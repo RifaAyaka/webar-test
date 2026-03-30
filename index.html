@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+      .overlay {
+        position: fixed; font-family: 'Segoe UI', sans-serif; color: white;
+        z-index: 1000; text-align: center; border-radius: 15px;
+        backdrop-filter: blur(8px); background: rgba(0, 0, 0, 0.4);
+      }
+      #info-card {
+        bottom: 20px; left: 50%; transform: translateX( -50%);
+        width: 85%; padding: 15px; display: none;
+      }
+      #grow-btn {
+        top: 20px; right: 20px; padding: 12px 24px; cursor: pointer;
+        border: 2px solid #81C784; font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body style="margin: 0; overflow: hidden;">
+    <div id="grow-btn" class="overlay" onclick="growSawit()">GROW SAWIT (+1 Year)</div>
+    
+    <div id="info-card" class="overlay">
+      <h2 id="title">Sawit Interaction</h2>
+      <p id="description">Tap the tree to see details!</p>
+    </div>
+
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-assets>
+        <a-asset-item id="sawitModel" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
+      </a-assets>
+
+      <a-marker preset="hiro">
+        <a-entity id="my-sawit" 
+                  gltf-model="#sawitModel" 
+                  scale="0.05 0.05 0.05" 
+                  position="0 0 0"
+                  class="clickable">
+        </a-entity>
+      </a-marker>
+
+      <a-entity camera>
+        <a-cursor fuse="false" raycaster="objects: .clickable" color="#FFEB3B"></a-cursor>
+      </a-entity>
+    </a-scene>
+
+    <script>
+      let stage = 0;
+      const tree = document.querySelector('#my-sawit');
+      const infoCard = document.getElementById('info-card');
+
+      function growSawit() {
+        stage++;
+        if (stage === 1) {
+          tree.setAttribute('animation', 'property: scale; to: 0.15 0.15 0.15; dur: 1000');
+          showInfo("Muda (Young)", "The palm is growing its first real fronds.");
+        } else if (stage >= 2) {
+          tree.setAttribute('animation', 'property: scale; to: 0.3 0.3 0.3; dur: 1000');
+          showInfo("Dewasa (Mature)", "The Sawit is now ready for harvesting!");
+        }
+      }
+
+      function showInfo(t, d) {
+        infoCard.style.display = 'block';
+        document.getElementById('title').innerText = t;
+        document.getElementById('description').innerText = d;
+      }
+
+      // Click interaction on the model
+      tree.addEventListener('click', () => {
+        showInfo("Info Pohon", "This is a 3D Low-Poly Sawit model. It looks modern and runs fast on phones!");
+      });
+    </script>
+  </body>
+</html>
