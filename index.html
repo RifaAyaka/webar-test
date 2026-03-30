@@ -6,21 +6,29 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
     <style>
-      /* Invisible Click Zones (Instagram Style) */
+      /* Instagram-style tap zones */
       .touch-zone {
-        position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999;
+        position: fixed; top: 0; bottom: 0; width: 35%; z-index: 999;
       }
       #left-zone { left: 0; }
       #right-zone { right: 0; }
 
-      #label-container {
+      /* UI Labels */
+      #ui-layer {
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px);
-        color: white; padding: 10px 20px; border-radius: 20px;
+        background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+        color: white; padding: 15px 25px; border-radius: 20px;
         text-align: center; z-index: 1000; font-family: sans-serif;
-        pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.3); pointer-events: none;
       }
-      .hint { font-size: 10px; opacity: 0.7; display: block; margin-top: 5px; }
+      
+      /* Reset button if it gets stuck */
+      #reset-btn {
+        position: fixed; bottom: 20px; right: 20px;
+        background: rgba(255, 255, 255, 0.2); color: white;
+        padding: 10px; border-radius: 5px; z-index: 1001;
+        font-size: 12px; cursor: pointer; text-decoration: underline;
+      }
     </style>
   </head>
 
@@ -28,69 +36,71 @@
     <div id="left-zone" class="touch-zone" onclick="changeModel(-1)"></div>
     <div id="right-zone" class="touch-zone" onclick="changeModel(1)"></div>
     
-    <div id="label-container">
-      <strong id="model-name">Loading...</strong>
-      <span class="hint">Tap edges to switch | Drag to rotate</span>
+    <div id="ui-layer">
+      <strong id="model-name">Sawit Palm</strong><br>
+      <small style="opacity: 0.6;">Tap edges to switch • Drag to rotate</small>
     </div>
+
+    <div id="reset-btn" onclick="location.reload()">Refresh Page</div>
 
     <a-scene 
       embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-      gesture-detector>
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
+      gesture-detector
+      renderer="logarithmicDepthBuffer: true; colorManagement: true;">
       
       <a-assets>
-        <a-asset-item id="tree1" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
-        <a-asset-item id="tree2" src="psx_birch_tree.glb"></a-asset-item>
-        <a-asset-item id="tree3" src="sakura_tree_01_-_low_poly_model.glb"></a-asset-item>
+        <a-asset-item id="tree-palm" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
+        <a-asset-item id="tree-birch" src="psx_birch_tree.glb"></a-asset-item>
+        <a-asset-item id="tree-sakura" src="sakura_tree_01_-_low_poly_model.glb"></a-asset-item>
       </a-assets>
 
       <a-marker type="pattern" url="pattern-images.patt" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-        <a-entity id="ar-model" 
-                  gltf-model="#tree1" 
-                  position="0 0 0" 
-                  class="clickable"
-                  gesture-handler="rotationFactor: 1.5">
-        </a-entity>
+        
+        <a-entity id="ent-palm" gltf-model="#tree-palm" class="clickable" gesture-handler scale="1.5 1.5 1.5" visible="true"></a-entity>
+        <a-entity id="ent-birch" gltf-model="#tree-birch" class="clickable" gesture-handler scale="0.01 0.01 0.01" visible="false"></a-entity>
+        <a-entity id="ent-sakura" gltf-model="#tree-sakura" class="clickable" gesture-handler scale="0.4 0.4 0.4" visible="false"></a-entity>
+
       </a-marker>
 
       <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-      const treeList = [
-        { id: "#tree1", name: "Sawit Palm", scale: "1.5 1.5 1.5" },
-        { id: "#tree2", name: "PSX Birch", scale: "0.02 0.02 0.02" },
-        { id: "#tree3", name: "Sakura Blossom", scale: "0.5 0.5 0.5" }
+      const models = [
+        { el: "#ent-palm", name: "Sawit Palm" },
+        { el: "#ent-birch", name: "PSX Birch" },
+        { el: "#ent-sakura", name: "Sakura Blossom" }
       ];
 
       let currentIndex = 0;
-      const modelEntity = document.querySelector('#ar-model');
-      const nameLabel = document.querySelector('#model-name');
-
-      function updateModel() {
-        const current = treeList[currentIndex];
-        modelEntity.setAttribute('gltf-model', current.id);
-        nameLabel.innerText = current.name;
-        
-        // Apply new bigger scale
-        modelEntity.setAttribute('scale', current.scale);
-
-        // Reset rotation when switching models
-        modelEntity.setAttribute('rotation', '0 0 0');
-
-        // Pop animation
-        modelEntity.removeAttribute('animation__pop');
-        modelEntity.setAttribute('animation__pop', `property: scale; from: 0 0 0; to: ${current.scale}; dur: 500; easing: easeOutBack`);
-      }
 
       function changeModel(dir) {
-        currentIndex += dir;
-        if (currentIndex < 0) currentIndex = treeList.length - 1;
-        if (currentIndex >= treeList.length) currentIndex = 0;
-        updateModel();
-      }
+        // Hide current
+        document.querySelector(models[currentIndex].el).setAttribute('visible', 'false');
 
-      window.onload = updateModel;
+        // Calculate next index (Looping)
+        currentIndex += dir;
+        if (currentIndex < 0) currentIndex = models.length - 1;
+        if (currentIndex >= models.length) currentIndex = 0;
+
+        // Show new
+        const newModel = document.querySelector(models[currentIndex].el);
+        newModel.setAttribute('visible', 'true');
+        
+        // Update UI
+        document.getElementById('model-name').innerText = models[currentIndex].name;
+
+        // Haptic-like feedback (small pop)
+        const currentScale = newModel.getAttribute('scale');
+        newModel.setAttribute('animation__pop', {
+          property: 'scale',
+          from: '0 0 0',
+          to: `${currentScale.x} ${currentScale.y} ${currentScale.z}`,
+          dur: 300,
+          easing: 'easeOutBack'
+        });
+      }
     </script>
   </body>
 </html>
