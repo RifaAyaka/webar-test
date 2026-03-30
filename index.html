@@ -12,15 +12,15 @@
 
       #info-card {
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
         color: white; padding: 15px 20px; border-radius: 20px;
         text-align: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         border: 1px solid rgba(255,255,255,0.3); width: 85%; max-width: 450px;
         pointer-events: none;
       }
       
-      #product-name { font-size: 18px; display: block; margin-bottom: 8px; color: #81C784; text-transform: uppercase; letter-spacing: 1px; }
-      #product-desc { font-size: 13px; line-height: 1.5; opacity: 0.9; text-align: justify; }
+      #product-name { font-size: 18px; display: block; margin-bottom: 8px; color: #81C784; text-transform: uppercase; font-weight: bold; }
+      #product-desc { font-size: 13px; line-height: 1.5; opacity: 0.9; text-align: left; }
       
       #nav-hint {
         position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -36,7 +36,7 @@
     
     <div id="info-card">
       <strong id="product-name">Palm Oil Tree</strong>
-      <div id="product-desc">Loading information...</div>
+      <div id="product-desc">Loading...</div>
     </div>
 
     <div id="nav-hint">Tap edges to switch • Drag to rotate</div>
@@ -55,9 +55,11 @@
 
       <a-marker type="pattern" url="pattern-images.patt" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
         
-        <a-entity id="ent-tree" gltf-model="#model-tree" class="clickable" gesture-handler scale="4 4 4" position="0 0.5 0" visible="true"></a-entity>
-        <a-entity id="ent-fertilizer" gltf-model="#model-fertilizer" class="clickable" gesture-handler scale="0.8 0.8 0.8" position="0 0 0" visible="false"></a-entity>
-        <a-entity id="ent-fertihole" gltf-model="#model-fertihole" class="clickable" gesture-handler scale="0.015 0.015 0.015" position="0 0.2 0" visible="false"></a-entity>
+        <a-entity id="ent-tree" gltf-model="#model-tree" class="clickable" gesture-handler scale="5 5 5" position="0 0.5 0" visible="true"></a-entity>
+        
+        <a-entity id="ent-fertilizer" gltf-model="#model-fertilizer" class="clickable" gesture-handler scale="8 8 8" position="0 0 0" visible="false"></a-entity>
+        
+        <a-entity id="ent-fertihole" gltf-model="#model-fertihole" class="clickable" gesture-handler scale="2.5 2.5 2.5" position="0 0.2 0" visible="false"></a-entity>
 
       </a-marker>
 
@@ -69,17 +71,17 @@
         {
           el: "#ent-tree",
           name: "Palm Oil Tree",
-          desc: "Pohon kelapa sawit merupakan sumber utama minyak nabati dunia. Tanaman ini membutuhkan nutrisi yang tepat untuk menghasilkan Tandan Buah Segar (TBS) yang optimal. Pengelolaan yang baik memastikan produktivitas tinggi dan keberlanjutan lahan."
+          desc: "Pohon kelapa sawit adalah tanaman perkebunan vital penghasil CPO. Membutuhkan perawatan intensif dan nutrisi seimbang untuk hasil panen maksimal."
         },
         {
           el: "#ent-fertilizer",
           name: "Fertilizer (Pupuk)",
-          desc: "Pupuk sangat krusial untuk pertumbuhan sawit. Menggunakan kombinasi NPK dan mikronutrien lainnya membantu perkembangan batang dan kualitas buah. Aplikasi yang efisien mencegah pemborosan biaya dan kerusakan lingkungan."
+          desc: "Nutrisi esensial (NPK+Mg+B) untuk meningkatkan berat janjang dan kualitas buah sawit. Aplikasi tepat waktu menjamin produktivitas berkelanjutan."
         },
         {
           el: "#ent-fertihole",
           name: "Fertihole (Alsin)",
-          desc: "Fertihole adalah alsin untuk membuat lubang tanam pupuk (pocket system) agar pemupukan efektif. <br><br>• Kapasitas: 500g/pocket<br>• Kedalaman: 20-30 cm<br>• Diameter: 13 cm<br>• Konsumsi: 2,4 L/Ha (Bensin campur)<br>• Efisiensi: Menekan losses akibat penguapan dan erosi."
+          desc: "Alat pembuat lubang pupuk (Pocket System). <br>• Kapasitas: 500g/pocket <br>• Kedalaman: 20-30 cm <br>• Diameter: 13 cm <br>• Efisiensi: Menghindari penguapan, pencucian, dan erosi pupuk secara maksimal."
         }
       ];
 
@@ -117,3 +119,4 @@
     </script>
   </body>
 </html>
+
