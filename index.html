@@ -4,50 +4,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
     <style>
-      /* Modern Glassmorphism Buttons */
-      .nav-btn {
-        position: fixed; top: 50%; transform: translateY(-50%);
-        width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px); color: white; border-radius: 50%;
-        display: flex; justify-content: center; align-items: center;
-        font-size: 40px; z-index: 1000; cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
-        user-select: none;
+      /* Invisible Click Zones (Instagram Style) */
+      .touch-zone {
+        position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999;
       }
-      #prev { left: 15px; }
-      #next { right: 15px; }
-      
+      #left-zone { left: 0; }
+      #right-zone { right: 0; }
+
       #label-container {
-        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
-        color: white; padding: 10px 25px; border-radius: 30px;
-        text-align: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
-        border: 1px solid rgba(255,255,255,0.2);
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px);
+        color: white; padding: 10px 20px; border-radius: 20px;
+        text-align: center; z-index: 1000; font-family: sans-serif;
+        pointer-events: none; border: 1px solid rgba(255,255,255,0.2);
       }
+      .hint { font-size: 10px; opacity: 0.7; display: block; margin-top: 5px; }
     </style>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <div id="prev" class="nav-btn" onclick="changeModel(-1)">&#10094;</div>
-    <div id="next" class="nav-btn" onclick="changeModel(1)">&#10095;</div>
+    <div id="left-zone" class="touch-zone" onclick="changeModel(-1)"></div>
+    <div id="right-zone" class="touch-zone" onclick="changeModel(1)"></div>
     
     <div id="label-container">
       <strong id="model-name">Loading...</strong>
+      <span class="hint">Tap edges to switch | Drag to rotate</span>
     </div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene 
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+      gesture-detector>
+      
       <a-assets>
         <a-asset-item id="tree1" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
         <a-asset-item id="tree2" src="psx_birch_tree.glb"></a-asset-item>
         <a-asset-item id="tree3" src="sakura_tree_01_-_low_poly_model.glb"></a-asset-item>
       </a-assets>
 
-      <a-marker type="pattern" url="pattern-images.patt">
+      <a-marker type="pattern" url="pattern-images.patt" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
         <a-entity id="ar-model" 
                   gltf-model="#tree1" 
                   position="0 0 0" 
-                  rotation="0 0 0"
-                  animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
+                  class="clickable"
+                  gesture-handler="rotationFactor: 1.5">
         </a-entity>
       </a-marker>
 
@@ -55,11 +57,10 @@
     </a-scene>
 
     <script>
-      // Configuration for each tree (Adjust scale if they look too tiny or huge)
       const treeList = [
-        { id: "#tree1", name: "Sawit Palm", scale: "0.2 0.2 0.2" },
-        { id: "#tree2", name: "PSX Birch", scale: "0.005 0.005 0.005" }, // Birch models are often huge
-        { id: "#tree3", name: "Sakura Blossom", scale: "0.1 0.1 0.1" }
+        { id: "#tree1", name: "Sawit Palm", scale: "1.5 1.5 1.5" },
+        { id: "#tree2", name: "PSX Birch", scale: "0.02 0.02 0.02" },
+        { id: "#tree3", name: "Sakura Blossom", scale: "0.5 0.5 0.5" }
       ];
 
       let currentIndex = 0;
@@ -68,30 +69,27 @@
 
       function updateModel() {
         const current = treeList[currentIndex];
-        
-        // Change the model
         modelEntity.setAttribute('gltf-model', current.id);
-        
-        // Update the label
         nameLabel.innerText = current.name;
         
-        // Adjust the scale specifically for this model
+        // Apply new bigger scale
         modelEntity.setAttribute('scale', current.scale);
 
-        // Add a nice "pop" animation when switching
-        modelEntity.removeAttribute('animation__scale');
-        modelEntity.setAttribute('animation__scale', 'property: scale; from: 0 0 0; to: ' + current.scale + '; dur: 400; easing: easeOutBack');
+        // Reset rotation when switching models
+        modelEntity.setAttribute('rotation', '0 0 0');
+
+        // Pop animation
+        modelEntity.removeAttribute('animation__pop');
+        modelEntity.setAttribute('animation__pop', `property: scale; from: 0 0 0; to: ${current.scale}; dur: 500; easing: easeOutBack`);
       }
 
       function changeModel(dir) {
         currentIndex += dir;
-        // Loop Logic
         if (currentIndex < 0) currentIndex = treeList.length - 1;
         if (currentIndex >= treeList.length) currentIndex = 0;
         updateModel();
       }
 
-      // Start the first model correctly
       window.onload = updateModel;
     </script>
   </body>
