@@ -5,81 +5,94 @@
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      .overlay {
-        position: fixed; font-family: 'Segoe UI', sans-serif; color: white;
-        z-index: 1000; text-align: center; border-radius: 15px;
-        backdrop-filter: blur(8px); background: rgba(0, 0, 0, 0.4);
+      /* Modern Glassmorphism Buttons */
+      .nav-btn {
+        position: fixed; top: 50%; transform: translateY(-50%);
+        width: 70px; height: 70px; background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px); color: white; border-radius: 50%;
+        display: flex; justify-content: center; align-items: center;
+        font-size: 40px; z-index: 1000; cursor: pointer; border: 1px solid rgba(255,255,255,0.3);
+        user-select: none;
       }
-      #info-card {
-        bottom: 20px; left: 50%; transform: translateX(-50%);
-        width: 85%; padding: 15px; display: none;
-      }
-      #grow-btn {
-        top: 20px; right: 20px; padding: 12px 24px; cursor: pointer;
-        border: 2px solid #81C784; font-weight: bold;
+      #prev { left: 15px; }
+      #next { right: 15px; }
+      
+      #label-container {
+        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+        color: white; padding: 10px 25px; border-radius: 30px;
+        text-align: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
+        border: 1px solid rgba(255,255,255,0.2);
       }
     </style>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <div id="grow-btn" class="overlay" onclick="growSawit()">GROW SAWIT (+1 Year)</div>
+    <div id="prev" class="nav-btn" onclick="changeModel(-1)">&#10094;</div>
+    <div id="next" class="nav-btn" onclick="changeModel(1)">&#10095;</div>
     
-    <div id="info-card" class="overlay">
-      <h2 id="title">Sawit Interaction</h2>
-      <p id="description">Point at the marker and tap the tree!</p>
+    <div id="label-container">
+      <strong id="model-name">Loading...</strong>
     </div>
 
-    <a-scene 
-      embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
-      renderer="logarithmicDepthBuffer: true;">
-      
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <a-assets>
-        <a-asset-item id="sawitModel" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
+        <a-asset-item id="tree1" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
+        <a-asset-item id="tree2" src="psx_birch_tree.glb"></a-asset-item>
+        <a-asset-item id="tree3" src="sakura_tree_01_-_low_poly_model.glb"></a-asset-item>
       </a-assets>
 
       <a-marker type="pattern" url="pattern-images.patt">
-        <a-entity id="my-sawit" 
-                  gltf-model="#sawitModel" 
-                  scale="1 1 1" 
-                  position="0 0 0"
-                  class="clickable"
-                  animation__click="property: scale; from: 1.1 1.1 1.1; to: 1 1 1; dur: 150; startEvents: click">
+        <a-entity id="ar-model" 
+                  gltf-model="#tree1" 
+                  position="0 0 0" 
+                  rotation="0 0 0"
+                  animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear">
         </a-entity>
       </a-marker>
 
-      <a-entity camera>
-        <a-cursor fuse="false" raycaster="objects: .clickable" color="#FFEB3B"></a-cursor>
-      </a-entity>
+      <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-      let stage = 0;
-      const infoCard = document.getElementById('info-card');
+      // Configuration for each tree (Adjust scale if they look too tiny or huge)
+      const treeList = [
+        { id: "#tree1", name: "Sawit Palm", scale: "0.2 0.2 0.2" },
+        { id: "#tree2", name: "PSX Birch", scale: "0.005 0.005 0.005" }, // Birch models are often huge
+        { id: "#tree3", name: "Sakura Blossom", scale: "0.1 0.1 0.1" }
+      ];
 
-      function growSawit() {
-        const tree = document.querySelector('#my-sawit');
-        stage++;
+      let currentIndex = 0;
+      const modelEntity = document.querySelector('#ar-model');
+      const nameLabel = document.querySelector('#model-name');
+
+      function updateModel() {
+        const current = treeList[currentIndex];
         
-        if (stage === 1) {
-          tree.setAttribute('animation', 'property: scale; to: 2 2 2; dur: 1000');
-          showInfo("Muda (Young)", "The palm is growing its first real fronds.");
-        } else if (stage >= 2) {
-          tree.setAttribute('animation', 'property: scale; to: 4 4 4; dur: 1000');
-          showInfo("Dewasa (Mature)", "The Sawit is now ready for harvesting!");
-        }
+        // Change the model
+        modelEntity.setAttribute('gltf-model', current.id);
+        
+        // Update the label
+        nameLabel.innerText = current.name;
+        
+        // Adjust the scale specifically for this model
+        modelEntity.setAttribute('scale', current.scale);
+
+        // Add a nice "pop" animation when switching
+        modelEntity.removeAttribute('animation__scale');
+        modelEntity.setAttribute('animation__scale', 'property: scale; from: 0 0 0; to: ' + current.scale + '; dur: 400; easing: easeOutBack');
       }
 
-      function showInfo(t, d) {
-        infoCard.style.display = 'block';
-        document.getElementById('title').innerText = t;
-        document.getElementById('description').innerText = d;
+      function changeModel(dir) {
+        currentIndex += dir;
+        // Loop Logic
+        if (currentIndex < 0) currentIndex = treeList.length - 1;
+        if (currentIndex >= treeList.length) currentIndex = 0;
+        updateModel();
       }
 
-      // Click interaction
-      document.querySelector('#my-sawit').addEventListener('click', () => {
-        showInfo("Info Pohon", "This is your Low-Poly Sawit model running in WebAR!");
-      });
+      // Start the first model correctly
+      window.onload = updateModel;
     </script>
   </body>
 </html>
