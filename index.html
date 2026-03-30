@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -10,7 +11,7 @@
         backdrop-filter: blur(8px); background: rgba(0, 0, 0, 0.4);
       }
       #info-card {
-        bottom: 20px; left: 50%; transform: translateX( -50%);
+        bottom: 20px; left: 50%; transform: translateX(-50%);
         width: 85%; padding: 15px; display: none;
       }
       #grow-btn {
@@ -25,22 +26,27 @@
     
     <div id="info-card" class="overlay">
       <h2 id="title">Sawit Interaction</h2>
-      <p id="description">Tap the tree to see details!</p>
+      <p id="description">Point at the marker and tap the tree!</p>
     </div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene 
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
+      renderer="logarithmicDepthBuffer: true;">
+      
       <a-assets>
         <a-asset-item id="sawitModel" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
       </a-assets>
 
       <a-marker type="pattern" url="pattern-images.patt">
-  <a-entity id="my-sawit" 
-            gltf-model="#sawitModel" 
-            scale="0.05 0.05 0.05" 
-            position="0 0 0"
-            class="clickable">
-  </a-entity>
-</a-marker>
+        <a-entity id="my-sawit" 
+                  gltf-model="#sawitModel" 
+                  scale="1 1 1" 
+                  position="0 0 0"
+                  class="clickable"
+                  animation__click="property: scale; from: 1.1 1.1 1.1; to: 1 1 1; dur: 150; startEvents: click">
+        </a-entity>
+      </a-marker>
 
       <a-entity camera>
         <a-cursor fuse="false" raycaster="objects: .clickable" color="#FFEB3B"></a-cursor>
@@ -49,16 +55,17 @@
 
     <script>
       let stage = 0;
-      const tree = document.querySelector('#my-sawit');
       const infoCard = document.getElementById('info-card');
 
       function growSawit() {
+        const tree = document.querySelector('#my-sawit');
         stage++;
+        
         if (stage === 1) {
-          tree.setAttribute('animation', 'property: scale; to: 0.15 0.15 0.15; dur: 1000');
+          tree.setAttribute('animation', 'property: scale; to: 2 2 2; dur: 1000');
           showInfo("Muda (Young)", "The palm is growing its first real fronds.");
         } else if (stage >= 2) {
-          tree.setAttribute('animation', 'property: scale; to: 0.3 0.3 0.3; dur: 1000');
+          tree.setAttribute('animation', 'property: scale; to: 4 4 4; dur: 1000');
           showInfo("Dewasa (Mature)", "The Sawit is now ready for harvesting!");
         }
       }
@@ -69,9 +76,9 @@
         document.getElementById('description').innerText = d;
       }
 
-      // Click interaction on the model
-      tree.addEventListener('click', () => {
-        showInfo("Info Pohon", "This is a 3D Low-Poly Sawit model. It looks modern and runs fast on phones!");
+      // Click interaction
+      document.querySelector('#my-sawit').addEventListener('click', () => {
+        showInfo("Info Pohon", "This is your Low-Poly Sawit model running in WebAR!");
       });
     </script>
   </body>
