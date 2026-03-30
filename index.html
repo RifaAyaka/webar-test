@@ -6,31 +6,26 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
     <style>
-      /* Instagram-style Tap Zones (Invisible) */
-      .touch-zone {
-        position: fixed; top: 0; bottom: 0; width: 35%; z-index: 999;
-      }
+      .touch-zone { position: fixed; top: 0; bottom: 0; width: 35%; z-index: 999; }
       #left-zone { left: 0; }
       #right-zone { right: 0; }
 
-      /* The Product Description Card (Like a Photo App) */
       #info-card {
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);
         color: white; padding: 15px 20px; border-radius: 20px;
         text-align: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
-        border: 1px solid rgba(255,255,255,0.3); pointer-events: none;
-        width: 85%; max-width: 400px;
+        border: 1px solid rgba(255,255,255,0.3); width: 85%; max-width: 450px;
+        pointer-events: none;
       }
       
-      #product-name { font-size: 20px; display: block; margin-bottom: 5px; color: #81C784; }
-      #product-desc { font-size: 14px; line-height: 1.4; opacity: 0.9; }
+      #product-name { font-size: 18px; display: block; margin-bottom: 8px; color: #81C784; text-transform: uppercase; letter-spacing: 1px; }
+      #product-desc { font-size: 13px; line-height: 1.5; opacity: 0.9; text-align: justify; }
       
       #nav-hint {
         position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-        background: rgba(255, 255, 255, 0.1); color: white;
-        padding: 5px 15px; border-radius: 15px; font-size: 10px;
-        z-index: 1000; font-family: sans-serif; opacity: 0.8;
+        background: rgba(0, 0, 0, 0.5); color: white; padding: 8px 15px;
+        border-radius: 20px; font-size: 11px; z-index: 1000;
       }
     </style>
   </head>
@@ -41,16 +36,14 @@
     
     <div id="info-card">
       <strong id="product-name">Palm Oil Tree</strong>
-      <div id="product-desc">
-        Pohon kelapa sawit adalah tanaman perkebunan terpenting yang menghasilkan minyak nabati (CPO) terbanyak di dunia dari buahnya.
-      </div>
+      <div id="product-desc">Loading information...</div>
     </div>
 
-    <div id="nav-hint">Tap edges to switch | Drag to rotate</div>
+    <div id="nav-hint">Tap edges to switch • Drag to rotate</div>
 
     <a-scene 
       embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix;"
+      arjs="sourceType: webcam; debugUIEnabled: false;"
       gesture-detector
       renderer="colorManagement: true; logarithmicDepthBuffer: true;">
       
@@ -62,32 +55,9 @@
 
       <a-marker type="pattern" url="pattern-images.patt" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
         
-        <a-entity id="ent-tree" 
-                  gltf-model="#model-tree" 
-                  class="clickable" 
-                  gesture-handler="rotationFactor: 1.5"
-                  scale="2.5 2.5 2.5" 
-                  position="0 0.5 0"
-                  visible="true">
-        </a-entity>
-
-        <a-entity id="ent-fertilizer" 
-                  gltf-model="#model-fertilizer" 
-                  class="clickable" 
-                  gesture-handler
-                  scale="0.05 0.05 0.05" 
-                  position="0 0 0" 
-                  visible="false">
-        </a-entity>
-
-        <a-entity id="ent-fertihole" 
-                  gltf-model="#model-fertihole" 
-                  class="clickable" 
-                  gesture-handler
-                  scale="0.5 0.5 0.5" 
-                  position="0 0.2 0" 
-                  visible="false">
-        </a-entity>
+        <a-entity id="ent-tree" gltf-model="#model-tree" class="clickable" gesture-handler scale="4 4 4" position="0 0.5 0" visible="true"></a-entity>
+        <a-entity id="ent-fertilizer" gltf-model="#model-fertilizer" class="clickable" gesture-handler scale="0.8 0.8 0.8" position="0 0 0" visible="false"></a-entity>
+        <a-entity id="ent-fertihole" gltf-model="#model-fertihole" class="clickable" gesture-handler scale="0.015 0.015 0.015" position="0 0.2 0" visible="false"></a-entity>
 
       </a-marker>
 
@@ -95,56 +65,55 @@
     </a-scene>
 
     <script>
-      // The descriptions for your products
       const products = [
         {
           el: "#ent-tree",
           name: "Palm Oil Tree",
-          desc: "Tanaman penghasil minyak goreng, margarin, dan biodisel. Minyak sawit sangat efisien lahan dan merupakan komoditas ekspor vital."
+          desc: "Pohon kelapa sawit merupakan sumber utama minyak nabati dunia. Tanaman ini membutuhkan nutrisi yang tepat untuk menghasilkan Tandan Buah Segar (TBS) yang optimal. Pengelolaan yang baik memastikan produktivitas tinggi dan keberlanjutan lahan."
         },
         {
           el: "#ent-fertilizer",
           name: "Fertilizer (Pupuk)",
-          desc: "Pupuk khusus sawit (N, P, K, Mg, B) sangat krusial untuk menjaga nutrisi tanaman dan meningkatkan hasil panen buah."
+          desc: "Pupuk sangat krusial untuk pertumbuhan sawit. Menggunakan kombinasi NPK dan mikronutrien lainnya membantu perkembangan batang dan kualitas buah. Aplikasi yang efisien mencegah pemborosan biaya dan kerusakan lingkungan."
         },
         {
           el: "#ent-fertihole",
           name: "Fertihole (Alsin)",
-          desc: "Alat pembuat lubang di tanah untuk pemupukan sistem kantong (pocket). Menekan kerugian pupuk hingga minimal, memastikan nutrisi terserap efektif oleh tanaman.<br><br><small>Diameter: 13cm | Kedalaman: 20-30cm</small>"
+          desc: "Fertihole adalah alsin untuk membuat lubang tanam pupuk (pocket system) agar pemupukan efektif. <br><br>• Kapasitas: 500g/pocket<br>• Kedalaman: 20-30 cm<br>• Diameter: 13 cm<br>• Konsumsi: 2,4 L/Ha (Bensin campur)<br>• Efisiensi: Menekan losses akibat penguapan dan erosi."
         }
       ];
 
       let currentIndex = 0;
 
-      function changeModel(dir) {
-        // Hide current model and reset its rotation
-        const currentModel = document.querySelector(products[currentIndex].el);
-        currentModel.setAttribute('visible', 'false');
-        currentModel.setAttribute('rotation', '0 0 0');
+      function updateUI() {
+        document.getElementById('product-name').innerText = products[currentIndex].name;
+        document.getElementById('product-desc').innerHTML = products[currentIndex].desc;
+      }
 
-        // Loop to next index
+      function changeModel(dir) {
+        document.querySelector(products[currentIndex].el).setAttribute('visible', 'false');
+
         currentIndex += dir;
         if (currentIndex < 0) currentIndex = products.length - 1;
         if (currentIndex >= products.length) currentIndex = 0;
 
-        // Show new model
         const newModel = document.querySelector(products[currentIndex].el);
         newModel.setAttribute('visible', 'true');
+        newModel.setAttribute('rotation', '0 0 0');
         
-        // Update UI
-        document.getElementById('product-name').innerText = products[currentIndex].name;
-        document.getElementById('product-desc').innerHTML = products[currentIndex].desc;
+        updateUI();
 
-        // Small pop animation
         const s = newModel.getAttribute('scale');
         newModel.setAttribute('animation__pop', {
           property: 'scale',
           from: '0 0 0',
           to: `${s.x} ${s.y} ${s.z}`,
-          dur: 300,
+          dur: 400,
           easing: 'easeOutBack'
         });
       }
+
+      window.onload = updateUI;
     </script>
   </body>
 </html>
