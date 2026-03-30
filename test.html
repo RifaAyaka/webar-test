@@ -4,56 +4,47 @@
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      /* Aesthetic UI Overlay */
+      /* Modern Aesthetic UI */
       .overlay {
-        position: fixed;
-        font-family: 'Segoe UI', sans-serif;
-        color: white;
-        z-index: 1000;
-        text-align: center;
-        backdrop-filter: blur(8px);
-        background: rgba(0, 0, 0, 0.4);
-        border-radius: 15px;
+        position: fixed; font-family: 'Segoe UI', sans-serif; color: white;
+        z-index: 1000; text-align: center; border-radius: 15px;
+        backdrop-filter: blur(8px); background: rgba(0, 0, 0, 0.4);
       }
       #info-card {
         bottom: 20px; left: 50%; transform: translateX(-50%);
         width: 85%; padding: 15px; display: none;
       }
       #grow-btn {
-        top: 20px; right: 20px;
-        padding: 12px 24px; cursor: pointer;
+        top: 20px; right: 20px; padding: 12px 24px; cursor: pointer;
         border: 2px solid #81C784; font-weight: bold;
       }
     </style>
   </head>
 
   <body style="margin: 0; overflow: hidden;">
-    <div id="grow-btn" class="overlay" onclick="growTree()">GROW SAWIT (+1 Year)</div>
+    <div id="grow-btn" class="overlay" onclick="growSawit()">GROW SAWIT (+1 Year)</div>
     
     <div id="info-card" class="overlay">
       <h2 id="title">Pohon Sawit</h2>
-      <p id="description">Tap the tree parts to learn more.</p>
+      <p id="description">Click the Grow button to start!</p>
     </div>
 
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-marker type="pattern" url="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/data/patt.hiro">
+      
+      <a-assets>
+        <a-asset-item id="sawitModel" src="palm_oil.glb"></a-asset-item>
+      </a-assets>
+
+      <a-marker preset="hiro">
         
-        <a-entity id="sawit-tree" scale="0.3 0.3 0.3">
-          
-          <a-cylinder id="trunk" position="0 1 0" radius="0.4" height="2" color="#4E342E" class="clickable"></a-cylinder>
-
-          <a-entity id="leaves">
-            <a-box position="0 2 1" rotation="-30 0 0" width="0.2" height="0.1" depth="2.5" color="#2E7D32" class="clickable"></a-box>
-            <a-box position="0 2 -1" rotation="30 0 0" width="0.2" height="0.1" depth="2.5" color="#2E7D32" class="clickable"></a-box>
-            <a-box position="1 2 0" rotation="0 0 30" width="2.5" height="0.1" depth="0.2" color="#1B5E20" class="clickable"></a-box>
-            <a-box position="-1 2 0" rotation="0 0 -30" width="2.5" height="0.1" depth="0.2" color="#1B5E20" class="clickable"></a-box>
-          </a-entity>
-
-          <a-sphere id="fruit" position="0 1.8 0.5" radius="0.3" color="#FF6F00" visible="false" class="clickable"
-                    animation="property: scale; dir: alternate; dur: 1000; easing: easeInSine; loop: true; to: 1.1 1.1 1.1">
-          </a-sphere>
-
+        <a-entity id="my-sawit" 
+                  gltf-model="#sawitModel" 
+                  scale="0.1 0.1 0.1" 
+                  position="0 0 0"
+                  class="clickable"
+                  animation="property: scale; from: 0.1 0.1 0.1; to: 0.15 0.15 0.15; dur: 800; easing: easeOutQuad; startEvents: model-loaded">
         </a-entity>
+
       </a-marker>
 
       <a-entity camera>
@@ -62,41 +53,40 @@
     </a-scene>
 
     <script>
-      let stage = 0;
-      const tree = document.querySelector('#sawit-tree');
-      const fruit = document.querySelector('#fruit');
+      let growthStage = 0;
+      const tree = document.querySelector('#my-sawit');
       const infoCard = document.getElementById('info-card');
       const title = document.getElementById('title');
       const desc = document.getElementById('description');
 
-      // 1. Growth Logic
-      function growTree() {
-        stage++;
-        if (stage === 1) {
-          tree.setAttribute('animation', 'property: scale; to: 0.6 0.6 0.6; dur: 1000');
-          showInfo("TBM (Tanaman Belum Menghasilkan)", "The palm is entering the immature stage. It needs lots of water and fertilizer.");
-        } else if (stage >= 2) {
-          tree.setAttribute('animation', 'property: scale; to: 1.2 1.2 1.2; dur: 1000');
-          fruit.setAttribute('visible', 'true');
-          showInfo("TM (Tanaman Menghasilkan)", "Mature stage! The tree is now producing TBS (Tandan Buah Segar).");
+      // Interaction Logic when clicking the model itself
+      tree.addEventListener('click', () => {
+        if(growthStage < 2) {
+          showInfo("Bibit Sawit (Seedling)", "This small palm needs protection and consistent watering.");
+        } else {
+          showInfo("Mature Sawit", "The tree is fully grown and ready for its first CPO (Palm Oil) harvest!");
+        }
+      });
+
+      // Growth Logic when clicking the button
+      function growSawit() {
+        growthStage++;
+        if (growthStage === 1) {
+          // Grow to medium size (TBM stage)
+          tree.setAttribute('animation', {property: 'scale', to: '0.4 0.4 0.4', dur: 1200});
+          showInfo("Growth: Stage 1", "The Sawit is developing its trunk and major fronds.");
+        } else if (growthStage >= 2) {
+          // Grow to full size (Mature stage)
+          tree.setAttribute('animation', {property: 'scale', to: '1.0 1.0 1.0', dur: 1500});
+          showInfo("Growth: Mature!", "Look closely! It might be time to harvest some 'brondolan' fruit.");
         }
       }
 
-      // 2. Interactive Info Logic
       function showInfo(t, d) {
         infoCard.style.display = 'block';
         title.innerText = t;
         desc.innerText = d;
       }
-
-      document.querySelector('#trunk').addEventListener('click', () => 
-        showInfo("Batang Sawit", "The trunk stores nutrients. In modern plantations, height is managed to make harvesting easier."));
-      
-      document.querySelector('#leaves').addEventListener('click', () => 
-        showInfo("Pelepah", "Palm fronds. Pruning these correctly is vital for fruit production and tree health."));
-
-      document.querySelector('#fruit').addEventListener('click', () => 
-        showInfo("Brondolan / TBS", "This is where the Crude Palm Oil (CPO) comes from. Harvest when the color is bright orange-red."));
-    </script>
+    </style>
   </body>
 </html>
