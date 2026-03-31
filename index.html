@@ -113,23 +113,23 @@
         </button>
 
         <div class="ad-card tree-info" slot="hotspot-t-ad" data-position="-2.5 4 0" data-normal="0 0 1">
-            <img src="image_06a7b2.jpg" alt="Seed Advertisement">
-            <div class="ad-tag">Premium Seed Result</div>
+            <img src="palm_oil_seeds_ads.png" alt="Seed Advertisement">
+            <div class="ad-tag">Recommended Seed Result</div>
         </div>
 
         <button class="info-card tree-info" slot="hotspot-t2" data-position="2.5 3 0" data-normal="0 0 1">
             <div class="card-header">📊 ECONOMIC YIELD</div>
-            <div class="card-body">High CPO extraction rate. Sustainable growth cycle.</div>
+            <div class="card-body">High CPO extraction rate. Optimal for sustainable long-term growth.</div>
         </button>
 
         <button class="info-card fert-info hidden" slot="hotspot-f1" data-position="0 2.5 0" data-normal="0 0 1">
             <div class="card-header">📦 DIMENSIONS</div>
-            <div class="card-body">Large Format: 52 x 85 cm. Industrial Grade.</div>
+            <div class="card-body">Large Format: 52 x 85 cm. Bulk Industrial Sack.</div>
         </button>
 
         <button class="info-card hole-info hidden" slot="hotspot-h1" data-position="0 1.2 0" data-normal="0 0 1">
             <div class="card-header">⚙️ SPECS</div>
-            <div class="card-body">Dia: 13cm | Depth: 20-30cm. Precision application.</div>
+            <div class="card-body">Dia: 13cm | Depth: 20-30cm. High-precision injection tool.</div>
         </button>
 
         <div class="ui-container">
@@ -152,16 +152,11 @@
         const viewer = document.querySelector('#viewer');
 
         function changeModel(dir) {
-            // Hide all cards
             document.querySelectorAll('.tree-info, .fert-info, .hole-info').forEach(c => c.classList.add('hidden'));
-            
             idx = (idx + dir + modelData.length) % modelData.length;
             const item = modelData[idx];
-            
             viewer.src = item.src;
             viewer.scale = item.scale;
-            
-            // Show new cards
             document.querySelectorAll('.' + item.class).forEach(c => c.classList.remove('hidden'));
         }
     </script>
