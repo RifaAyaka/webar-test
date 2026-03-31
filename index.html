@@ -5,126 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; background: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        model-viewer {
-            width: 100%;
-            height: 100vh;
-            background-color: #eeeeee;
-        }
+        body { margin: 0; background: #000; font-family: 'Inter', sans-serif; }
+        model-viewer { width: 100%; height: 100vh; --poster-color: transparent; }
 
-        /* Professional Rounded Card Style */
+        /* Professional Glassmorphism Cards */
         .info-card {
-            background: rgba(255, 255, 255, 0.8); /* White glass effect */
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #1a1a1a;
-            width: 220px;
-            pointer-events: none;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #1b1b1b;
+            width: 180px;
+            transition: opacity 0.3s;
         }
 
-        .card-title {
-            font-weight: bold;
-            color: #2e7d32; /* Professional Green */
-            font-size: 16px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-            padding-bottom: 4px;
-        }
-
-        .card-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
+        .card-header {
+            font-size: 11px;
+            font-weight: 800;
+            color: #2e7d32;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 4px;
         }
 
+        .card-body {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
         /* Navigation Buttons */
-        .controls {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 12px;
-            z-index: 100;
+        .ui-overlay {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+            display: flex; align-items: center; gap: 20px; z-index: 100;
         }
 
-        button {
-            padding: 12px 24px;
-            border-radius: 30px;
-            border: none;
-            background: #2e7d32;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            cursor: pointer;
+        .ar-btn {
+            background: #2e7d32; color: white; border: none; padding: 15px 30px;
+            border-radius: 50px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
         }
 
-        button.nav { background: #454545; }
+        .nav-btn {
+            background: rgba(255,255,255,0.2); color: white; border: 1px solid white;
+            width: 50px; height: 50px; border-radius: 50%; cursor: pointer;
+        }
+
+        /* Hide hotspots when model is not active */
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <model-viewer id="main-viewer"
+    <model-viewer id="viewer"
         src="animal_crossing_palm_tree_background.glb"
-        ar ar-modes="webxr scene-viewer quick-look" 
+        ar ar-modes="webxr" 
         camera-controls 
-        shadow-intensity="1"
+        shadow-intensity="1" 
         auto-rotate
-        camera-orbit="0deg 75deg 10m">
+        camera-orbit="45deg 75deg 10m">
 
-        <div id="card-tree" class="info-card" slot="hotspot-tree" data-position="-1 2 0">
-            <div class="card-title">OIL PALM TREE</div>
-            <div class="card-row"><span>Height:</span> <span>20 – 30 Meters</span></div>
-            <div class="card-row"><span>Type:</span> <span>Tenera / Dura</span></div>
-        </div>
+        <button class="info-card tree-info" slot="hotspot-t1" data-position="0 5 0" data-normal="0 0 1">
+            <div class="card-header">Height Profile</div>
+            <div class="card-body">Professional height range: 20 – 30 Meters.</div>
+        </button>
+        <button class="info-card tree-info" slot="hotspot-t2" data-position="1 2.5 0" data-normal="0 0 1">
+            <div class="card-header">Economic Yield</div>
+            <div class="card-body">Primary source for CPO & PKO global exports.</div>
+        </button>
 
-        <div id="card-fert" class="info-card" slot="hotspot-fert" data-position="0.5 1 0" style="display:none">
-            <div class="card-title">FERTILIZER BAG</div>
-            <div class="card-row"><span>Standard:</span> <span>45 x 75 cm</span></div>
-            <div class="card-row"><span>Large:</span> <span>52 x 85 cm</span></div>
-        </div>
+        <button class="info-card fert-info hidden" slot="hotspot-f1" data-position="0 1.5 0" data-normal="0 0 1">
+            <div class="card-header">Package Dimensions</div>
+            <div class="card-body">Standard: 45x75 cm<br>Large: 52x85 cm</div>
+        </button>
+        <button class="info-card fert-info hidden" slot="hotspot-f2" data-position="0.5 0.5 0.5" data-normal="0 0 1">
+            <div class="card-header">Application</div>
+            <div class="card-body">Designed for efficient Pocket System release.</div>
+        </button>
 
-        <div id="card-hole" class="info-card" slot="hotspot-hole" data-position="0.6 0.8 0" style="display:none">
-            <div class="card-title">FERTIHOLE SPECS</div>
-            <div class="card-row"><span>Diameter:</span> <span>13 cm</span></div>
-            <div class="card-row"><span>Depth:</span> <span>20 – 30 cm</span></div>
-            <div class="card-row"><span>Capacity:</span> <span>Max 500g</span></div>
-        </div>
+        <button class="info-card hole-info hidden" slot="hotspot-h1" data-position="0 1.2 0" data-normal="0 0 1">
+            <div class="card-header">Bore Specs</div>
+            <div class="card-body">Diameter: 13 cm<br>Depth: 20 – 30 cm</div>
+        </button>
+        <button class="info-card hole-info hidden" slot="hotspot-h2" data-position="0.5 0.8 0" data-normal="0 0 1">
+            <div class="card-header">Load Capacity</div>
+            <div class="card-body">Max 500g fertilizer per injection pocket.</div>
+        </button>
+        <button class="info-card hole-info hidden" slot="hotspot-h3" data-position="-0.5 0.5 0" data-normal="0 0 1">
+            <div class="card-header">Efficiency</div>
+            <div class="card-body">Consumption: 2.4 L/Ha<br>Petrol Mix Engine.</div>
+        </button>
 
-        <div class="controls">
-            <button class="nav" onclick="changeModel(-1)">PREV</button>
-            <button onclick="document.querySelector('model-viewer').activateAR()">VIEW IN MY ROOM</button>
-            <button class="nav" onclick="changeModel(1)">NEXT</button>
+        <div class="ui-overlay">
+            <button class="nav-btn" onclick="changeModel(-1)">❮</button>
+            <button class="ar-btn" onclick="viewer.activateAR()">EXPLORE IN AR</button>
+            <button class="nav-btn" onclick="changeModel(1)">❯</button>
         </div>
     </model-viewer>
 
     <script>
-        const models = [
-            { id: "tree", file: "animal_crossing_palm_tree_background.glb", hotspot: "card-tree", scale: "1 1 1" },
-            { id: "fert", file: "fertilizer.glb", hotspot: "card-fert", scale: "8 8 8" },
-            { id: "hole", file: "millers_falls_no._980_drill__game_ready_model.glb", hotspot: "card-hole", scale: "0.5 0.5 0.5" }
+        const modelData = [
+            { src: "animal_crossing_palm_tree_background.glb", scale: "5 5 5", class: "tree-info" },
+            { src: "fertilizer.glb", scale: "150 150 150", class: "fert-info" },
+            { src: "millers_falls_no._980_drill__game_ready_model.glb", scale: "1.5 1.5 1.5", class: "hole-info" }
         ];
 
-        let index = 0;
-        const viewer = document.getElementById('main-viewer');
+        let idx = 0;
+        const viewer = document.querySelector('#viewer');
 
         function changeModel(dir) {
-            // Hide current card
-            document.getElementById(models[index].hotspot).style.display = 'none';
+            // Hide all cards first
+            document.querySelectorAll('.info-card').forEach(c => c.classList.add('hidden'));
 
-            index = (index + dir + models.length) % models.length;
-            const m = models[index];
+            idx = (idx + dir + modelData.length) % modelData.length;
+            const item = modelData[idx];
 
-            // Update Model and Card
-            viewer.src = m.file;
-            viewer.scale = m.scale;
-            document.getElementById(m.hotspot).style.display = 'block';
+            // Change Model & Scale
+            viewer.src = item.src;
+            viewer.scale = item.scale;
+
+            // Show cards for the current model
+            document.querySelectorAll('.' + item.class).forEach(c => c.classList.remove('hidden'));
         }
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
