@@ -1,123 +1,104 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://raw.githack.com/fcor/arjs-gestures/master/dist/gestures.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-      .touch-zone { position: fixed; top: 0; bottom: 0; width: 35%; z-index: 999; }
-      #left-zone { left: 0; }
-      #right-zone { right: 0; }
+        body { margin: 0; font-family: sans-serif; background: #121212; }
+        model-viewer { width: 100%; height: 100vh; --poster-color: transparent; }
+        
+        /* UI Overlay */
+        .controls {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px; z-index: 10;
+        }
+        button {
+            padding: 12px 25px; border-radius: 25px; border: none;
+            background: #81C784; color: black; font-weight: bold; cursor: pointer;
+        }
+        button.secondary { background: rgba(255,255,255,0.2); color: white; }
 
-      #info-card {
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-        color: white; padding: 15px 20px; border-radius: 20px;
-        text-align: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
-        border: 1px solid rgba(255,255,255,0.3); width: 85%; max-width: 450px;
-        pointer-events: none;
-      }
-      
-      #product-name { font-size: 18px; display: block; margin-bottom: 8px; color: #81C784; text-transform: uppercase; font-weight: bold; }
-      #product-desc { font-size: 13px; line-height: 1.5; opacity: 0.9; text-align: left; }
-      
-      #nav-hint {
-        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.5); color: white; padding: 8px 15px;
-        border-radius: 20px; font-size: 11px; z-index: 1000;
-      }
+        /* Hotspot Styling (The "Pop up" dots) */
+        .hotspot {
+            display: block; width: 24px; height: 24px; border-radius: 12px;
+            border: none; background-color: #81C784; box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .annotation {
+            background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            color: rgba(0, 0, 0, 0.8); display: block; font-size: 12px; font-weight: 700;
+            padding: 10px; position: absolute; transform: translate(10px, 10px);
+            width: 150px; display: none;
+        }
+        .hotspot:not(.selected) > .annotation { display: none; }
+        .hotspot.selected > .annotation { display: block; }
     </style>
-  </head>
+</head>
+<body>
 
-  <body style="margin: 0; overflow: hidden;">
-    <div id="left-zone" class="touch-zone" onclick="changeModel(-1)"></div>
-    <div id="right-zone" class="touch-zone" onclick="changeModel(1)"></div>
-    
-    <div id="info-card">
-      <strong id="product-name">Palm Oil Tree</strong>
-      <div id="product-desc">Loading...</div>
-    </div>
+    <model-viewer id="viewer"
+        src="animal_crossing_palm_tree_background.glb"
+        ar ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        shadow-intensity="1" 
+        auto-rotate
+        touch-action="pan-y">
 
-    <div id="nav-hint">Tap edges to switch • Drag to rotate</div>
+        <button id="spot1" class="hotspot" slot="hotspot-1" data-position="0 1.5 0" data-normal="0 0 1">
+            <div class="annotation">Kapasitas: 500g/pocket</div>
+        </button>
 
-    <a-scene 
-      embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false;"
-      gesture-detector
-      renderer="colorManagement: true; logarithmicDepthBuffer: true;">
-      
-      <a-assets>
-        <a-asset-item id="model-tree" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
-        <a-asset-item id="model-fertilizer" src="fertilizer.glb"></a-asset-item>
-        <a-asset-item id="model-fertihole" src="millers_falls_no._980_drill__game_ready_model.glb"></a-asset-item>
-      </a-assets>
-
-      <a-marker type="pattern" url="pattern-images.patt" raycaster="objects: .clickable" emitevents="true" cursor="fuse: false; rayOrigin: mouse;">
-        
-        <a-entity id="ent-tree" gltf-model="#model-tree" class="clickable" gesture-handler scale="5 5 5" position="0 0.5 0" visible="true"></a-entity>
-        
-        <a-entity id="ent-fertilizer" gltf-model="#model-fertilizer" class="clickable" gesture-handler scale="100 100 100" position="0 0 0" visible="false"></a-entity>
-        
-        <a-entity id="ent-fertihole" gltf-model="#model-fertihole" class="clickable" gesture-handler scale="2.5 2.5 2.5" position="0 0.2 0" visible="false"></a-entity>
-
-      </a-marker>
-
-      <a-entity camera></a-entity>
-    </a-scene>
+        <div class="controls">
+            <button class="secondary" onclick="prevModel()">Prev</button>
+            <button onclick="document.querySelector('model-viewer').activateAR()">VIEW IN AR</button>
+            <button class="secondary" onclick="nextModel()">Next</button>
+        </div>
+    </model-viewer>
 
     <script>
-      const products = [
-        {
-          el: "#ent-tree",
-          name: "Palm Oil Tree",
-          desc: "Pohon kelapa sawit adalah tanaman perkebunan vital penghasil CPO. Membutuhkan perawatan intensif dan nutrisi seimbang untuk hasil panen maksimal."
-        },
-        {
-          el: "#ent-fertilizer",
-          name: "Fertilizer (Pupuk)",
-          desc: "Nutrisi esensial (NPK+Mg+B) untuk meningkatkan berat janjang dan kualitas buah sawit. Aplikasi tepat waktu menjamin produktivitas berkelanjutan."
-        },
-        {
-          el: "#ent-fertihole",
-          name: "Fertihole (Alsin)",
-          desc: "Alat pembuat lubang pupuk (Pocket System). <br>• Kapasitas: 500g/pocket <br>• Kedalaman: 20-30 cm <br>• Diameter: 13 cm <br>• Efisiensi: Menghindari penguapan, pencucian, dan erosi pupuk secara maksimal."
+        const modelList = [
+            {
+                file: "animal_crossing_palm_tree_background.glb",
+                name: "Palm Oil Tree",
+                spots: false
+            },
+            {
+                file: "fertilizer.glb",
+                name: "Fertilizer",
+                spots: false
+            },
+            {
+                file: "millers_falls_no._980_drill__game_ready_model.glb",
+                name: "Fertihole",
+                spots: true
+            }
+        ];
+
+        let index = 0;
+        const viewer = document.querySelector('#viewer');
+        const hotspot = document.querySelector('#spot1');
+
+        function updateModel() {
+            const m = modelList[index];
+            viewer.src = m.file;
+            // Only show info dots for the Fertihole machine
+            hotspot.style.display = m.spots ? "block" : "none";
         }
-      ];
 
-      let currentIndex = 0;
+        function nextModel() {
+            index = (index + 1) % modelList.length;
+            updateModel();
+        }
 
-      function updateUI() {
-        document.getElementById('product-name').innerText = products[currentIndex].name;
-        document.getElementById('product-desc').innerHTML = products[currentIndex].desc;
-      }
+        function prevModel() {
+            index = (index - 1 + modelList.length) % modelList.length;
+            updateModel();
+        }
 
-      function changeModel(dir) {
-        document.querySelector(products[currentIndex].el).setAttribute('visible', 'false');
-
-        currentIndex += dir;
-        if (currentIndex < 0) currentIndex = products.length - 1;
-        if (currentIndex >= products.length) currentIndex = 0;
-
-        const newModel = document.querySelector(products[currentIndex].el);
-        newModel.setAttribute('visible', 'true');
-        newModel.setAttribute('rotation', '0 0 0');
-        
-        updateUI();
-
-        const s = newModel.getAttribute('scale');
-        newModel.setAttribute('animation__pop', {
-          property: 'scale',
-          from: '0 0 0',
-          to: `${s.x} ${s.y} ${s.z}`,
-          dur: 400,
-          easing: 'easeOutBack'
+        // Toggle Hotspot info on click
+        hotspot.addEventListener('click', () => {
+            hotspot.classList.toggle('selected');
         });
-      }
-
-      window.onload = updateUI;
     </script>
-  </body>
+</body>
 </html>
-
-
