@@ -1,92 +1,130 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-      .touch-zone { position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999; }
-      #left-zone { left: 0; }
-      #right-zone { right: 0; }
-      
-      /* The floating UI style */
-      .info-panel {
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 20px;
-        border-radius: 15px;
-        border: 2px solid #81C784;
-        font-family: Arial, sans-serif;
-        width: 280px;
-      }
-      .info-title { font-size: 24px; font-weight: bold; color: #81C784; margin-bottom: 10px; border-bottom: 1px solid #444; }
-      .info-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 16px; }
-      .label { opacity: 0.7; }
-    </style>
-  </head>
-
-  <body style="margin: 0; overflow: hidden;">
-    <div id="left-zone" class="touch-zone" onclick="changeModel(-1)"></div>
-    <div id="right-zone" class="touch-zone" onclick="changeModel(1)"></div>
-
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" renderer="logarithmicDepthBuffer: true;">
-      <a-assets>
-        <a-asset-item id="model-tree" src="animal_crossing_palm_tree_background.glb"></a-asset-item>
-        <a-asset-item id="model-fertilizer" src="fertilizer.glb"></a-asset-item>
-        <a-asset-item id="model-fertihole" src="millers_falls_no._980_drill__game_ready_model.glb"></a-asset-item>
-      </a-assets>
-
-      <a-marker type="pattern" url="pattern-images.patt">
+        body { margin: 0; background: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
-        <a-entity id="group-tree" visible="true">
-          <a-entity gltf-model="#model-tree" scale="8 8 8" position="0 0 0"></a-entity>
-          <a-entity position="2 3 0" rotation="-90 0 0">
-            <a-plane width="3" height="1.5" color="#000" opacity="0.8">
-                <a-text value="OIL PALM TREE\nHeight: 20-30 Meters\nYield: CPO & PKO" align="center" width="4"></a-text>
-            </a-plane>
-          </a-entity>
-        </a-entity>
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+            background-color: #eeeeee;
+        }
 
-        <a-entity id="group-fertilizer" visible="false">
-          <a-entity gltf-model="#model-fertilizer" scale="50 50 50" position="0 0 0"></a-entity>
-          <a-entity position="1.5 1 0" rotation="-90 0 0">
-            <a-plane width="2.5" height="1.2" color="#000" opacity="0.8">
-                <a-text value="FERTILIZER BAG\nSize: 52 x 85 cm\nSystem: Pocket Application" align="center" width="3.5"></a-text>
-            </a-plane>
-          </a-entity>
-        </a-entity>
+        /* Professional Rounded Card Style */
+        .info-card {
+            background: rgba(255, 255, 255, 0.8); /* White glass effect */
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #1a1a1a;
+            width: 220px;
+            pointer-events: none;
+        }
 
-        <a-entity id="group-fertihole" visible="false">
-          <a-entity gltf-model="#model-fertihole" scale="2.5 2.5 2.5" position="0 0.5 0"></a-entity>
-          <a-entity position="2 1.5 0" rotation="-90 0 0">
-            <a-plane width="3" height="2" color="#000" opacity="0.9" side="double">
-                <a-text value="FERTIHOLE SPECS" position="0 0.7 0.1" align="center" color="#81C784" width="5"></a-text>
-                <a-text value="Diameter: 13 cm\nDepth: 20-30 cm\nCap: 500g / Pocket\nFuel: Petrol Mix" position="0 -0.1 0.1" align="center" width="3.8"></a-text>
-            </a-plane>
-          </a-entity>
-        </a-entity>
+        .card-title {
+            font-weight: bold;
+            color: #2e7d32; /* Professional Green */
+            font-size: 16px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 4px;
+        }
 
-      </a-marker>
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
 
-      <a-entity camera></a-entity>
-    </a-scene>
+        /* Navigation Buttons */
+        .controls {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        button {
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: none;
+            background: #2e7d32;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        button.nav { background: #454545; }
+    </style>
+</head>
+<body>
+
+    <model-viewer id="main-viewer"
+        src="animal_crossing_palm_tree_background.glb"
+        ar ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        shadow-intensity="1"
+        auto-rotate
+        camera-orbit="0deg 75deg 10m">
+
+        <div id="card-tree" class="info-card" slot="hotspot-tree" data-position="-1 2 0">
+            <div class="card-title">OIL PALM TREE</div>
+            <div class="card-row"><span>Height:</span> <span>20 – 30 Meters</span></div>
+            <div class="card-row"><span>Type:</span> <span>Tenera / Dura</span></div>
+        </div>
+
+        <div id="card-fert" class="info-card" slot="hotspot-fert" data-position="0.5 1 0" style="display:none">
+            <div class="card-title">FERTILIZER BAG</div>
+            <div class="card-row"><span>Standard:</span> <span>45 x 75 cm</span></div>
+            <div class="card-row"><span>Large:</span> <span>52 x 85 cm</span></div>
+        </div>
+
+        <div id="card-hole" class="info-card" slot="hotspot-hole" data-position="0.6 0.8 0" style="display:none">
+            <div class="card-title">FERTIHOLE SPECS</div>
+            <div class="card-row"><span>Diameter:</span> <span>13 cm</span></div>
+            <div class="card-row"><span>Depth:</span> <span>20 – 30 cm</span></div>
+            <div class="card-row"><span>Capacity:</span> <span>Max 500g</span></div>
+        </div>
+
+        <div class="controls">
+            <button class="nav" onclick="changeModel(-1)">PREV</button>
+            <button onclick="document.querySelector('model-viewer').activateAR()">VIEW IN MY ROOM</button>
+            <button class="nav" onclick="changeModel(1)">NEXT</button>
+        </div>
+    </model-viewer>
 
     <script>
-      const groups = ["#group-tree", "#group-fertilizer", "#group-fertihole"];
-      let currentIndex = 0;
+        const models = [
+            { id: "tree", file: "animal_crossing_palm_tree_background.glb", hotspot: "card-tree", scale: "1 1 1" },
+            { id: "fert", file: "fertilizer.glb", hotspot: "card-fert", scale: "8 8 8" },
+            { id: "hole", file: "millers_falls_no._980_drill__game_ready_model.glb", hotspot: "card-hole", scale: "0.5 0.5 0.5" }
+        ];
 
-      function changeModel(dir) {
-        // Hide current
-        document.querySelector(groups[currentIndex]).setAttribute('visible', 'false');
+        let index = 0;
+        const viewer = document.getElementById('main-viewer');
 
-        // Loop
-        currentIndex += dir;
-        if (currentIndex < 0) currentIndex = groups.length - 1;
-        if (currentIndex >= groups.length) currentIndex = 0;
+        function changeModel(dir) {
+            // Hide current card
+            document.getElementById(models[index].hotspot).style.display = 'none';
 
-        // Show next
-        document.querySelector(groups[currentIndex]).setAttribute('visible', 'true');
-      }
+            index = (index + dir + models.length) % models.length;
+            const m = models[index];
+
+            // Update Model and Card
+            viewer.src = m.file;
+            viewer.scale = m.scale;
+            document.getElementById(m.hotspot).style.display = 'block';
+        }
     </script>
-  </body>
+</body>
 </html>
