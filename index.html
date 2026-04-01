@@ -1,99 +1,200 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <style>
-      /* Instagram-style Nav Taps */
-      .nav-tap { position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999; }
-      #l-tap { left: 0; }
-      #r-tap { right: 0; }
-      
-      /* Top Label UI */
-      #top-ui {
-        position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
-        background: rgba(46, 125, 50, 0.95); backdrop-filter: blur(10px);
-        color: white; padding: 12px 25px; border-radius: 30px;
-        text-align: center; z-index: 1000; font-family: 'Montserrat', sans-serif;
-        border: 2px solid #FBC02D; font-weight: 800; min-width: 220px;
-      }
-    </style>
-  </head>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <body style="margin: 0; overflow: hidden;">
-    <div id="l-tap" class="nav-tap" onclick="changeModel(-1)"></div>
-    <div id="r-tap" class="nav-tap" onclick="changeModel(1)"></div>
-    
-    <div id="top-ui"><span id="m-name">DXP 540 NG</span></div>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-assets>
-        <a-asset-item id="model-k" src="kecambah sawit.glb"></a-asset-item>
-        <a-asset-item id="model-f" src="fertilizer.glb"></a-asset-item>
-        <img id="img-ad" src="palm_oil_seeds_ads.png">
-      </a-assets>
+<style>
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f5f5;
+    overflow: hidden;
+}
 
-      <a-marker type="pattern" url="pattern-images.patt">
-        
-        <a-entity id="g-k" visible="true">
-          <a-entity gltf-model="#model-k" scale="2 2 2" position="0 0.5 0" 
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
-          </a-entity>
-          
-          <a-entity position="-4.5 1.5 1" rotation="-90 0 0">
-            <a-plane width="3.8" height="2.8" color="#fff" opacity="0.95" border="0.1 2e7d32">
-              <a-plane width="3.8" height="0.5" color="#2e7d32" position="0 1.15 0.01">
-                <a-text value="PPKS VARIETAS INFO" align="center" width="6.5" color="#fff" font="roboto"></a-text>
-              </a-plane>
-              
-              <a-entity position="-1.7 0.5 0.02">
-                <a-text value="VARIETAS:" color="#2e7d32" width="4.5" font="bold"></a-text>
-                <a-text value="DxP 540 NG" position="0 -0.25 0" color="#333" width="4"></a-text>
-                
-                <a-text value="KARAKTER:" position="0 -0.7 0" color="#2e7d32" width="4.5"></a-text>
-                <a-text value="Anti Ganoderma\nQuick Starter" position="0 -0.95 0" color="#333" width="4"></a-text>
+model-viewer {
+    width: 100%;
+    height: 100vh;
+}
 
-                <a-text value="RENDEMEN:" position="0 -1.45 0" color="#2e7d32" width="4.5"></a-text>
-                <a-text value="27.4%" position="0 -1.7 0" color="#333" width="4"></a-text>
-              </a-entity>
-            </a-plane>
-          </a-entity>
+/* ===== CARD STYLE ===== */
+.info-card, .ad-card {
+    width: 200px;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    background: white;
+    text-align: left;
+}
 
-          <a-entity position="4.5 1.5 1" rotation="-90 0 0">
-            <a-plane width="3.5" height="1.8" color="#FBC02D" padding="0.1">
-               <a-image src="#img-ad" width="3.3" height="1.6" position="0 0 0.05"></a-image>
-            </a-plane>
-          </a-entity>
-        </a-entity>
+/* INFO CARD */
+.info-card {
+    border-left: 5px solid #fbc02d;
+}
 
-        <a-entity id="g-f" visible="false">
-          <a-entity gltf-model="#model-f" scale="30 30 30" position="0 0 0"></a-entity>
-          <a-entity position="4 1 0" rotation="-90 0 0">
-            <a-plane width="3" height="1.5" color="#000" opacity="0.8">
-              <a-text value="PUPUK SAWIT PPKS\nFormula NPK+Mg\nKapasitas 50KG" align="center" width="5.5" color="#fff"></a-text>
-            </a-plane>
-          </a-entity>
-        </a-entity>
+.card-header {
+    font-weight: 800;
+    font-size: 11px;
+    color: #2e7d32;
+    margin-bottom: 5px;
+}
 
-      </a-marker>
+.card-body {
+    font-size: 11px;
+    line-height: 1.4;
+}
 
-      <a-entity camera></a-entity>
-    </a-scene>
+/* AD CARD */
+.ad-card {
+    border: 2px solid #2e7d32;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-    <script>
-      const catalog = [
-        { id: "#g-k", name: "DXP 540 NG" },
-        { id: "#g-f", name: "PUPUK PPKS" }
-      ];
+.ad-card:hover {
+    transform: scale(1.05);
+}
 
-      let cur = 0;
-      function changeModel(dir) {
-        document.querySelector(catalog[cur].id).setAttribute('visible', 'false');
-        cur = (cur + dir + catalog.length) % catalog.length;
-        document.querySelector(catalog[cur].id).setAttribute('visible', 'true');
-        document.querySelector('#m-name').innerText = catalog[cur].name;
-      }
-    </script>
-  </body>
+.ad-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+/* OVERLAY */
+#zoom-overlay {
+    position: fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background: rgba(0,0,0,0.9);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+
+#zoom-overlay img {
+    max-width:90%;
+    max-height:80%;
+}
+
+/* BUTTON */
+.ui {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+button {
+    padding: 12px 25px;
+    border:none;
+    background:#2e7d32;
+    color:white;
+    font-weight:bold;
+    border-radius:5px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ZOOM -->
+<div id="zoom-overlay" onclick="closeZoom()">
+    <img src="palm_oil_seeds_ads.png">
+    <p style="color:white;">Tap untuk tutup</p>
+</div>
+
+<model-viewer id="viewer"
+    src="Kecambah.glb"
+    scale="18 18 18"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    camera-orbit="0deg 75deg 1.8m"
+    ar>
+
+    <!-- ===== SEBAR HOTSPOT (GA OVERLAP) ===== -->
+
+    <!-- KIRI -->
+    <div class="info-card" slot="hotspot-1"
+        data-position="-0.15 0.05 0"
+        data-normal="0 1 0">
+        <div class="card-header">GENETIK</div>
+        <div class="card-body">
+            DxP unggul PPKS, produktivitas tinggi.
+        </div>
+    </div>
+
+    <!-- KANAN -->
+    <div class="info-card" slot="hotspot-2"
+        data-position="0.15 0.05 0"
+        data-normal="0 1 0">
+        <div class="card-header">KETAHANAN</div>
+        <div class="card-body">
+            Tahan Ganoderma, umur panjang.
+        </div>
+    </div>
+
+    <!-- DEPAN -->
+    <div class="info-card" slot="hotspot-3"
+        data-position="0 0.02 0.15"
+        data-normal="0 0 1">
+        <div class="card-header">PRODUKSI</div>
+        <div class="card-body">
+            Rendemen minyak tinggi.
+        </div>
+    </div>
+
+    <!-- BELAKANG -->
+    <div class="info-card" slot="hotspot-4"
+        data-position="0 0.02 -0.15"
+        data-normal="0 0 -1">
+        <div class="card-header">PERTUMBUHAN</div>
+        <div class="card-body">
+            Cepat tumbuh & stabil.
+        </div>
+    </div>
+
+    <!-- ATAS -->
+    <div class="info-card" slot="hotspot-5"
+        data-position="0 0.12 0"
+        data-normal="0 1 0">
+        <div class="card-header">VARIETAS</div>
+        <div class="card-body">
+            SP540, Yangambi, Langkat.
+        </div>
+    </div>
+
+    <!-- AD (AGAK JAUH BIAR GAK NUTUP) -->
+    <div class="ad-card" slot="hotspot-ad"
+        data-position="0.25 0.03 0.15"
+        data-normal="0 1 0"
+        onclick="openZoom()">
+
+        <img src="palm_oil_seeds_ads.png">
+    </div>
+
+</model-viewer>
+
+<div class="ui">
+    <button onclick="viewer.activateAR()">BUKA AR</button>
+</div>
+
+<script>
+const viewer = document.getElementById("viewer");
+
+function openZoom(){
+    document.getElementById("zoom-overlay").style.display="flex";
+}
+
+function closeZoom(){
+    document.getElementById("zoom-overlay").style.display="none";
+}
+</script>
+
+</body>
 </html>
