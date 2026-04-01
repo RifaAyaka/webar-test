@@ -2,172 +2,180 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
 
-        :root {
-            --ppks-green: #2e7d32;
-            --ppks-gold: #FBC02D;
-            --ppks-dark: #1b1b1b;
+        /* Disable all accidental scrolling and zooming */
+        html, body { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; touch-action: none; background: #fafafa;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        body { margin: 0; background: #000; font-family: 'Montserrat', sans-serif; color: white; overflow: hidden; }
-        
-        /* 3D Viewer - Full Background */
-        model-viewer {
-            width: 100vw;
-            height: 100vh;
-            background-color: #fafafa;
-            --poster-color: transparent;
+        model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
+
+        /* Floating Info Cards - Placed to the sides to NOT hide the model */
+        .floating-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2e7d32;
+            width: 160px; /* Slimmer so it doesn't overlap center */
+            z-index: 10;
+            pointer-events: none; /* Allows clicks to pass through to the 3D model */
         }
 
-        /* Top Progress Bars (Instagram Style) */
-        .progress-container {
-            position: absolute; top: 15px; left: 0; width: 100%;
-            display: flex; gap: 5px; padding: 0 10px; box-sizing: border-box; z-index: 100;
-        }
-        .bar { height: 3px; flex: 1; background: rgba(0,0,0,0.1); border-radius: 2px; overflow: hidden; }
-        .bar-fill { height: 100%; width: 0%; background: var(--ppks-green); transition: width 0.1s linear; }
-        .bar.active .bar-fill { width: 100%; transition: none; }
+        .card-left { top: 60px; left: 15px; }
+        .card-right { top: 60px; right: 15px; border-left: none; border-right: 4px solid #FBC02D; }
 
-        /* Product Info Section (Bottom Sheet) */
-        .bottom-info {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8) 20%);
-            padding: 40px 20px 100px 20px; box-sizing: border-box;
-            z-index: 50; pointer-events: none;
-        }
-        .product-label { font-weight: 900; font-size: 20px; color: var(--ppks-gold); text-transform: uppercase; margin-bottom: 5px; }
-        .product-desc { font-size: 13px; line-height: 1.5; max-width: 85%; font-weight: 500; }
+        .card-title { font-size: 10px; font-weight: 800; color: #2e7d32; margin-bottom: 4px; text-transform: uppercase; }
+        .card-text { font-size: 11px; font-weight: 600; color: #333; line-height: 1.3; }
 
-        /* Interactive Ads Overlay */
-        .ad-mini-card {
-            position: absolute; right: 20px; bottom: 120px;
-            width: 80px; height: 80px; border: 2px solid white;
-            border-radius: 12px; overflow: hidden; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 60;
-            pointer-events: auto;
-        }
-        .ad-mini-card img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Navigation Taps (Left/Right side of screen) */
-        .nav-tap {
-            position: absolute; top: 0; width: 30%; height: 80%; z-index: 40;
-        }
-        .nav-left { left: 0; }
-        .nav-right { right: 0; }
-
-        /* AR Floating Button */
-        .ar-float-btn {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--ppks-green); color: white; border: none;
-            padding: 12px 30px; border-radius: 30px; font-weight: 800;
-            font-size: 12px; letter-spacing: 1px; z-index: 100;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4); cursor: pointer;
+        /* Bottom Control Panel with Safe Area for Mobile Buttons */
+        .bottom-panel {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(255,255,255,1) 70%, rgba(255,255,255,0));
+            padding-bottom: env(safe-area-inset-bottom, 35px); /* FIX: Prevents phone home bars from hiding button */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
         }
 
-        /* Lightbox for Ads */
-        #zoom-overlay {
+        .nav-row { display: flex; align-items: center; gap: 25px; width: 100%; justify-content: center; }
+
+        .nav-btn {
+            background: white; color: #2e7d32; border: 2px solid #2e7d32;
+            width: 44px; height: 44px; border-radius: 50%; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+
+        .ar-btn {
+            background: #2e7d32; color: white; border: none; 
+            padding: 14px 40px; border-radius: 8px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+        }
+
+        /* Ad Card - Floating top center */
+        .ad-thumb {
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 50px; border-radius: 8px; overflow: hidden;
+            border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 200; cursor: pointer;
+        }
+        .ad-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Zoom Overlay */
+        #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: none;
-            justify-content: center; align-items: center; z-index: 2000;
+            background: rgba(0,0,0,0.9); display: none; 
+            justify-content: center; align-items: center; z-index: 3000;
         }
-        #zoom-overlay img { max-width: 90%; max-height: 80%; border-radius: 10px; }
+        #overlay img { max-width: 90%; max-height: 80%; border-radius: 8px; }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="zoom-overlay" onclick="this.style.display='none'">
+    <div id="overlay" onclick="this.style.display='none'">
         <img src="palm_oil_seeds_ads.png">
     </div>
 
-    <div class="progress-container" id="progress-bars"></div>
+    <div class="ad-thumb" onclick="document.getElementById('overlay').style.display='flex'">
+        <img src="palm_oil_seeds_ads.png">
+    </div>
 
-    <div class="nav-tap nav-left" onclick="changeModel(-1)"></div>
-    <div class="nav-tap nav-right" onclick="changeModel(1)"></div>
+    <div id="info-l" class="floating-card card-left">
+        <div class="card-title">🧬 GENETIKA</div>
+        <div id="text-l" class="card-text">DxP 540 NG: Moderat tahan Ganoderma.</div>
+    </div>
+
+    <div id="info-r" class="floating-card card-right">
+        <div class="card-title">📊 POTENSI</div>
+        <div id="text-r" class="card-text">Rendemen Minyak: 26.5 - 27.4%.</div>
+    </div>
 
     <model-viewer id="viewer"
         src="kecambah sawit.glb"
         scale="15 15 15"
         ar ar-modes="webxr scene-viewer quick-look" 
-        camera-controls auto-rotate
-        shadow-intensity="1"
+        camera-controls auto-rotate shadow-intensity="1"
         camera-orbit="0deg 75deg 2m">
-        
-        <div class="bottom-info">
-            <div class="product-label" id="p-name">Kecambah Kelapa Sawit</div>
-            <div class="product-desc" id="p-desc">Varietas unggul PPKS dengan moderat tahan Ganoderma dan rendemen minyak tinggi.</div>
-        </div>
 
-        <div class="ad-mini-card" onclick="document.getElementById('zoom-overlay').style.display='flex'">
-            <img src="palm_oil_seeds_ads.png">
+        <div class="bottom-panel">
+            <div class="nav-row">
+                <button class="nav-btn" onclick="changeModel(-1)">❮</button>
+                <button class="ar-btn" id="ar-trigger" onclick="viewer.activateAR()">Buka AR</button>
+                <button class="nav-btn" onclick="changeModel(1)">❯</button>
+            </div>
+            <div style="font-size: 10px; font-weight: 800; color: #666; margin-bottom: 5px;" id="model-name">
+                KECAMBAH SAWIT PPKS
+            </div>
         </div>
-
-        <button class="ar-float-btn" onclick="viewer.activateAR()">LIHAT DI RUANGAN (AR)</button>
     </model-viewer>
 
     <script>
         const products = [
             {
-                name: "Kecambah Kelapa Sawit",
-                desc: "Varietas DxP 540 NG: Generasi baru tahan Ganoderma. Rendemen minyak 26.5% - 27.4%.",
+                name: "KECAMBAH SAWIT PPKS",
+                l: "DxP 540 NG: Moderat tahan Ganoderma.",
+                r: "Rendemen Minyak: 26.5 - 27.4%.",
                 src: "kecambah sawit.glb",
-                scale: "15 15 15"
+                scale: "15 15 15",
+                orbit: "0deg 75deg 2m"
             },
             {
-                name: "Pupuk Industri PPKS",
-                desc: "Formula khusus untuk optimasi pertumbuhan vegetatif dan generatif kelapa sawit.",
+                name: "PUPUK INDUSTRI",
+                l: "Format: 52 x 85 cm. Karung Industri.",
+                r: "Optimasi pertumbuhan vegetatif sawit.",
                 src: "fertilizer.glb",
-                scale: "280 280 280"
+                scale: "280 280 280",
+                orbit: "45deg 75deg 15m"
             },
             {
-                name: "Alat Fertihole",
-                desc: "Injeksi presisi untuk efisiensi pemupukan. Diameter 13cm dengan kedalaman terukur.",
+                name: "ALAT FERTIHOLE",
+                l: "Dia: 13cm | Kedalaman: 20-30cm.",
+                r: "Injeksi presisi untuk efisiensi pupuk.",
                 src: "millers_falls_no._980_drill__game_ready_model.glb",
-                scale: "0.8 0.8 0.8"
+                scale: "0.8 0.8 0.8",
+                orbit: "45deg 75deg 15m"
             }
         ];
 
         let idx = 0;
         const viewer = document.querySelector('#viewer');
-        const pName = document.querySelector('#p-name');
-        const pDesc = document.querySelector('#p-desc');
-        const progressContainer = document.getElementById('progress-bars');
-
-        // Build Progress Bars
-        function initBars() {
-            progressContainer.innerHTML = '';
-            products.forEach((_, i) => {
-                const bar = document.createElement('div');
-                bar.className = 'bar' + (i <= idx ? ' active' : '');
-                const fill = document.createElement('div');
-                fill.className = 'bar-fill';
-                bar.appendChild(fill);
-                progressContainer.appendChild(bar);
-            });
-        }
+        const textL = document.querySelector('#text-l');
+        const textR = document.querySelector('#text-r');
+        const mName = document.querySelector('#model-name');
 
         function changeModel(dir) {
             idx = (idx + dir + products.length) % products.length;
             const item = products[idx];
             
-            // Smoothly swap model
             viewer.src = item.src;
             viewer.scale = item.scale;
+            viewer.setAttribute("camera-orbit", item.orbit);
             
-            // Update UI Text
-            pName.innerText = item.name;
-            pDesc.innerText = item.desc;
-
-            // Update Progress Bars
-            initBars();
+            textL.innerText = item.l;
+            textR.innerText = item.r;
+            mName.innerText = item.name;
         }
 
-        initBars();
+        // Lock screen and address bar behavior
+        window.addEventListener('load', () => {
+            window.scrollTo(0, 1);
+        });
     </script>
 </body>
 </html>
