@@ -14,44 +14,38 @@
 
         model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
 
-        /* Floating Hotspot Cards - Pushed further to sides (Offset) */
-        .floating-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-            width: 140px;
-            pointer-events: none;
-            transition: transform 0.3s ease;
+        /* Top Bar Label */
+        .header-label {
+            position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+            background: #2e7d32; color: white; padding: 10px 25px;
+            border-radius: 30px; font-size: 11px; font-weight: 800;
+            z-index: 100; text-transform: uppercase;
         }
 
-        /* The Card/Table */
-        .card-table { border-left: 5px solid #2e7d32; }
-        
-        /* The Floating Photo */
-        .card-photo { border: 2px solid #FBC02D; padding: 4px; width: 90px; height: 90px; }
-        .card-photo img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        /* Fixed Screen Cards (NOT Hotspots) to prevent Overlap */
+        .fixed-card {
+            position: absolute; bottom: 130px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px; padding: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            z-index: 80; pointer-events: none;
+        }
+        .card-left { left: 20px; border-left: 5px solid #2e7d32; width: 140px; }
+        .card-right { right: 20px; border: 2px solid #FBC02D; width: 90px; height: 90px; padding: 4px; }
+        .card-right img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
 
         .info-title { font-size: 9px; font-weight: 800; color: #2e7d32; margin-bottom: 5px; text-transform: uppercase; }
         .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 4px 0; }
         .info-key { font-size: 8px; color: #888; }
         .info-val { font-size: 9px; font-weight: 700; color: #222; }
 
-        /* Instagram Navigation Layers */
-        .nav-tap { position: absolute; top: 0; width: 25%; height: 85%; z-index: 50; }
+        /* Navigation Taps */
+        .nav-tap { position: absolute; top: 0; width: 30%; height: 80%; z-index: 60; }
         .nav-prev { left: 0; }
         .nav-next { right: 0; }
 
-        /* Top Header */
-        .header-label {
-            position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 10px 25px;
-            border-radius: 30px; font-size: 11px; font-weight: 800;
-            z-index: 100; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        /* The Centered AR Button */
+        /* AR Button Panel */
         .ar-container {
             position: absolute; bottom: 50px; left: 0; width: 100%;
             display: flex; justify-content: center; z-index: 100;
@@ -62,10 +56,7 @@
             padding: 16px 60px; border-radius: 14px; font-weight: 800;
             font-size: 14px; text-transform: uppercase; cursor: pointer;
             box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-            transition: background 0.3s;
         }
-        .ar-btn.active { background: #d32f2f; } /* Red for "Kembali" */
-
     </style>
 </head>
 <body>
@@ -75,26 +66,25 @@
     <div class="nav-tap nav-prev" onclick="changeModel(-1)"></div>
     <div class="nav-tap nav-next" onclick="changeModel(1)"></div>
 
+    <div class="fixed-card card-left">
+        <div class="info-title">Spesifikasi</div>
+        <div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="v1">DxP 540 NG</span></div>
+        <div class="info-row"><span class="info-key">Karakter</span><span class="info-val" id="v2">Tahan Gano</span></div>
+        <div class="info-row" style="border:none;"><span class="info-key">Yield</span><span class="info-val" id="v3">27.4%</span></div>
+    </div>
+
+    <div class="fixed-card card-right">
+        <img id="side-photo" src="palm_oil_seeds_ads.png">
+    </div>
+
     <model-viewer id="viewer"
         src="kecambah sawit.glb"
+        scale="1 1 1"
         ar ar-modes="webxr scene-viewer quick-look" 
         camera-controls auto-rotate shadow-intensity="1"
-        camera-orbit="0deg 75deg 3m" 
-        min-camera-orbit="auto auto 0.5m"
+        camera-orbit="0deg 75deg 6m" 
+        field-of-view="20deg"
         interaction-prompt="none">
-
-        <button class="floating-card card-table" slot="hotspot-table" 
-            data-position="-0.6 0.3 0" data-normal="-1 0 0">
-            <div class="info-title">Spesifikasi</div>
-            <div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="v1">DxP 540 NG</span></div>
-            <div class="info-row"><span class="info-key">Karakter</span><span class="info-val" id="v2">Tahan Gano</span></div>
-            <div class="info-row" style="border:none;"><span class="info-key">Yield</span><span class="info-val" id="v3">27.4%</span></div>
-        </button>
-
-        <button class="floating-card card-photo" slot="hotspot-img" 
-            data-position="0.6 0.3 0" data-normal="1 0 0">
-            <img id="side-photo" src="palm_oil_seeds_ads.png">
-        </button>
 
         <div class="ar-container">
             <button class="ar-btn" id="ar-btn" onclick="handleARClick()">Buka AR</button>
@@ -107,21 +97,16 @@
                 name: "Kecambah Sawit PPKS",
                 v1: "DxP 540 NG", v2: "Tahan Gano", v3: "27.4%",
                 src: "kecambah sawit.glb",
-                orbit: "0deg 75deg 3m", // Increased orbit to make model look smaller/further at start
+                orbit: "0deg 75deg 6m", // Further back
+                fov: "20deg", // Narrower view makes the seed look smaller
                 photo: "palm_oil_seeds_ads.png"
             },
             {
                 name: "Pupuk Industri",
-                v1: "Premium", v2: "Slow Release", v3: "Organik",
+                v1: "Premium", v2: "Industri", v3: "Slow Release",
                 src: "fertilizer.glb",
-                orbit: "45deg 75deg 12m",
-                photo: "palm_oil_seeds_ads.png"
-            },
-            {
-                name: "Alat Fertihole",
-                v1: "Manual", v2: "Deep Drill", v3: "Carbon Steel",
-                src: "millers_falls_no._980_drill__game_ready_model.glb",
-                orbit: "45deg 75deg 10m",
+                orbit: "45deg 75deg 15m",
+                fov: "30deg",
                 photo: "palm_oil_seeds_ads.png"
             }
         ];
@@ -136,6 +121,7 @@
             
             viewer.src = item.src;
             viewer.setAttribute("camera-orbit", item.orbit);
+            viewer.setAttribute("field-of-view", item.fov);
             
             document.getElementById('top-label').innerText = item.name;
             document.getElementById('v1').innerText = item.v1;
@@ -144,24 +130,19 @@
             document.getElementById('side-photo').src = item.photo;
         }
 
-        // Fix AR Toggle Logic
         function handleARClick() {
             if (viewer.getAttribute('ar-status') === 'session-started') {
-                // This forces the session to end or reload the page to go back to UI
                 location.reload(); 
             } else {
                 viewer.activateAR();
             }
         }
 
-        // Monitor AR status to change button text/style
         viewer.addEventListener('ar-status', (event) => {
             if (event.detail.status === 'session-started') {
                 btn.innerText = "Kembali";
-                btn.classList.add('active');
             } else {
                 btn.innerText = "Buka AR";
-                btn.classList.remove('active');
             }
         });
     </script>
