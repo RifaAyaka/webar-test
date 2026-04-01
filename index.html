@@ -5,76 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            overflow: hidden; background: #ffffff; font-family: 'Montserrat', sans-serif;
-        }
+        :root { --ppks-green: #2e7d32; --ppks-gold: #FBC02D; }
 
-        model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #ffffff; font-family: 'Montserrat', sans-serif; }
 
-        /* Top Bar Label */
-        .header-label {
+        model-viewer { width: 100%; height: 100%; --poster-color: transparent; z-index: 1; }
+
+        /* Top Title */
+        .header-title {
             position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 10px 25px;
-            border-radius: 30px; font-size: 11px; font-weight: 800;
-            z-index: 100; text-transform: uppercase;
+            background: var(--ppks-green); color: white; padding: 12px 30px;
+            border-radius: 40px; font-size: 12px; font-weight: 900; z-index: 100;
+            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Fixed Screen Cards (NOT Hotspots) to prevent Overlap */
-        .fixed-card {
-            position: absolute; bottom: 130px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 12px; padding: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            z-index: 80; pointer-events: none;
+        /* LEFT CARD: Full PPKS Data Table */
+        .dashboard-card {
+            position: absolute; bottom: 140px; left: 20px;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px);
+            border-radius: 15px; width: 180px; padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-left: 6px solid var(--ppks-green);
+            z-index: 100; pointer-events: none;
         }
-        .card-left { left: 20px; border-left: 5px solid #2e7d32; width: 140px; }
-        .card-right { right: 20px; border: 2px solid #FBC02D; width: 90px; height: 90px; padding: 4px; }
-        .card-right img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+        .db-title { font-size: 10px; font-weight: 900; color: var(--ppks-green); margin-bottom: 8px; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+        .db-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f2f2f2; }
+        .db-key { font-size: 9px; font-weight: 700; color: #888; }
+        .db-val { font-size: 10px; font-weight: 800; color: #222; text-align: right; }
 
-        .info-title { font-size: 9px; font-weight: 800; color: #2e7d32; margin-bottom: 5px; text-transform: uppercase; }
-        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 4px 0; }
-        .info-key { font-size: 8px; color: #888; }
-        .info-val { font-size: 9px; font-weight: 700; color: #222; }
+        /* RIGHT CARD: Floating Product Photo */
+        .photo-card {
+            position: absolute; bottom: 140px; right: 20px;
+            background: white; border-radius: 15px; width: 110px; height: 110px;
+            padding: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 3px solid var(--ppks-gold); z-index: 100;
+        }
+        .photo-card img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; }
 
-        /* Navigation Taps */
-        .nav-tap { position: absolute; top: 0; width: 30%; height: 80%; z-index: 60; }
+        /* Instagram Navigation Taps */
+        .nav-tap { position: absolute; top: 0; width: 30%; height: 80%; z-index: 50; }
         .nav-prev { left: 0; }
         .nav-next { right: 0; }
 
-        /* AR Button Panel */
-        .ar-container {
+        /* Center AR Button */
+        .ar-wrap {
             position: absolute; bottom: 50px; left: 0; width: 100%;
-            display: flex; justify-content: center; z-index: 100;
+            display: flex; justify-content: center; z-index: 200;
             padding-bottom: env(safe-area-inset-bottom);
         }
         .ar-btn {
-            background: #2e7d32; color: white; border: none;
-            padding: 16px 60px; border-radius: 14px; font-weight: 800;
+            background: var(--ppks-green); color: white; border: none;
+            padding: 18px 70px; border-radius: 16px; font-weight: 900;
             font-size: 14px; text-transform: uppercase; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.4); transition: 0.3s;
         }
+        .ar-btn:active { transform: scale(0.95); background: #1b5e20; }
     </style>
 </head>
 <body>
 
-    <div class="header-label" id="top-label">Kecambah Sawit PPKS</div>
+    <div class="header-title" id="m-name">KECAMBAH KELAPA SAWIT</div>
 
     <div class="nav-tap nav-prev" onclick="changeModel(-1)"></div>
     <div class="nav-tap nav-next" onclick="changeModel(1)"></div>
 
-    <div class="fixed-card card-left">
-        <div class="info-title">Spesifikasi</div>
-        <div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="v1">DxP 540 NG</span></div>
-        <div class="info-row"><span class="info-key">Karakter</span><span class="info-val" id="v2">Tahan Gano</span></div>
-        <div class="info-row" style="border:none;"><span class="info-key">Yield</span><span class="info-val" id="v3">27.4%</span></div>
+    <div class="dashboard-card">
+        <div class="db-title">INFORMASI VARIETAS</div>
+        <div class="db-row"><span class="db-key">Tipe</span><span class="db-val" id="d-1">DxP 540 NG</span></div>
+        <div class="db-row"><span class="db-key">Keunggulan</span><span class="db-val" id="d-2">Tahan Ganoderma</span></div>
+        <div class="db-row"><span class="db-key">Rendemen</span><span class="db-val" id="d-3">27.4%</span></div>
+        <div class="db-row" style="border:none;"><span class="db-key">Pertumbuhan</span><span class="db-val" id="d-4">Moderat</span></div>
     </div>
 
-    <div class="fixed-card card-right">
-        <img id="side-photo" src="palm_oil_seeds_ads.png">
+    <div class="photo-card">
+        <img id="m-img" src="palm_oil_seeds_ads.png">
     </div>
 
     <model-viewer id="viewer"
@@ -82,68 +87,62 @@
         scale="1 1 1"
         ar ar-modes="webxr scene-viewer quick-look" 
         camera-controls auto-rotate shadow-intensity="1"
-        camera-orbit="0deg 75deg 6m" 
-        field-of-view="20deg"
+        camera-orbit="0deg 75deg 8m" 
+        field-of-view="25deg"
         interaction-prompt="none">
 
-        <div class="ar-container">
-            <button class="ar-btn" id="ar-btn" onclick="handleARClick()">Buka AR</button>
+        <div class="ar-wrap">
+            <button class="ar-btn" id="ar-trigger" onclick="handleAR()">Buka AR</button>
         </div>
     </model-viewer>
 
     <script>
-        const products = [
+        const catalog = [
             {
-                name: "Kecambah Sawit PPKS",
-                v1: "DxP 540 NG", v2: "Tahan Gano", v3: "27.4%",
-                src: "kecambah sawit.glb",
-                orbit: "0deg 75deg 6m", // Further back
-                fov: "20deg", // Narrower view makes the seed look smaller
-                photo: "palm_oil_seeds_ads.png"
+                name: "KECAMBAH KELAPA SAWIT",
+                data: ["DxP 540 NG", "Anti Ganoderma", "27.4%", "Lambat"],
+                img: "palm_oil_seeds_ads.png",
+                file: "kecambah sawit.glb",
+                orbit: "0deg 75deg 8m"
             },
             {
-                name: "Pupuk Industri",
-                v1: "Premium", v2: "Industri", v3: "Slow Release",
-                src: "fertilizer.glb",
-                orbit: "45deg 75deg 15m",
-                fov: "30deg",
-                photo: "palm_oil_seeds_ads.png"
+                name: "PUPUK INDUSTRI PPKS",
+                data: ["Premium Blue", "Slow Release", "Organik Plus", "Cepat"],
+                img: "palm_oil_seeds_ads.png",
+                file: "fertilizer.glb",
+                orbit: "45deg 75deg 18m"
             }
         ];
 
-        let idx = 0;
-        const viewer = document.querySelector('#viewer');
-        const btn = document.querySelector('#ar-btn');
+        let i = 0;
+        const v = document.querySelector('#viewer');
+        const btn = document.querySelector('#ar-trigger');
 
         function changeModel(dir) {
-            idx = (idx + dir + products.length) % products.length;
-            const item = products[idx];
+            i = (i + dir + catalog.length) % catalog.length;
+            const item = catalog[i];
             
-            viewer.src = item.src;
-            viewer.setAttribute("camera-orbit", item.orbit);
-            viewer.setAttribute("field-of-view", item.fov);
+            v.src = item.file;
+            v.setAttribute("camera-orbit", item.orbit);
             
-            document.getElementById('top-label').innerText = item.name;
-            document.getElementById('v1').innerText = item.v1;
-            document.getElementById('v2').innerText = item.v2;
-            document.getElementById('v3').innerText = item.v3;
-            document.getElementById('side-photo').src = item.photo;
+            document.getElementById('m-name').innerText = item.name;
+            document.getElementById('d-1').innerText = item.data[0];
+            document.getElementById('d-2').innerText = item.data[1];
+            document.getElementById('d-3').innerText = item.data[2];
+            document.getElementById('d-4').innerText = item.data[3];
+            document.getElementById('m-img').src = item.img;
         }
 
-        function handleARClick() {
-            if (viewer.getAttribute('ar-status') === 'session-started') {
+        function handleAR() {
+            if (v.getAttribute('ar-status') === 'session-started') {
                 location.reload(); 
             } else {
-                viewer.activateAR();
+                v.activateAR();
             }
         }
 
-        viewer.addEventListener('ar-status', (event) => {
-            if (event.detail.status === 'session-started') {
-                btn.innerText = "Kembali";
-            } else {
-                btn.innerText = "Buka AR";
-            }
+        v.addEventListener('ar-status', (e) => {
+            btn.innerText = (e.detail.status === 'session-started') ? "KEMBALI" : "BUKA AR";
         });
     </script>
 </body>
