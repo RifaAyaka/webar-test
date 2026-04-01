@@ -8,7 +8,6 @@
       .nav-zone { position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999; }
       #l-zone { left: 0; }
       #r-zone { right: 0; }
-      
       #top-ui {
         position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
         background: #2e7d32; color: white; padding: 12px 25px; border-radius: 30px;
@@ -22,11 +21,9 @@
     <div id="l-zone" class="nav-zone" onclick="changeModel(-1)"></div>
     <div id="r-zone" class="nav-zone" onclick="changeModel(1)"></div>
     
-    <div id="top-ui">
-      <span id="m-name">DXP 540 NG</span>
-    </div>
+    <div id="top-ui"><span id="m-name">DXP 540 NG</span></div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" cursor="fuse: false; rayOrigin: mouse">
       <a-assets>
         <a-asset-item id="model-k" src="kecambah sawit.glb"></a-asset-item>
         <a-asset-item id="model-f" src="fertilizer.glb"></a-asset-item>
@@ -36,41 +33,41 @@
       <a-marker type="pattern" url="pattern-images.patt">
         
         <a-entity id="g-k" visible="true">
-          <a-entity gltf-model="#model-k" scale="3 3 3" position="0 0 0" 
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+          <a-entity gltf-model="#model-k" scale="2 2 2" position="0 0 0" 
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear">
           </a-entity>
           
-          <a-entity position="-3 1.5 0" rotation="-90 0 0">
-            <a-plane width="3.5" height="2.5" color="#fff" opacity="0.95">
-              <a-plane width="3.5" height="0.5" color="#2e7d32" position="0 1 0.01">
-                <a-text value="PPKS VARIETAS INFO" align="center" width="6" color="#fff"></a-text>
+          <a-entity id="info-card" position="-3.5 1.5 1" rotation="-90 0 0">
+            <a-plane width="3.8" height="3" color="#fff" opacity="0.95">
+              <a-plane width="3.8" height="0.6" color="#2e7d32" position="0 1.2 0.01">
+                <a-text value="PPKS TECHNICAL DATA" align="center" width="7" color="#fff"></a-text>
               </a-plane>
               
-              <a-entity position="-1.5 0.3 0.02">
-                <a-text value="VARIETAS:" color="#2e7d32" width="4" font="bold"></a-text>
-                <a-text value="DxP 540 NG (New Gen)" position="0 -0.2 0" color="#333" width="3.5"></a-text>
+              <a-entity position="-1.7 0.5 0.02">
+                <a-text value="VARIETAS:" color="#2e7d32" width="5" font="bold"></a-text>
+                <a-text value="DxP 540 NG (New Generation)" position="0 -0.3 0" color="#333" width="4.5"></a-text>
                 
-                <a-text value="KARAKTER:" position="0 -0.6 0" color="#2e7d32" width="4"></a-text>
-                <a-text value="Moderat Tahan Ganoderma\nYield: 35 Ton TBS/Ha" position="0 -0.85 0" color="#333" width="3.5"></a-text>
-                
-                <a-text value="RENDEMEN:" position="0 -1.25 0" color="#2e7d32" width="4"></a-text>
-                <a-text value="26.5% - 27.4%" position="0 -1.45 0" color="#333" width="3.5"></a-text>
+                <a-text value="KETAHANAN:" position="0 -0.8 0" color="#2e7d32" width="5"></a-text>
+                <a-text value="Moderat Tahan Ganoderma" position="0 -1.05 0" color="#333" width="4.5"></a-text>
+
+                <a-text value="PRODUKSI:" position="0 -1.5 0" color="#2e7d32" width="5"></a-text>
+                <a-text value="35 Ton TBS/Ha | Rendemen 27.4%" position="0 -1.75 0" color="#333" width="4.5"></a-text>
               </a-entity>
             </a-plane>
           </a-entity>
 
-          <a-entity position="3 1.5 0" rotation="-90 0 0">
-            <a-plane width="2.5" height="2.5" color="#FBC02D">
-               <a-image src="#img-ad" width="2.3" height="2.3" position="0 0 0.05"></a-image>
+          <a-entity position="3.5 1.5 1" rotation="-90 0 0">
+            <a-plane width="3" height="3" color="#FBC02D">
+               <a-image src="#img-ad" width="2.8" height="2.8" position="0 0 0.05"></a-image>
             </a-plane>
           </a-entity>
         </a-entity>
 
         <a-entity id="g-f" visible="false">
-          <a-entity gltf-model="#model-f" scale="30 30 30" position="0 0 0"></a-entity>
-          <a-entity position="3 1 0" rotation="-90 0 0">
-            <a-plane width="3" height="1.5" color="#000" opacity="0.8">
-              <a-text value="PUPUK LOGISTIK\nSize: 50KG\nFormula: NPK+Mg" align="center" width="5" color="#fff"></a-text>
+          <a-entity gltf-model="#model-f" scale="25 25 25" position="0 0 0"></a-entity>
+          <a-entity position="3.5 1.5 1" rotation="-90 0 0">
+            <a-plane width="3.5" height="1.5" color="#000" opacity="0.8">
+              <a-text value="PUPUK SAWIT PPKS\nFormula NPK+Mg\nKapasitas 50KG" align="center" width="6" color="#fff"></a-text>
             </a-plane>
           </a-entity>
         </a-entity>
