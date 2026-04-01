@@ -5,201 +5,169 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        body { margin: 0; background: #fafafa; font-family: 'Montserrat', sans-serif; overflow: hidden; }
-        model-viewer { width: 100%; height: 100vh; --poster-color: transparent; }
-
-        /* PPKS Research Cards (Standard) */
-        .info-card {
-            background: rgba(255, 255, 255, 0.93);
-            backdrop-filter: blur(10px);
-            border-radius: 8px;
-            padding: 14px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border-left: 5px solid #FBC02D; /* Gold Accent */
-            color: #1b1b1b;
-            width: 220px;
-            text-align: left;
+        :root {
+            --ppks-green: #2e7d32;
+            --ppks-gold: #FBC02D;
+            --ppks-dark: #1b1b1b;
         }
 
-        /* Clickable Seed Advertisement Card */
-        .ad-card {
-            background: white;
-            border-radius: 12px;
-            padding: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 220px;
-            border: 2px solid #2e7d32; /* Green Accent */
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
+        body { margin: 0; background: #000; font-family: 'Montserrat', sans-serif; color: white; overflow: hidden; }
         
-        .ad-card:active { transform: scale(0.95); }
-
-        .ad-card img {
-            width: 100%;
-            border-radius: 6px;
-            display: block;
+        /* 3D Viewer - Full Background */
+        model-viewer {
+            width: 100vw;
+            height: 100vh;
+            background-color: #fafafa;
+            --poster-color: transparent;
         }
 
-        /* Full-screen Zoom Overlay (Lightbox) */
+        /* Top Progress Bars (Instagram Style) */
+        .progress-container {
+            position: absolute; top: 15px; left: 0; width: 100%;
+            display: flex; gap: 5px; padding: 0 10px; box-sizing: border-box; z-index: 100;
+        }
+        .bar { height: 3px; flex: 1; background: rgba(0,0,0,0.1); border-radius: 2px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 0%; background: var(--ppks-green); transition: width 0.1s linear; }
+        .bar.active .bar-fill { width: 100%; transition: none; }
+
+        /* Product Info Section (Bottom Sheet) */
+        .bottom-info {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8) 20%);
+            padding: 40px 20px 100px 20px; box-sizing: border-box;
+            z-index: 50; pointer-events: none;
+        }
+        .product-label { font-weight: 900; font-size: 20px; color: var(--ppks-gold); text-transform: uppercase; margin-bottom: 5px; }
+        .product-desc { font-size: 13px; line-height: 1.5; max-width: 85%; font-weight: 500; }
+
+        /* Interactive Ads Overlay */
+        .ad-mini-card {
+            position: absolute; right: 20px; bottom: 120px;
+            width: 80px; height: 80px; border: 2px solid white;
+            border-radius: 12px; overflow: hidden; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 60;
+            pointer-events: auto;
+        }
+        .ad-mini-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Navigation Taps (Left/Right side of screen) */
+        .nav-tap {
+            position: absolute; top: 0; width: 30%; height: 80%; z-index: 40;
+        }
+        .nav-left { left: 0; }
+        .nav-right { right: 0; }
+
+        /* AR Floating Button */
+        .ar-float-btn {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--ppks-green); color: white; border: none;
+            padding: 12px 30px; border-radius: 30px; font-weight: 800;
+            font-size: 12px; letter-spacing: 1px; z-index: 100;
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.4); cursor: pointer;
+        }
+
+        /* Lightbox for Ads */
         #zoom-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            display: none; justify-content: center; align-items: center;
-            z-index: 2000; flex-direction: column;
+            background: rgba(0,0,0,0.95); display: none;
+            justify-content: center; align-items: center; z-index: 2000;
         }
+        #zoom-overlay img { max-width: 90%; max-height: 80%; border-radius: 10px; }
 
-        #zoom-overlay img {
-            max-width: 90%; max-height: 80%;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.2);
-        }
-
-        .close-hint {
-            color: white; margin-top: 20px;
-            font-weight: 700; font-size: 14px;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        /* Internal Card Elements */
-        .ad-tag {
-            background: #2e7d32; color: white; font-size: 9px; font-weight: 800;
-            padding: 4px 8px; border-radius: 4px; display: inline-block;
-            margin-top: 8px; text-transform: uppercase;
-        }
-
-        .card-header {
-            font-size: 10px; font-weight: 800; color: #2e7d32;
-            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .card-header::before { content: '•'; color: #FBC02D; font-size: 18px; }
-
-        .card-body { font-size: 11px; font-weight: 600; line-height: 1.4; color: #333; }
-
-        /* Navigation UI */
-        .ui-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
-            z-index: 100; width: 90%;
-        }
-        .nav-row { display: flex; align-items: center; gap: 20px; }
-        .ar-btn {
-            background: #2e7d32; color: white; border: none; padding: 16px 40px;
-            border-radius: 4px; font-weight: 800; cursor: pointer;
-            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 0 #1b5e20;
-        }
-        .nav-btn {
-            background: white; color: #2e7d32; border: 2px solid #2e7d32;
-            width: 45px; height: 45px; border-radius: 4px; cursor: pointer;
-            font-weight: bold; font-size: 20px;
-        }
-
-        .hidden { display: none !important; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="zoom-overlay" onclick="closeZoom()">
-        <img id="zoomed-img" src="palm_oil_seeds_ads.png">
-        <div class="close-hint">Ketuk di mana saja untuk menutup</div>
+    <div id="zoom-overlay" onclick="this.style.display='none'">
+        <img src="palm_oil_seeds_ads.png">
     </div>
 
+    <div class="progress-container" id="progress-bars"></div>
+
+    <div class="nav-tap nav-left" onclick="changeModel(-1)"></div>
+    <div class="nav-tap nav-right" onclick="changeModel(1)"></div>
+
     <model-viewer id="viewer"
-        src="Kecambah.glb"
-        scale="20 20 20"
+        src="kecambah sawit.glb"
+        scale="15 15 15"
         ar ar-modes="webxr scene-viewer quick-look" 
-        camera-controls 
-        shadow-intensity="1" 
-        auto-rotate
-        camera-orbit="0deg 75deg 1.5m">
-
-        <button class="info-card kecambah-info" slot="hotspot-k1" data-position="0 0.05 0" data-normal="0 1 0">
-            <div class="card-header">🧬 PROFIL GENETIK PPKS</div>
-            <div class="card-body">
-                <strong>Kelompok SP540:</strong> DxP PPKS 540, Simalungun, AVROS (Quick Starter).<br>
-                <strong>Kelompok Yangambi:</strong> DxP Yangambi, PPKS 239, PPKS 718 (Bobot Tandan Besar).
-            </div>
-        </button>
-
-        <div class="ad-card kecambah-info" slot="hotspot-k-ad" data-position="-0.04 0.03 0" data-normal="0 1 0" onclick="openZoom()">
-            <img src="palm_oil_seeds_ads.png" alt="Seed Advertisement">
-            <div class="ad-tag">Kecambah Kelapa Sawit (DxP)</div>
+        camera-controls auto-rotate
+        shadow-intensity="1"
+        camera-orbit="0deg 75deg 2m">
+        
+        <div class="bottom-info">
+            <div class="product-label" id="p-name">Kecambah Kelapa Sawit</div>
+            <div class="product-desc" id="p-desc">Varietas unggul PPKS dengan moderat tahan Ganoderma dan rendemen minyak tinggi.</div>
         </div>
 
-        <button class="info-card kecambah-info" slot="hotspot-k2" data-position="0.04 0.03 0" data-normal="0 1 0">
-            <div class="card-header">🛡️ KETAHANAN PENYAKIT</div>
-            <div class="card-body">
-                <strong>DxP 540 NG:</strong> Generasi baru tahan Ganoderma (Moderat Tahan). Rendemen minyak tinggi (26,5-27,4%).
-            </div>
-        </button>
-
-        <button class="info-card kecambah-info" slot="hotspot-k3" data-position="0 0 0.04" data-normal="0 0 1">
-            <div class="card-header">⭐ KARAKTER UNGGUL LAINNYA</div>
-            <div class="card-body">
-                <strong>DxP Langkat:</strong> Compact palm (rachis pendek), potensi CPO 8,3 ton/ha/tahun.<br>
-                <strong>SP-I (Dumpy):</strong> Laju pertumbuhan lambat (<55 cm/tahun), umur ekonomi hingga 30 tahun.
-            </div>
-        </button>
-
-        <button class="info-card fert-info hidden" slot="hotspot-f1" data-position="0 2.5 0" data-normal="0 0 1">
-            <div class="card-header">📦 DIMENSI</div>
-            <div class="card-body">Format Besar: 52 x 85 cm. Karung Industri Curah.</div>
-        </button>
-
-        <button class="info-card hole-info hidden" slot="hotspot-h1" data-position="0 1.2 0" data-normal="0 0 1">
-            <div class="card-header">⚙️ SPESIFIKASI</div>
-            <div class="card-body">Diameter: 13cm | Kedalaman: 20-30cm. Alat injeksi presisi tinggi.</div>
-        </button>
-
-        <div class="ui-container">
-            <div class="nav-row">
-                <button class="nav-btn" onclick="changeModel(-1)">❮</button>
-                <button class="ar-btn" onclick="viewer.activateAR()">BUKA KATALOG AR</button>
-                <button class="nav-btn" onclick="changeModel(1)">❯</button>
-            </div>
+        <div class="ad-mini-card" onclick="document.getElementById('zoom-overlay').style.display='flex'">
+            <img src="palm_oil_seeds_ads.png">
         </div>
+
+        <button class="ar-float-btn" onclick="viewer.activateAR()">LIHAT DI RUANGAN (AR)</button>
     </model-viewer>
 
     <script>
-        // Updated modelData with new labels and scales for the tiny seed
-        const modelData = [
-            { src: "Kecambah.glb", scale: "20 20 20", class: "kecambah-info", label: "Kecambah Kelapa Sawit (DxP)" },
-            { src: "fertilizer.glb", scale: "280 280 280", class: "fert-info", label: "Pupuk Industri PPKS" },
-            { src: "millers_falls_no._980_drill__game_ready_model.glb", scale: "0.8 0.8 0.8", class: "hole-info", label: "Alat Fertihole Presisi" }
+        const products = [
+            {
+                name: "Kecambah Kelapa Sawit",
+                desc: "Varietas DxP 540 NG: Generasi baru tahan Ganoderma. Rendemen minyak 26.5% - 27.4%.",
+                src: "kecambah sawit.glb",
+                scale: "15 15 15"
+            },
+            {
+                name: "Pupuk Industri PPKS",
+                desc: "Formula khusus untuk optimasi pertumbuhan vegetatif dan generatif kelapa sawit.",
+                src: "fertilizer.glb",
+                scale: "280 280 280"
+            },
+            {
+                name: "Alat Fertihole",
+                desc: "Injeksi presisi untuk efisiensi pemupukan. Diameter 13cm dengan kedalaman terukur.",
+                src: "millers_falls_no._980_drill__game_ready_model.glb",
+                scale: "0.8 0.8 0.8"
+            }
         ];
 
         let idx = 0;
         const viewer = document.querySelector('#viewer');
-        const zoomOverlay = document.getElementById('zoom-overlay');
-        const arBtn = document.querySelector('.ar-btn');
+        const pName = document.querySelector('#p-name');
+        const pDesc = document.querySelector('#p-desc');
+        const progressContainer = document.getElementById('progress-bars');
 
-        // Functions for Zoom Logic
-        function openZoom() { zoomOverlay.style.display = 'flex'; }
-        function closeZoom() { zoomOverlay.style.display = 'none'; }
+        // Build Progress Bars
+        function initBars() {
+            progressContainer.innerHTML = '';
+            products.forEach((_, i) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar' + (i <= idx ? ' active' : '');
+                const fill = document.createElement('div');
+                fill.className = 'bar-fill';
+                bar.appendChild(fill);
+                progressContainer.appendChild(bar);
+            });
+        }
 
         function changeModel(dir) {
-            // Hide all active cards
-            document.querySelectorAll('.kecambah-info, .fert-info, .hole-info').forEach(c => c.classList.add('hidden'));
+            idx = (idx + dir + products.length) % products.length;
+            const item = products[idx];
             
-            idx = (idx + dir + modelData.length) % modelData.length;
-            const item = modelData[idx];
-            
+            // Smoothly swap model
             viewer.src = item.src;
             viewer.scale = item.scale;
             
-            // Adjust the camera zoom for the tiny seed vs the large sack
-            if (item.class === "kecambah-info") {
-                viewer.setAttribute("camera-orbit", "0deg 75deg 1.5m");
-            } else {
-                viewer.setAttribute("camera-orbit", "45deg 75deg 15m");
-            }
+            // Update UI Text
+            pName.innerText = item.name;
+            pDesc.innerText = item.desc;
 
-            // Show relevant cards
-            document.querySelectorAll('.' + item.class).forEach(c => c.classList.remove('hidden'));
+            // Update Progress Bars
+            initBars();
         }
+
+        initBars();
     </script>
 </body>
 </html>
