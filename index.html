@@ -1,161 +1,98 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
-
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #ffffff; font-family: 'Montserrat', sans-serif; }
-        model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
-
-        /* Floating Hotspot Container */
-        .hotspot-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-            width: 260px; /* Big like PPKS Original */
-            border-left: 6px solid #2e7d32;
-            pointer-events: auto; /* Clickable */
-            transition: transform 0.3s ease;
-        }
-
-        /* Collapsible Section */
-        .details { display: none; margin-top: 10px; font-size: 10px; line-height: 1.4; color: #444; max-height: 200px; overflow-y: auto; }
-        .details.show { display: block; }
-        
-        .toggle-btn {
-            background: #2e7d32; color: white; border: none; padding: 5px 10px;
-            border-radius: 4px; font-size: 9px; font-weight: 800; cursor: pointer; margin-top: 5px;
-        }
-
-        .info-title { font-size: 11px; font-weight: 900; color: #2e7d32; text-transform: uppercase; margin-bottom: 5px; }
-        
-        /* Table Style */
-        .ppks-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
-        .ppks-table td { padding: 4px 0; border-bottom: 1px solid #eee; font-size: 10px; }
-        .label { font-weight: 700; color: #888; }
-        .value { font-weight: 800; color: #222; text-align: right; }
-
-        /* Pinned Photo Ad */
-        .photo-hotspot {
-            width: 120px; height: 120px; border: 3px solid #FBC02D;
-            border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        .photo-hotspot img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Nav Taps */
-        .nav-tap { position: absolute; top: 0; width: 25%; height: 80%; z-index: 50; }
-        .nav-prev { left: 0; }
-        .nav-next { right: 0; }
-
-        /* AR UI */
-        .ar-container {
-            position: absolute; bottom: 50px; left: 0; width: 100%;
-            display: flex; justify-content: center; z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .ar-btn {
-            background: #2e7d32; color: white; border: none; padding: 16px 60px;
-            border-radius: 15px; font-weight: 900; font-size: 14px; text-transform: uppercase;
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-        }
+      .nav-zone { position: fixed; top: 0; bottom: 0; width: 30%; z-index: 999; }
+      #l-zone { left: 0; }
+      #r-zone { right: 0; }
+      
+      #top-ui {
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: #2e7d32; color: white; padding: 12px 25px; border-radius: 30px;
+        text-align: center; z-index: 1000; font-family: sans-serif;
+        border: 2px solid #FBC02D; font-weight: bold; min-width: 220px;
+      }
     </style>
-</head>
-<body>
+  </head>
 
-    <div class="nav-tap nav-prev" onclick="changeModel(-1)"></div>
-    <div class="nav-tap nav-next" onclick="changeModel(1)"></div>
+  <body style="margin: 0; overflow: hidden;">
+    <div id="l-zone" class="nav-zone" onclick="changeModel(-1)"></div>
+    <div id="r-zone" class="nav-zone" onclick="changeModel(1)"></div>
+    
+    <div id="top-ui">
+      <span id="m-name">DXP 540 NG</span>
+    </div>
 
-    <model-viewer id="viewer"
-        src="kecambah sawit.glb"
-        ar ar-modes="webxr scene-viewer quick-look" 
-        camera-controls auto-rotate shadow-intensity="1"
-        camera-orbit="0deg 75deg 3m"
-        min-camera-orbit="auto auto 1m">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-assets>
+        <a-asset-item id="model-k" src="kecambah sawit.glb"></a-asset-item>
+        <a-asset-item id="model-f" src="fertilizer.glb"></a-asset-item>
+        <img id="img-ad" src="palm_oil_seeds_ads.png">
+      </a-assets>
 
-        <div slot="hotspot-info" class="hotspot-card" data-position="-0.5 0.3 0" data-normal="-1 0 0">
-            <div class="info-title" id="p-title">Kecambah Kelapa Sawit</div>
-            <table class="ppks-table">
-                <tr><td class="label">Varietas</td><td class="value" id="v-1">DxP 540 NG</td></tr>
-                <tr><td class="label">Ketahanan</td><td class="value" id="v-2">Moderat Ganoderma</td></tr>
-            </table>
-            <button class="toggle-btn" onclick="toggleDetails()">BACA DESKRIPSI LENGKAP</button>
-            <div class="details" id="p-desc">
-                Varietas DxP 540 NG: Generasi baru untuk Ganoderma. Produksi TBS tinggi (35 ton/ha) dengan rendemen minyak 26.5-27.4%. Kandungan mesokarp buah mencapai 84.5-87.5%.
-            </div>
-        </div>
+      <a-marker type="pattern" url="pattern-images.patt">
+        
+        <a-entity id="g-k" visible="true">
+          <a-entity gltf-model="#model-k" scale="3 3 3" position="0 0 0" 
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+          </a-entity>
+          
+          <a-entity position="-3 1.5 0" rotation="-90 0 0">
+            <a-plane width="3.5" height="2.5" color="#fff" opacity="0.95">
+              <a-plane width="3.5" height="0.5" color="#2e7d32" position="0 1 0.01">
+                <a-text value="PPKS VARIETAS INFO" align="center" width="6" color="#fff"></a-text>
+              </a-plane>
+              
+              <a-entity position="-1.5 0.3 0.02">
+                <a-text value="VARIETAS:" color="#2e7d32" width="4" font="bold"></a-text>
+                <a-text value="DxP 540 NG (New Gen)" position="0 -0.2 0" color="#333" width="3.5"></a-text>
+                
+                <a-text value="KARAKTER:" position="0 -0.6 0" color="#2e7d32" width="4"></a-text>
+                <a-text value="Moderat Tahan Ganoderma\nYield: 35 Ton TBS/Ha" position="0 -0.85 0" color="#333" width="3.5"></a-text>
+                
+                <a-text value="RENDEMEN:" position="0 -1.25 0" color="#2e7d32" width="4"></a-text>
+                <a-text value="26.5% - 27.4%" position="0 -1.45 0" color="#333" width="3.5"></a-text>
+              </a-entity>
+            </a-plane>
+          </a-entity>
 
-        <div slot="hotspot-photo" class="photo-hotspot" data-position="0.5 0.3 0" data-normal="1 0 0">
-            <img id="p-img" src="palm_oil_seeds_ads.png">
-        </div>
+          <a-entity position="3 1.5 0" rotation="-90 0 0">
+            <a-plane width="2.5" height="2.5" color="#FBC02D">
+               <a-image src="#img-ad" width="2.3" height="2.3" position="0 0 0.05"></a-image>
+            </a-plane>
+          </a-entity>
+        </a-entity>
 
-        <div class="ar-container">
-            <button class="ar-btn" id="ar-btn" onclick="handleAR()">Buka AR</button>
-        </div>
-    </model-viewer>
+        <a-entity id="g-f" visible="false">
+          <a-entity gltf-model="#model-f" scale="30 30 30" position="0 0 0"></a-entity>
+          <a-entity position="3 1 0" rotation="-90 0 0">
+            <a-plane width="3" height="1.5" color="#000" opacity="0.8">
+              <a-text value="PUPUK LOGISTIK\nSize: 50KG\nFormula: NPK+Mg" align="center" width="5" color="#fff"></a-text>
+            </a-plane>
+          </a-entity>
+        </a-entity>
+
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
 
     <script>
-        const db = [
-            {
-                name: "Kecambah Kelapa Sawit",
-                v1: "DxP 540 NG",
-                v2: "Anti Ganoderma",
-                desc: "DxP 540 NG (New Generation for Ganoderma) memiliki tingkat ketahanan tinggi di lapangan. Potensi CPO 8.3 ton/ha/tahun. Cocok untuk wilayah datar hingga bergelombang.",
-                img: "palm_oil_seeds_ads.png",
-                file: "kecambah sawit.glb",
-                orbit: "0deg 75deg 3m"
-            },
-            {
-                name: "Pupuk Industri PPKS",
-                v1: "Premium Blue",
-                v2: "Slow Release",
-                desc: "Formula khusus PPKS untuk meningkatkan rendemen minyak dan kesehatan tajuk kelapa sawit.",
-                img: "palm_oil_seeds_ads.png",
-                file: "fertilizer.glb",
-                orbit: "45deg 75deg 12m"
-            }
-        ];
+      const catalog = [
+        { id: "#g-k", name: "DXP 540 NG" },
+        { id: "#g-f", name: "PUPUK PPKS" }
+      ];
 
-        let idx = 0;
-        const viewer = document.querySelector('#viewer');
-        const btn = document.querySelector('#ar-btn');
-
-        function toggleDetails() {
-            document.getElementById('p-desc').classList.toggle('show');
-        }
-
-        function changeModel(dir) {
-            idx = (idx + dir + db.length) % db.length;
-            const item = db[idx];
-            
-            viewer.src = item.file;
-            viewer.setAttribute("camera-orbit", item.orbit);
-            
-            document.getElementById('p-title').innerText = item.name;
-            document.getElementById('v-1').innerText = item.v1;
-            document.getElementById('v-2').innerText = item.v2;
-            document.getElementById('p-desc').innerText = item.desc;
-            document.getElementById('p-img').src = item.img;
-            
-            // Hide description on switch
-            document.getElementById('p-desc').classList.remove('show');
-        }
-
-        function handleAR() {
-            if (viewer.getAttribute('ar-status') === 'session-started') {
-                location.reload(); 
-            } else {
-                viewer.activateAR();
-            }
-        }
-
-        viewer.addEventListener('ar-status', (e) => {
-            btn.innerText = (e.detail.status === 'session-started') ? "Kembali" : "Buka AR";
-        });
+      let cur = 0;
+      function changeModel(dir) {
+        document.querySelector(catalog[cur].id).setAttribute('visible', 'false');
+        cur = (cur + dir + catalog.length) % catalog.length;
+        document.querySelector(catalog[cur].id).setAttribute('visible', 'true');
+        document.querySelector('#m-name').innerText = catalog[cur].name;
+      }
     </script>
-</body>
+  </body>
 </html>
