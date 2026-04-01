@@ -14,54 +14,51 @@
 
         model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
 
-        /* Top Bar Label */
-        .header-label {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(46, 125, 50, 0.9); color: white;
-            padding: 8px 20px; border-radius: 20px; font-size: 10px;
-            font-weight: 800; letter-spacing: 1px; z-index: 100; text-transform: uppercase;
+        /* Floating Info Cards (Hotspots) - Positioned to the sides */
+        .floating-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
 
-        /* Side Tap Areas (Instagram Style) */
-        .nav-tap {
-            position: absolute; top: 0; width: 25%; height: 80%; z-index: 50;
-        }
+        .card-table { border-left: 4px solid #2e7d32; }
+        .card-photo { border: 2px solid #FBC02D; padding: 5px; width: 100px; height: 100px; }
+        .card-photo img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
+
+        .info-title { font-size: 9px; font-weight: 800; color: #2e7d32; margin-bottom: 5px; text-transform: uppercase; }
+        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 4px 0; }
+        .info-key { font-size: 8px; color: #777; }
+        .info-val { font-size: 9px; font-weight: 700; color: #333; }
+
+        /* Instagram Navigation Layers */
+        .nav-tap { position: absolute; top: 0; width: 25%; height: 80%; z-index: 50; }
         .nav-prev { left: 0; }
         .nav-next { right: 0; }
 
-        /* Floating Info - BOTTOM LEFT (Card/Table) */
-        .info-panel {
-            position: absolute; bottom: 120px; left: 20px;
-            background: white; border-radius: 12px; width: 160px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-left: 5px solid #2e7d32; padding: 12px; z-index: 60;
-            pointer-events: none;
+        /* Top Header Label */
+        .header-label {
+            position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+            background: #2e7d32; color: white; padding: 10px 25px;
+            border-radius: 30px; font-size: 11px; font-weight: 800;
+            z-index: 100; text-transform: uppercase; letter-spacing: 1px;
         }
-        .info-title { font-size: 9px; font-weight: 800; color: #2e7d32; margin-bottom: 5px; }
-        .info-row { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 4px 0; }
-        .info-key { font-size: 9px; color: #777; }
-        .info-val { font-size: 10px; font-weight: 700; color: #333; }
 
-        /* Floating Photo - BOTTOM RIGHT */
-        .photo-card {
-            position: absolute; bottom: 120px; right: 20px;
-            width: 90px; height: 90px; background: white;
-            border-radius: 12px; padding: 5px; z-index: 60;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #FBC02D;
-        }
-        .photo-card img { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-
-        /* Fixed Center AR Button */
+        /* Fixed Bottom AR Toggle */
         .ar-container {
-            position: absolute; bottom: 40px; left: 0; width: 100%;
-            display: flex; justify-content: center; z-index: 200;
+            position: absolute; bottom: 50px; left: 0; width: 100%;
+            display: flex; justify-content: center; z-index: 100;
             padding-bottom: env(safe-area-inset-bottom);
         }
         .ar-btn {
             background: #2e7d32; color: white; border: none;
-            padding: 16px 50px; border-radius: 12px; font-weight: 800;
+            padding: 16px 60px; border-radius: 14px; font-weight: 800;
             font-size: 14px; text-transform: uppercase; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+            box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
         }
 
         .hidden { display: none !important; }
@@ -74,27 +71,27 @@
     <div class="nav-tap nav-prev" onclick="changeModel(-1)"></div>
     <div class="nav-tap nav-next" onclick="changeModel(1)"></div>
 
-    <div class="info-panel">
-        <div class="info-title">DESKRIPSI PRODUK</div>
-        <div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="val-1">DxP 540 NG</span></div>
-        <div class="info-row"><span class="info-key">Karakter</span><span class="info-val" id="val-2">Tahan Gano</span></div>
-        <div class="info-row" style="border:none;"><span class="info-key">Rendemen</span><span class="info-val" id="val-3">27.4%</span></div>
-    </div>
-
-    <div class="photo-card">
-        <img id="side-photo" src="palm_oil_seeds_ads.png">
-    </div>
-
     <model-viewer id="viewer"
         src="kecambah sawit.glb"
         ar ar-modes="webxr scene-viewer quick-look" 
         camera-controls auto-rotate shadow-intensity="1"
-        camera-orbit="0deg 75deg 2m"
+        camera-orbit="0deg 75deg 2.5m"
         min-camera-orbit="auto auto 1m"
         interaction-prompt="none">
 
+        <div class="floating-card card-table" slot="hotspot-data" data-position="-0.4 0.2 0" data-normal="-1 0 0">
+            <div class="info-title">Detail Produk</div>
+            <div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="val-1">DxP 540 NG</span></div>
+            <div class="info-row"><span class="info-key">Karakter</span><span class="info-val" id="val-2">Tahan Gano</span></div>
+            <div class="info-row" style="border:none;"><span class="info-key">Rendemen</span><span class="info-val" id="val-3">27.4%</span></div>
+        </div>
+
+        <div class="floating-card card-photo" slot="hotspot-photo" data-position="0.4 0.2 0" data-normal="1 0 0">
+            <img id="side-photo" src="palm_oil_seeds_ads.png">
+        </div>
+
         <div class="ar-container">
-            <button class="ar-btn" id="ar-button">Buka AR</button>
+            <button class="ar-btn" id="ar-button" onclick="viewer.activateAR()">Buka AR</button>
         </div>
     </model-viewer>
 
@@ -102,15 +99,22 @@
         const products = [
             {
                 name: "Kecambah Sawit PPKS",
-                v1: "DxP 540 NG", v2: "Anti Ganoderma", v3: "27.4%",
+                v1: "DxP 540 NG", v2: "Tahan Gano", v3: "27.4%",
                 src: "kecambah sawit.glb",
-                orbit: "0deg 75deg 2m",
+                orbit: "0deg 75deg 2.5m",
                 photo: "palm_oil_seeds_ads.png"
             },
             {
-                name: "Pupuk Sawit Unggul",
-                v1: "Formula Cair", v2: "Quick Starter", v3: "High Yield",
+                name: "Pupuk Sawit",
+                v1: "Formula Cair", v2: "Industri", v3: "High Yield",
                 src: "fertilizer.glb",
+                orbit: "45deg 75deg 15m",
+                photo: "palm_oil_seeds_ads.png"
+            },
+            {
+                name: "Alat Fertihole",
+                v1: "Manual Drill", v2: "Presisi", v3: "Deep Hole",
+                src: "millers_falls_no._980_drill__game_ready_model.glb",
                 orbit: "45deg 75deg 15m",
                 photo: "palm_oil_seeds_ads.png"
             }
@@ -120,7 +124,6 @@
         const viewer = document.querySelector('#viewer');
         const arBtn = document.querySelector('#ar-button');
 
-        // Handles Model and UI Changes
         function changeModel(dir) {
             idx = (idx + dir + products.length) % products.length;
             const item = products[idx];
@@ -135,14 +138,7 @@
             document.getElementById('side-photo').src = item.photo;
         }
 
-        // AR Button Logic: Swap text when entering AR
-        arBtn.addEventListener('click', () => {
-            if (viewer.canActivateAR) {
-                viewer.activateAR();
-            }
-        });
-
-        // Detect if user returns from AR to change text back
+        // Logic for "Buka AR" vs "Kembali"
         viewer.addEventListener('ar-status', (event) => {
             if (event.detail.status === 'session-started') {
                 arBtn.innerText = "Kembali";
