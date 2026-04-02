@@ -14,6 +14,7 @@
             border-radius: 30px; font-weight: 800; z-index: 1000; border: 2px solid #FBC02D;
         }
 
+        /* TUTORIAL OVERLAY */
         #tutorial {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -22,19 +23,22 @@
         .hand-icon { font-size: 50px; animation: swipe 2s infinite; }
         @keyframes swipe { 0%, 100% { transform: translateX(-30px); } 50% { transform: translateX(30px); } }
 
-        model-viewer { width: 100%; height: 100vh; }
+        model-viewer { width: 100%; height: 100vh; transition: filter 0.3s ease; }
+        .blurred { filter: blur(8px) brightness(0.6); }
 
+        /* ORBITING DOTS */
         .dot {
-            width: 32px; height: 32px; background: #2e7d32; border: 3px solid white;
+            width: 35px; height: 35px; background: #2e7d32; border: 3px solid white;
             border-radius: 50%; cursor: pointer; box-shadow: 0 0 20px rgba(46,125,50,0.5);
             display: flex; align-items: center; justify-content: center;
             transition: transform 0.3s; pointer-events: auto; z-index: 1;
         }
 
+        /* INFO CARDS (STILL ATTACHED TO DOT) */
         .info-card {
-            position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%) scale(0);
-            background: white; border-radius: 15px; padding: 15px; width: 260px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-left: 8px solid #2e7d32;
+            position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%) scale(0);
+            background: white; border-radius: 15px; padding: 18px; width: 280px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-left: 10px solid #2e7d32;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
             opacity: 0; pointer-events: none; z-index: 10;
         }
@@ -42,34 +46,39 @@
         .dot.active { background: #FBC02D; z-index: 100; }
 
         .zoom-trigger {
-            margin-top: 12px; width: 100%; padding: 10px; background: #f0f0f0; 
-            border: 1px dashed #2e7d32; border-radius: 8px; cursor: pointer;
-            font-size: 11px; font-weight: 800; color: #2e7d32; transition: 0.2s;
+            margin-top: 15px; width: 100%; padding: 12px; background: #f9f9f9; 
+            border: 2px solid #2e7d32; border-radius: 10px; cursor: pointer;
+            font-size: 11px; font-weight: 800; color: #2e7d32; transition: 0.3s;
         }
         .zoom-trigger:hover { background: #2e7d32; color: white; }
 
-        #zoom-overlay {
-            position: fixed; inset: 0; background: #fff; z-index: 5000;
-            display: none; flex-direction: column; padding: 60px 25px; 
-            overflow-y: auto; align-items: center;
+        /* WINDOW POPUP (CENTER SCREEN) */
+        #window-overlay {
+            position: fixed; inset: 0; z-index: 5000;
+            display: none; align-items: center; justify-content: center;
+            padding: 20px; background: rgba(0,0,0,0.2);
         }
+        .window-box {
+            background: white; width: 100%; max-width: 500px; max-height: 80vh;
+            border-radius: 24px; position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden;
+            border-top: 12px solid #2e7d32;
+        }
+        .window-content { padding: 30px; overflow-y: auto; }
         .close-btn {
-            position: fixed; top: 20px; right: 20px; width: 45px; height: 45px;
-            background: #2e7d32; color: white; border-radius: 50%; border: none;
-            font-size: 24px; cursor: pointer; z-index: 5001;
+            position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
+            background: #e74c3c; color: white; border-radius: 50%; border: none;
+            font-size: 20px; font-weight: bold; cursor: pointer; z-index: 5001;
         }
 
-        .tag { font-size: 11px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .text { font-size: 12px; font-weight: 500; color: #333; line-height: 1.5; text-align: justify; }
-        .zoom-text { font-size: 15px; line-height: 1.8; max-width: 650px; color: #333; }
-        .list { margin: 15px 0; padding-left: 20px; color: #2e7d32; font-weight: 700; }
-
-        .orbit-ad img { width: 100%; border-radius: 8px; margin-bottom: 5px; }
+        .tag { font-size: 12px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 10px; display: block; border-bottom: 2px solid #FBC02D; padding-bottom: 5px; }
+        .text { font-size: 14px; font-weight: 500; color: #333; line-height: 1.7; text-align: justify; }
+        .list { margin: 15px 0; padding-left: 20px; color: #2e7d32; font-weight: 700; line-height: 2; }
 
         .ar-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 15px 60px;
-            border-radius: 14px; font-weight: 800; border: none; z-index: 1000;
+            background: #2e7d32; color: white; padding: 18px 60px;
+            border-radius: 16px; font-weight: 800; border: none; z-index: 1000;
         }
     </style>
 </head>
@@ -77,14 +86,16 @@
 
     <div id="product-header">KECAMBAH SAWIT PPKS</div>
 
-    <div id="zoom-overlay">
-        <button class="close-btn" onclick="closeZoom()">✕</button>
-        <div id="zoom-body"></div>
+    <div id="window-overlay" onclick="closeWindow(event)">
+        <div class="window-box" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeWindow()">✕</button>
+            <div class="window-content" id="window-body"></div>
+        </div>
     </div>
 
     <div id="tutorial" onclick="hideTutorial()">
         <div class="hand-icon">👆</div>
-        <p style="font-weight: 800; margin-top: 20px; text-align: center;">TAP DOTS TO READ INFO<br>TAP BUTTON FOR BIG PICTURE</p>
+        <p style="font-weight: 800; margin-top: 20px; text-align: center;">CLICK DOTS FOR INFO<br>DRAG FOR 360° VIEW</p>
     </div>
 
     <button class="ar-btn" onclick="document.querySelector('#v').activateAR()">OPEN AR CATALOG</button>
@@ -93,56 +104,59 @@
                   camera-controls auto-rotate shadow-intensity="2" 
                   rotation-per-second="8deg" interaction-prompt="none">
 
-        <div class="dot" slot="hotspot-1" data-position="-30 6 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-1" data-position="-30 6 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card">
                 <span class="tag">Description</span>
-                <div class="text">Varietas Dumpy (SP-I): Pertumbuhan meninggi yang lambat (<55 cm/tahun) & umur ekonomi hingga 30 tahun.</div>
-                <button class="zoom-trigger" onclick="openZoom('Description', 'Varietas DyP Sungai Pancur I (SP-I) atau yang lebih dikenal sebagai Varietas Dumpy, merupakan varietas dengan keunggulan spesifik laju pertumbuhan meninggi yang lambat (<55 cm/tahun). Dengan karakter ini, Varietas Dumpy mampu mencapai umur ekonomi hingga 30 tahun atau lebih lama dari varietas lain.')">VIEW BIG PICTURE 🔍</button>
+                <div class="text">Varietas Dumpy (SP-I): Memiliki laju pertumbuhan meninggi yang lambat & umur ekonomi hingga 30 tahun.</div>
+                <button class="zoom-trigger" onclick="openWindow('Description', 'Varietas DyP Sungai Pancur I (SP-I) atau yang lebih dikenal sebagai Varietas Dumpy, merupakan varietas dengan keunggulan spesifik laju pertumbuhan meninggi yang lambat (<55 cm/tahun). Dengan karakter ini, Varietas Dumpy mampu mencapai umur ekonomi hingga 30 tahun atau lebih lama dari varietas lain.')">VIEW FULL INFO 📄</button>
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-2" data-position="35 4 -15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-2" data-position="35 4 -20" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card">
                 <span class="tag">Turunan SP540</span>
-                <div class="text">Keturunan SP540 murni PPKS: DxP PPKS 540, DxP Simalungun, & DxP AVROS.</div>
-                <button class="zoom-trigger" onclick="openZoom('Turunan SP540', 'Varietas kelapa sawit yang termasuk ke dalam kelompok SP540 merupakan varietas-varietas yang dihasilkan dari tetua pisifera keturunan SP540 murni yang hanya dimiliki oleh PPKS. Varietas-varietas dalam kelompok ini terdiri dari:<ul class=\'list\'><li>DxP PPKS 540</li><li>DxP Simalungun</li><li>DxP AVROS</li></ul>Karakter unggulan dari kelompok ini adalah quick starter dan persentase mesokarp per buah yang cukup tinggi. Dengan daya adaptasi cukup luas, varietas ini dapat ditanam di berbagai tipe lahan kelapa sawit (wilayah datar sampai bergelombang).')">VIEW BIG PICTURE 🔍</button>
+                <div class="text">Varietas dari tetua pisifera murni PPKS (DxP 540, Simalungun, AVROS) dengan mesokarp tinggi.</div>
+                <button class="zoom-trigger" onclick="openWindow('Turunan SP540', 'Varietas kelapa sawit yang termasuk ke dalam kelompok SP540 merupakan varietas-varietas yang dihasilkan dari tetua pisifera keturunan SP540 murni yang hanya dimiliki oleh PPKS. Varietas-varietas dalam kelompok ini terdiri dari: <ul class=\'list\'><li>DxP PPKS 540</li><li>DxP Simalungun</li><li>DxP AVROS</li></ul> Karakter unggulan dari kelompok ini adalah quick starter dan persentase mesokarp per buah yang cukup tinggi. Dengan daya adaptasi cukup luas, varietas ini dapat ditanam di berbagai tipe lahan kelapa sawit (wilayah datar sampai bergelombang).')">VIEW FULL INFO 📄</button>
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-3" data-position="-35 1 -25" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-3" data-position="-35 1 -30" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card">
                 <span class="tag">Turunan Yangambi</span>
-                <div class="text">Populasi Afrika untuk benih unggul: DxP Yangambi, DxP PPKS 239, & DxP PPKS 718.</div>
-                <button class="zoom-trigger" onclick="openZoom('Turunan Yangambi', 'Yangambi merupakan populasi kelapa sawit asal Afrika yang banyak digunakan sebagai tetua pisifera sumber benih unggul. Varietas kelapa sawit PPKS yang dihasilkan dari populasi ini adalah:<ul class=\'list\'><li>DxP Yangambi</li><li>DxP PPKS 239</li><li>DxP PPKS 718</li></ul>Secara umum, populasi ini memiliki keunggulan pada bobot tandan yang relatif besar. Umumnya Yangambi memiliki kandungan minyak dan mesokarp yang tinggi, jauh lebih tinggi dari populasi lain.')">VIEW BIG PICTURE 🔍</button>
+                <div class="text">Populasi Afrika (Yangambi, 239, 718) dengan bobot tandan besar & kandungan minyak sangat tinggi.</div>
+                <button class="zoom-trigger" onclick="openWindow('Turunan Yangambi', 'Yangambi merupakan populasi kelapa sawit asal Afrika yang banyak digunakan sebagai tetua pisifera sumber benih unggul. Varietas kelapa sawit PPKS yang dihasilkan dari populasi ini adalah: <ul class=\'list\'><li>DxP Yangambi</li><li>DxP PPKS 239</li><li>DxP PPKS 718</li></ul> Secara umum, populasi ini memiliki keunggulan pada bobot tandan yang relatif besar. Umumnya Yangambi memiliki kandungan minyak dan mesokarp yang tinggi, jauh lebih tinggi dari populasi lain.')">VIEW FULL INFO 📄</button>
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-4" data-position="30 -2 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-4" data-position="32 -5 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card">
                 <span class="tag">DxP Langkat</span>
-                <div class="text">Compact palm dengan potensi CPO 8,3 ton/ha/tahun. Berbuah umur 22 bulan.</div>
-                <button class="zoom-trigger" onclick="openZoom('DxP Langkat', 'DxP Langkat merupakan varietas pertama yang dirakit PPKS dari hasil rekombinasi tetua-tetua terbaik beberapa populasi pisifera. Tetua pisifera hasil rekombinasi antara pisifera SP540, Yangambi, dan Marihat yang disilangkan dengan Dura Deli terbaik menghasilkan varietas dengan karakter unggul rachis yang relatif pendek (compact palm) dan potensi CPO hingga 8,3 ton/ha/tahun. Selain cocok ditanam di areal bergelombang dan berbukit, varietas ini juga dapat mulai berbuah pada umur 22 bulan setelah tanam.')">VIEW BIG PICTURE 🔍</button>
+                <div class="text">Compact palm hasil rekombinasi tetua terbaik dengan potensi CPO hingga 8,3 ton/ha/tahun.</div>
+                <button class="zoom-trigger" onclick="openWindow('DxP Langkat', 'DxP Langkat merupakan varietas pertama yang dirakit PPKS dari hasil rekombinasi tetua-tetua terbaik beberapa populasi pisifera. Tetua pisifera hasil rekombinasi antara pisifera SP540, Yangambi, dan Marihat yang disilangkan dengan Dura Deli terbaik menghasilkan varietas dengan karakter unggul rachis yang relatif pendek (compact palm) dan potensi CPO hingga 8,3 ton/ha/tahun. Selain cocok ditanam di areal bergelombang dan berbukit, varietas ini juga dapat mulai berbuah pada umur 22 bulan setelah tanam.')">VIEW FULL INFO 📄</button>
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-5" data-position="0 9 35" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-5" data-position="0 10 38" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card">
                 <span class="tag">DxP 540 NG</span>
-                <div class="text">New Generation for Ganoderma. Tahan Ganoderma dengan rendemen minyak hingga 27,4%.</div>
-                <button class="zoom-trigger" onclick="openZoom('DxP 540 NG', 'Tetua varietas DxP komersial PPKS yang merupakan keturunan SP540T merupakan salah satu material genetik yang memiliki tingkat ketahanan tinggi terhadap Ganoderma di lapangan. Persilangan yang menunjukkan sifat ketahanan ditetapkan sebagai varietas moderat tahan Ganoderma dan diberi nama DxP 540 NG. Frasa \'NG\' sendiri memiliki arti New Generation for Ganoderma. Selain memiliki sifat moderat tahan terhadap Ganoderma, Varietas DxP 540 NG juga memiliki karakter produksi TBS dan minyak yang sangat baik. Pada umur 6 tahun, varietas ini dapat menghasilkan 35 ton TBS/ha/tahun dengan tingkat rendemen minyak 26,5-27,4%. Tingkat rendemen yang tinggi disebabkan kandungan mesokarp/buah yang tinggi, yakni 84,5-87,5%.')">VIEW BIG PICTURE 🔍</button>
+                <div class="text">New Generation for Ganoderma: Material tahan Ganoderma dengan produksi TBS & minyak sangat baik.</div>
+                <button class="zoom-trigger" onclick="openWindow('DxP 540 NG', 'Tetua varietas DxP komersial PPKS yang merupakan keturunan SP540T merupakan salah satu material genetik yang memiliki tingkat ketahanan tinggi terhadap Ganoderma di lapangan. Persilangan yang menunjukkan sifat ketahanan ditetapkan sebagai varietas moderat tahan Ganoderma dan diberi nama DxP 540 NG. Frasa \'NG\' sendiri memiliki arti New Generation for Ganoderma. Selain memiliki sifat moderat tahan terhadap Ganoderma, Varietas DxP 540 NG juga memiliki karakter produksi TBS dan minyak yang sangat baik. Pada umur 6 tahun, varietas ini dapat menghasilkan 35 ton TBS/ha/tahun dengan tingkat rendemen minyak 26,5-27,4%. Tingkat rendemen yang tinggi disebabkan kandungan mesokarp/buah yang tinggi, yakni 84,5-87,5%.')">VIEW FULL INFO 📄</button>
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-6" data-position="25 8 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        <div class="dot" slot="hotspot-6" data-position="25 10 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
             <div class="info-card orbit-ad">
                 <img src="palm_oil_seeds_ads.png">
-                <button class="zoom-trigger" onclick="openZoom('Product Catalog', '<img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:12px;\'>')">VIEW BIG PICTURE 🔍</button>
+                <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px;\'>')">VIEW FULL IMAGE 🔍</button>
             </div>
         </div>
 
     </model-viewer>
 
     <script>
+        const viewer = document.getElementById('v');
+        const overlay = document.getElementById('window-overlay');
+
         function hideTutorial() {
             document.getElementById('tutorial').style.opacity = '0';
             setTimeout(() => document.getElementById('tutorial').style.display = 'none', 500);
@@ -156,14 +170,16 @@
             if (!isActive) el.classList.add('active');
         }
 
-        function openZoom(title, content) {
-            const body = document.getElementById('zoom-body');
-            body.innerHTML = `<span class="tag">${title}</span><div class="text zoom-text">${content}</div>`;
-            document.getElementById('zoom-overlay').style.display = 'flex';
+        function openWindow(title, content) {
+            const body = document.getElementById('window-body');
+            body.innerHTML = `<span class="tag">${title}</span><div class="text" style="font-size:16px">${content}</div>`;
+            overlay.style.display = 'flex';
+            viewer.classList.add('blurred');
         }
 
-        function closeZoom() {
-            document.getElementById('zoom-overlay').style.display = 'none';
+        function closeWindow() {
+            overlay.style.display = 'none';
+            viewer.classList.remove('blurred');
         }
 
         function closeAllDots(e) {
