@@ -8,6 +8,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
         body { margin: 0; background: #ffffff; font-family: 'Montserrat', sans-serif; overflow: hidden; }
         
+        /* TOP PRODUCT LABEL - Fixed Name */
         #product-header {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #2e7d32; color: white; padding: 10px 25px;
@@ -16,28 +17,30 @@
 
         model-viewer { width: 100%; height: 100vh; }
 
-        /* WIDE ORBIT CARDS */
+        /* PROFESSIONAL GLASS CARDS */
         .orbit-card {
-            background: white; border-radius: 12px; padding: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-left: 5px solid #2e7d32;
-            width: 170px; pointer-events: none; 
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 12px; padding: 12px; width: 170px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-left: 6px solid #2e7d32;
+            pointer-events: none; transition: opacity 0.5s ease;
         }
         
-        .orbit-ad { width: 200px; padding: 6px; border: 2px solid #2e7d32; }
+        .orbit-ad { width: 220px; padding: 5px; border: 2.5px solid #2e7d32; }
         .orbit-ad img { width: 100%; border-radius: 6px; display: block; }
 
         .tag { font-size: 9px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 4px; }
-        .text { font-size: 11px; font-weight: 600; color: #333; line-height: 1.3; }
+        .text { font-size: 11px; font-weight: 600; color: #333; line-height: 1.4; }
 
-        .nav-zone { position: fixed; top: 0; bottom: 0; width: 25%; z-index: 500; }
+        /* NAVIGATION & UI */
+        .nav-zone { position: fixed; top: 0; bottom: 0; width: 20%; z-index: 500; }
         #l-zone { left: 0; }
         #r-zone { right: 0; }
 
         .ar-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 15px 40px;
-            border-radius: 10px; font-weight: 800; box-shadow: 0 6px 0 #1b5e20; z-index: 1000; border: none;
+            background: #2e7d32; color: white; padding: 15px 50px;
+            border-radius: 12px; font-weight: 800; border: none;
+            box-shadow: 0 6px 0 #1b5e20; z-index: 1000; cursor: pointer;
         }
 
         .hidden { display: none !important; }
@@ -53,24 +56,24 @@
     <button class="ar-btn" onclick="document.querySelector('#v').activateAR()">BUKA AR</button>
 
     <model-viewer id="v" src="kecambah sawit.glb" ar ar-modes="webxr" 
-                  camera-controls auto-rotate shadow-intensity="1" 
-                  rotation-per-second="40deg" touch-action="none">
+                  camera-controls auto-rotate shadow-intensity="1.5" 
+                  rotation-per-second="35deg">
 
-        <div id="h1" class="orbit-card tree-info" slot="hotspot-1" data-position="-6 3 4" data-normal="0 0 1">
+        <div id="h1" class="orbit-card tree-info" slot="hotspot-1" data-position="-7 3 5" data-normal="0 0 1">
             <div class="tag">🧬 GENETICS</div>
             <div class="text">DxP 540 NG. Moderat Tahan Ganoderma.</div>
         </div>
 
-        <div id="h2" class="orbit-card orbit-ad tree-info" slot="hotspot-2" data-position="6 2 -4" data-normal="0 0 1">
+        <div id="h2" class="orbit-card orbit-ad tree-info" slot="hotspot-2" data-position="8 2.5 -6" data-normal="0 0 1">
             <img src="palm_oil_seeds_ads.png">
         </div>
 
-        <div id="h3" class="orbit-card tree-info" slot="hotspot-3" data-position="6 0.5 4" data-normal="0 0 1">
+        <div id="h3" class="orbit-card tree-info" slot="hotspot-3" data-position="-8 0.5 -5" data-normal="0 0 1">
             <div class="tag">📊 YIELD</div>
             <div class="text">35 Ton TBS/Ha. Rendemen 27.4%.</div>
         </div>
 
-        <div id="h4" class="orbit-card tree-info" slot="hotspot-4" data-position="-6 1 -4" data-normal="0 0 1">
+        <div id="h4" class="orbit-card tree-info" slot="hotspot-4" data-position="7 1 6" data-normal="0 0 1">
             <div class="tag">📍 ORIGIN</div>
             <div class="text">PPKS Medan, Indonesia.</div>
         </div>
@@ -94,11 +97,6 @@
             title.innerText = models[idx].name;
             document.querySelectorAll('.' + models[idx].cls).forEach(c => c.classList.remove('hidden'));
         }
-
-        // Hides cards when they go behind the model for a cleaner "Orbit"
-        viewer.addEventListener('camera-change', () => {
-            // Native model-viewer behavior handles this via data-normal
-        });
     </script>
 </body>
 </html>
