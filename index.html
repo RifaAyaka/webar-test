@@ -8,6 +8,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
         body { margin: 0; background: #ffffff; font-family: 'Montserrat', sans-serif; overflow: hidden; }
         
+        /* TOP PRODUCT LABEL */
         #product-header {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #2e7d32; color: white; padding: 10px 25px;
@@ -16,23 +17,19 @@
 
         model-viewer { width: 100%; height: 100vh; }
 
-        /* ULTRA-WIDE CARDS */
+        /* DEEP ORBIT CARDS - Glassmorphism Style */
         .orbit-card {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 12px; padding: 14px; width: 180px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.12); border-left: 6px solid #2e7d32;
-            pointer-events: none; transition: opacity 0.6s ease;
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);
+            border-radius: 12px; padding: 15px; width: 180px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-left: 6px solid #2e7d32;
+            pointer-events: none; transition: opacity 0.8s ease;
         }
         
-        .orbit-ad { width: 240px; padding: 6px; border: 2.5px solid #2e7d32; }
+        .orbit-ad { width: 250px; padding: 6px; border: 2.5px solid #2e7d32; }
         .orbit-ad img { width: 100%; border-radius: 6px; display: block; }
 
         .tag { font-size: 10px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 4px; }
         .text { font-size: 12px; font-weight: 600; color: #333; line-height: 1.4; }
-
-        .nav-zone { position: fixed; top: 0; bottom: 0; width: 20%; z-index: 500; }
-        #l-zone { left: 0; }
-        #r-zone { right: 0; }
 
         .ar-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
@@ -47,54 +44,33 @@
 <body>
 
     <div id="product-header">KECAMBAH SAWIT PPKS</div>
-    
-    <div id="l-zone" class="nav-zone" onclick="change(-1)"></div>
-    <div id="r-zone" class="nav-zone" onclick="change(1)"></div>
 
     <button class="ar-btn" onclick="document.querySelector('#v').activateAR()">BUKA AR</button>
 
     <model-viewer id="v" src="kecambah sawit.glb" ar ar-modes="webxr" 
                   camera-controls auto-rotate shadow-intensity="1.5" 
-                  rotation-per-second="45deg">
+                  rotation-per-second="15deg">
 
-        <div id="h1" class="orbit-card tree-info" slot="hotspot-1" data-position="-12 4 8" data-normal="0 0 1">
+        <div id="h1" class="orbit-card tree-info" slot="hotspot-1" data-position="-20 4 15" data-normal="0 0 1">
             <div class="tag">🧬 GENETICS</div>
             <div class="text">DxP 540 NG. Moderat Tahan Ganoderma.</div>
         </div>
 
-        <div id="h2" class="orbit-card orbit-ad tree-info" slot="hotspot-2" data-position="15 3 -10" data-normal="0 0 1">
+        <div id="h2" class="orbit-card orbit-ad tree-info" slot="hotspot-2" data-position="25 3 -20" data-normal="0 0 1">
             <img src="palm_oil_seeds_ads.png">
         </div>
 
-        <div id="h3" class="orbit-card tree-info" slot="hotspot-3" data-position="-15 1 -8" data-normal="0 0 1">
+        <div id="h3" class="orbit-card tree-info" slot="hotspot-3" data-position="-25 1 -18" data-normal="0 0 1">
             <div class="tag">📊 YIELD</div>
             <div class="text">35 Ton TBS/Ha. Rendemen 27.4%.</div>
         </div>
 
-        <div id="h4" class="orbit-card tree-info" slot="hotspot-4" data-position="12 2 10" data-normal="0 0 1">
+        <div id="h4" class="orbit-card tree-info" slot="hotspot-4" data-position="20 2 18" data-normal="0 0 1">
             <div class="tag">📍 ORIGIN</div>
             <div class="text">PPKS Medan, Indonesia.</div>
         </div>
 
     </model-viewer>
 
-    <script>
-        const models = [
-            { src: "kecambah sawit.glb", name: "KECAMBAH SAWIT PPKS", cls: "tree-info" },
-            { src: "fertilizer.glb", name: "PUPUK INDUSTRI PPKS", cls: "fert-info" }
-        ];
-
-        let idx = 0;
-        const viewer = document.querySelector('#v');
-        const title = document.getElementById('product-header');
-
-        function change(dir) {
-            document.querySelectorAll('.orbit-card').forEach(c => c.classList.add('hidden'));
-            idx = (idx + dir + models.length) % models.length;
-            viewer.src = models[idx].src;
-            title.innerText = models[idx].name;
-            document.querySelectorAll('.' + models[idx].cls).forEach(c => c.classList.remove('hidden'));
-        }
-    </script>
 </body>
 </html>
