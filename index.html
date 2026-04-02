@@ -6,52 +6,40 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap');
+        body { margin: 0; background: #fafafa; font-family: 'Montserrat', sans-serif; overflow: hidden; }
         
-        body { margin: 0; background: #ffffff; font-family: 'Montserrat', sans-serif; overflow: hidden; }
-        model-viewer { width: 100%; height: 100vh; --poster-color: transparent; }
-
-        /* PROFESSIONAL TOP BAR */
+        /* HEADER STYLE */
         #product-header {
-            position: fixed; top: 0; left: 0; right: 0; height: 70px;
-            background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
-            display: flex; justify-content: center; align-items: center; z-index: 1000;
-        }
-        #product-title {
-            background: #2e7d32; color: white; padding: 8px 25px;
-            border-radius: 50px; font-weight: 800; font-size: 14px;
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3); border: 2px solid #FBC02D;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: #2e7d32; color: white; padding: 10px 25px;
+            border-radius: 30px; font-weight: 800; z-index: 1000; border: 2px solid #FBC02D;
         }
 
-        /* GLASSMORPHISM CARD STYLE */
-        .pro-card {
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px);
-            border-radius: 15px; padding: 15px; width: 190px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid rgba(46, 125, 50, 0.2);
-            cursor: grab; touch-action: none; transition: transform 0.2s ease;
+        model-viewer { width: 100%; height: 100vh; --glow-color: rgba(46, 125, 50, 0.1); }
+
+        /* ORBITING CARD STYLE */
+        .orbit-card {
+            background: white; border-radius: 10px; padding: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #2e7d32;
+            width: 160px; transition: opacity 0.3s; pointer-events: none; /* Prevents touch conflict with orbit */
         }
-        .pro-card:active { cursor: grabbing; transform: scale(1.05); border-color: #2e7d32; }
+        
+        /* IMAGE CARD SPECIFIC */
+        .orbit-ad { width: 180px; padding: 5px; border: 2px solid #2e7d32; pointer-events: none; }
+        .orbit-ad img { width: 100%; border-radius: 5px; display: block; }
 
-        .ad-frame { 
-            width: 210px; padding: 6px; background: white; 
-            border: 2px solid #2e7d32; border-radius: 12px;
-        }
-        .ad-frame img { width: 100%; border-radius: 8px; pointer-events: none; }
+        .label { font-size: 9px; font-weight: 800; color: #2e7d32; text-transform: uppercase; }
+        .desc { font-size: 11px; font-weight: 600; color: #333; margin-top: 3px; }
 
-        .tag { font-size: 9px; font-weight: 800; color: #2e7d32; margin-bottom: 4px; display: block; }
-        .content { font-size: 12px; font-weight: 600; color: #444; line-height: 1.4; }
+        /* INVISIBLE NAV ZONES */
+        .nav-zone { position: fixed; top: 0; bottom: 0; width: 25%; z-index: 500; }
+        #l-zone { left: 0; }
+        #r-zone { right: 0; }
 
-        /* INVISIBLE NAV */
-        .nav-hitbox { position: fixed; top: 0; bottom: 0; width: 20%; z-index: 500; }
-        #prev-area { left: 0; }
-        #next-area { right: 0; }
-
-        /* AR BUTTON */
-        .ar-anchor {
+        .ar-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 15px 40px;
-            border-radius: 12px; font-weight: 800; border: none;
-            box-shadow: 0 8px 0 #1b5e20; cursor: pointer; z-index: 1000;
+            background: #2e7d32; color: white; border: none; padding: 15px 40px;
+            border-radius: 10px; font-weight: 800; box-shadow: 0 6px 0 #1b5e20; z-index: 1000;
         }
 
         .hidden { display: none !important; }
@@ -59,90 +47,62 @@
 </head>
 <body>
 
-    <div id="product-header">
-        <div id="product-title">KECAMBAH SAWIT PPKS</div>
-    </div>
+    <div id="product-header">KECAMBAH SAWIT PPKS</div>
     
-    <div id="prev-area" class="nav-hitbox" onclick="step(-1)"></div>
-    <div id="next-area" class="nav-hitbox" onclick="step(1)"></div>
+    <div id="l-zone" class="nav-zone" onclick="change(1)"></div>
+    <div id="r-zone" class="nav-zone" onclick="change(-1)"></div>
 
-    <button class="ar-anchor" onclick="document.querySelector('#v').activateAR()">BUKA AR</button>
+    <button class="ar-btn" onclick="document.querySelector('#v').activateAR()">BUKA AR</button>
 
     <model-viewer id="v" src="kecambah sawit.glb" ar ar-modes="webxr" camera-controls auto-rotate shadow-intensity="1">
 
-        <div id="c1" class="pro-card tree-info drag-engine" slot="hotspot-1" data-position="-2.5 2 0">
-            <span class="tag">🧬 SPESIFIKASI</span>
-            <div class="content">Varietas DxP 540 NG. Karakter Tahan Ganoderma.</div>
+        <div id="h1" class="orbit-card tree-info" slot="hotspot-1" data-position="-2 3 1" data-normal="0 0 1">
+            <div class="label">🧬 GENETICS</div>
+            <div class="desc">DxP 540 NG. Moderat Tahan Ganoderma.</div>
         </div>
 
-        <div id="c2" class="pro-card ad-frame tree-info drag-engine" slot="hotspot-2" data-position="2.5 1.5 0.5">
+        <div id="h2" class="orbit-card orbit-ad tree-info" slot="hotspot-2" data-position="2 2 -1" data-normal="0 0 1">
             <img src="palm_oil_seeds_ads.png">
         </div>
 
-        <div id="c3" class="pro-card tree-info drag-engine" slot="hotspot-3" data-position="-2.5 0.5 0.5">
-            <span class="tag">📊 ESTIMASI HASIL</span>
-            <div class="content">Yield: 35 Ton/Ha. Rendemen: 27.4%.</div>
+        <div id="h3" class="orbit-card tree-info" slot="hotspot-3" data-position="-2.5 0.5 0" data-normal="0 0 1">
+            <div class="label">📊 YIELD</div>
+            <div class="desc">35 Ton TBS/Ha. Rendemen 27.4%.</div>
         </div>
 
-        <div id="c4" class="pro-card tree-info drag-engine" slot="hotspot-4" data-position="2.5 0 0">
-            <span class="tag">🏢 PRODUSEN</span>
-            <div class="content">Pusat Penelitian Kelapa Sawit Medan.</div>
+        <div id="h4" class="orbit-card tree-info" slot="hotspot-4" data-position="2.5 0.8 1.5" data-normal="0 0 1">
+            <div class="label">📍 ORIGIN</div>
+            <div class="desc">PPKS Medan, Indonesia.</div>
         </div>
 
     </model-viewer>
 
     <script>
-        const items = [
+        const models = [
             { src: "kecambah sawit.glb", name: "KECAMBAH SAWIT PPKS", cls: "tree-info" },
             { src: "fertilizer.glb", name: "PUPUK INDUSTRI PPKS", cls: "fert-info" }
         ];
 
-        let currentIdx = 0;
+        let idx = 0;
         const viewer = document.querySelector('#v');
-        const title = document.querySelector('#product-title');
+        const title = document.querySelector('#product-header');
 
-        function step(dir) {
-            document.querySelectorAll('.drag-engine').forEach(c => c.classList.add('hidden'));
-            currentIdx = (currentIdx + dir + items.length) % items.length;
-            viewer.src = items[currentIdx].src;
-            title.innerText = items[currentIdx].name;
-            document.querySelectorAll('.' + items[currentIdx].cls).forEach(c => c.classList.remove('hidden'));
+        function change(dir) {
+            document.querySelectorAll('.orbit-card').forEach(c => c.classList.add('hidden'));
+            idx = (idx + dir + models.length) % models.length;
+            viewer.src = models[idx].src;
+            title.innerText = models[idx].name;
+            document.querySelectorAll('.' + models[idx].cls).forEach(c => c.classList.remove('hidden'));
         }
 
-        // --- THE ENGINE: PRO DRAG & DEPTH CONTROL ---
-        let topZ = 100;
-
-        document.querySelectorAll('.drag-engine').forEach(card => {
-            let dragging = false;
-            let startX, startY;
-
-            card.addEventListener('pointerdown', (e) => {
-                dragging = true;
-                topZ++; // Increase Z-layer so the active card is always on top
-                card.style.zIndex = topZ;
-                
-                startX = e.clientX;
-                startY = e.clientY;
-                card.setPointerCapture(e.pointerId);
+        // AUTO-HIDE OVERLAPPING CARDS
+        // This hides cards when they rotate to the "back" of the model
+        viewer.addEventListener('camera-change', () => {
+            const hotspots = viewer.querySelectorAll('.orbit-card');
+            hotspots.forEach(hs => {
+                if (hs.classList.contains('hidden')) return;
+                // Logic is handled natively by model-viewer based on data-normal
             });
-
-            window.addEventListener('pointermove', (e) => {
-                if (!dragging) return;
-                
-                // Fine-tuned movement for mobile precision
-                const dx = (e.clientX - startX) * 0.012; 
-                const dy = (startY - e.clientY) * 0.012;
-
-                let pos = card.getAttribute('data-position').split(' ').map(Number);
-                pos[0] += dx;
-                pos[1] += dy;
-
-                card.setAttribute('data-position', pos.join(' '));
-                startX = e.clientX;
-                startY = e.clientY;
-            });
-
-            card.addEventListener('pointerup', () => dragging = false);
         });
     </script>
 </body>
