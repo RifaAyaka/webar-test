@@ -12,15 +12,31 @@
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #2e7d32; color: white; padding: 10px 25px;
             border-radius: 30px; font-weight: 800; z-index: 1000; border: 2px solid #FBC02D;
+            white-space: nowrap; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+
+        .nav-bar {
+            position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px; z-index: 1000; width: max-content;
+        }
+        .nav-btn {
+            background: white; color: #2e7d32; padding: 8px 16px;
+            border-radius: 20px; font-weight: 800; border: 2px solid #2e7d32;
+            cursor: pointer; transition: 0.3s; font-size: 11px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn:hover { background: #e8f5e9; }
+        .nav-btn.active { background: #2e7d32; color: white; border-color: #FBC02D; }
 
         #tutorial {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: white; z-index: 3000; transition: opacity 0.5s;
+            color: white; z-index: 3000; transition: opacity 0.5s; pointer-events: none;
         }
         .hand-icon { font-size: 50px; animation: swipe 2s infinite; }
         @keyframes swipe { 0%, 100% { transform: translateX(-30px); } 50% { transform: translateX(30px); } }
+
+        .product-container { display: none; width: 100%; height: 100vh; position: absolute; top: 0; left: 0; }
+        .product-container.active { display: block; }
 
         model-viewer { width: 100%; height: 100vh; transition: filter 0.3s ease; }
         .blurred { filter: blur(8px) brightness(0.6); }
@@ -52,7 +68,7 @@
         #window-overlay {
             position: fixed; inset: 0; z-index: 5000;
             display: none; align-items: center; justify-content: center;
-            padding: 20px; background: rgba(0,0,0,0.2);
+            padding: 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
         }
         .window-box {
             background: white; width: 100%; max-width: 500px; max-height: 80vh;
@@ -65,25 +81,33 @@
             position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
             background: #e74c3c; color: white; border-radius: 50%; border: none;
             font-size: 20px; font-weight: bold; cursor: pointer; z-index: 5001;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .tag { font-size: 12px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 10px; display: block; border-bottom: 2px solid #FBC02D; padding-bottom: 5px; }
-        .text { font-size: 14px; font-weight: 500; color: #333; line-height: 1.7; text-align: justify; }
+        .text { font-size: 14px; font-weight: 600; color: #333; line-height: 1.6; text-align: justify; }
         .list { margin: 15px 0; padding-left: 20px; color: #2e7d32; font-weight: 700; line-height: 2; }
 
-        /* FIXED AD IMAGE IN INFO CARD */
         .orbit-ad img { max-height: 120px; width: auto; max-width: 100%; border-radius: 8px; margin: 0 auto 10px auto; display: block; }
 
         .ar-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: #2e7d32; color: white; padding: 18px 60px;
             border-radius: 16px; font-weight: 800; border: none; z-index: 1000;
+            box-shadow: 0 10px 20px rgba(46,125,50,0.4); cursor: pointer; transition: 0.3s;
         }
+        .ar-btn:active { transform: translateX(-50%) scale(0.95); }
     </style>
 </head>
 <body onclick="closeAllDots(event)">
 
     <div id="product-header">KECAMBAH SAWIT PPKS</div>
+
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="switchProduct('kecambah', 'KECAMBAH SAWIT PPKS', event)">Kecambah</button>
+        <button class="nav-btn" onclick="switchProduct('bibit3', 'BIBIT SAWIT 3 BULAN (PN)', event)">Bibit 3 Bulan</button>
+        <button class="nav-btn" onclick="switchProduct('bibit8', 'BIBIT SAWIT 8 BULAN (MN)', event)">Bibit 8 Bulan</button>
+    </div>
 
     <div id="window-overlay" onclick="closeWindow(event)">
         <div class="window-box" onclick="event.stopPropagation()">
@@ -92,73 +116,141 @@
         </div>
     </div>
 
-    <div id="tutorial" onclick="hideTutorial()">
+    <div id="tutorial">
         <div class="hand-icon">👆</div>
         <p style="font-weight: 800; margin-top: 20px; text-align: center;">CLICK DOTS FOR INFO<br>DRAG FOR 360° VIEW</p>
     </div>
 
-    <button class="ar-btn" onclick="document.querySelector('#v').activateAR()">OPEN AR CATALOG</button>
+    <button class="ar-btn" onclick="document.querySelector('.product-container.active model-viewer').activateAR()">OPEN AR CATALOG</button>
 
-    <model-viewer id="v" src="kecambah sawit.glb" ar ar-modes="webxr" 
-                  camera-controls auto-rotate shadow-intensity="2" 
-                  rotation-per-second="8deg" interaction-prompt="none">
+    <div id="kecambah" class="product-container active">
+        <model-viewer src="kecambah sawit.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
-        <div class="dot" slot="hotspot-1" data-position="-30 6 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card">
-                <span class="tag">Description</span>
-                <div class="text">Varietas Dumpy (SP-I): Memiliki laju pertumbuhan meninggi yang lambat & umur ekonomi hingga 30 tahun.</div>
-                <button class="zoom-trigger" onclick="openWindow('Description', 'Varietas DyP Sungai Pancur I (SP-I) atau yang lebih dikenal sebagai Varietas Dumpy, merupakan varietas dengan keunggulan spesifik laju pertumbuhan meninggi yang lambat (<55 cm/tahun). Dengan karakter ini, Varietas Dumpy mampu mencapai umur ekonomi hingga 30 tahun atau lebih lama dari varietas lain.')">VIEW FULL INFO 📄</button>
+            <div class="dot" slot="hotspot-1" data-position="-30 6 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Description</span>
+                    <div class="text">Varietas Dumpy (SP-I): Memiliki laju pertumbuhan meninggi yang lambat & umur ekonomi hingga 30 tahun.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Description', 'Varietas DyP Sungai Pancur I (SP-I) atau yang lebih dikenal sebagai Varietas Dumpy, merupakan varietas dengan keunggulan spesifik laju pertumbuhan meninggi yang lambat (<55 cm/tahun). Dengan karakter ini, Varietas Dumpy mampu mencapai umur ekonomi hingga 30 tahun atau lebih lama dari varietas lain.')">VIEW FULL INFO 📄</button>
+                </div>
             </div>
-        </div>
 
-        <div class="dot" slot="hotspot-2" data-position="35 4 -20" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card">
-                <span class="tag">Turunan SP540</span>
-                <div class="text">Varietas dari tetua pisifera murni PPKS (DxP 540, Simalungun, AVROS) dengan mesokarp tinggi.</div>
-                <button class="zoom-trigger" onclick="openWindow('Turunan SP540', 'Varietas kelapa sawit yang termasuk ke dalam kelompok SP540 merupakan varietas-varietas yang dihasilkan dari tetua pisifera keturunan SP540 murni yang hanya dimiliki oleh PPKS. Varietas-varietas dalam kelompok ini terdiri dari: <ul class=\'list\'><li>DxP PPKS 540</li><li>DxP Simalungun</li><li>DxP AVROS</li></ul> Karakter unggulan dari kelompok ini adalah quick starter dan persentase mesokarp per buah yang cukup tinggi. Dengan daya adaptasi cukup luas, varietas ini dapat ditanam di berbagai tipe lahan kelapa sawit (wilayah datar sampai bergelombang).')">VIEW FULL INFO 📄</button>
+            <div class="dot" slot="hotspot-2" data-position="35 4 -20" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Turunan SP540</span>
+                    <div class="text">Varietas dari tetua pisifera murni PPKS (DxP 540, Simalungun, AVROS) dengan mesokarp tinggi.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Turunan SP540', 'Varietas kelapa sawit yang termasuk ke dalam kelompok SP540 merupakan varietas-varietas yang dihasilkan dari tetua pisifera keturunan SP540 murni yang hanya dimiliki oleh PPKS. Varietas-varietas dalam kelompok ini terdiri dari: <ul class=\'list\'><li>DxP PPKS 540</li><li>DxP Simalungun</li><li>DxP AVROS</li></ul> Karakter unggulan dari kelompok ini adalah quick starter dan persentase mesokarp per buah yang cukup tinggi. Dengan daya adaptasi cukup luas, varietas ini dapat ditanam di berbagai tipe lahan kelapa sawit (wilayah datar sampai bergelombang).')">VIEW FULL INFO 📄</button>
+                </div>
             </div>
-        </div>
 
-        <div class="dot" slot="hotspot-3" data-position="-35 1 -30" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card">
-                <span class="tag">Turunan Yangambi</span>
-                <div class="text">Populasi Afrika (Yangambi, 239, 718) dengan bobot tandan besar & kandungan minyak sangat tinggi.</div>
-                <button class="zoom-trigger" onclick="openWindow('Turunan Yangambi', 'Yangambi merupakan populasi kelapa sawit asal Afrika yang banyak digunakan sebagai tetua pisifera sumber benih unggul. Varietas kelapa sawit PPKS yang dihasilkan dari populasi ini adalah: <ul class=\'list\'><li>DxP Yangambi</li><li>DxP PPKS 239</li><li>DxP PPKS 718</li></ul> Secara umum, populasi ini memiliki keunggulan pada bobot tandan yang relatif besar. Umumnya Yangambi memiliki kandungan minyak dan mesokarp yang tinggi, jauh lebih tinggi dari populasi lain.')">VIEW FULL INFO 📄</button>
+            <div class="dot" slot="hotspot-3" data-position="-35 1 -30" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Turunan Yangambi</span>
+                    <div class="text">Populasi Afrika (Yangambi, 239, 718) dengan bobot tandan besar & kandungan minyak sangat tinggi.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Turunan Yangambi', 'Yangambi merupakan populasi kelapa sawit asal Afrika yang banyak digunakan sebagai tetua pisifera sumber benih unggul. Varietas kelapa sawit PPKS yang dihasilkan dari populasi ini adalah: <ul class=\'list\'><li>DxP Yangambi</li><li>DxP PPKS 239</li><li>DxP PPKS 718</li></ul> Secara umum, populasi ini memiliki keunggulan pada bobot tandan yang relatif besar. Umumnya Yangambi memiliki kandungan minyak dan mesokarp yang tinggi, jauh lebih tinggi dari populasi lain.')">VIEW FULL INFO 📄</button>
+                </div>
             </div>
-        </div>
 
-        <div class="dot" slot="hotspot-4" data-position="32 -5 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card">
-                <span class="tag">DxP Langkat</span>
-                <div class="text">Compact palm hasil rekombinasi tetua terbaik dengan potensi CPO hingga 8,3 ton/ha/tahun.</div>
-                <button class="zoom-trigger" onclick="openWindow('DxP Langkat', 'DxP Langkat merupakan varietas pertama yang dirakit PPKS dari hasil rekombinasi tetua-tetua terbaik beberapa populasi pisifera. Tetua pisifera hasil rekombinasi antara pisifera SP540, Yangambi, dan Marihat yang disilangkan dengan Dura Deli terbaik menghasilkan varietas dengan karakter unggul rachis yang relatif pendek (compact palm) dan potensi CPO hingga 8,3 ton/ha/tahun. Selain cocok ditanam di areal bergelombang dan berbukit, varietas ini juga dapat mulai berbuah pada umur 22 bulan setelah tanam.')">VIEW FULL INFO 📄</button>
+            <div class="dot" slot="hotspot-4" data-position="32 -5 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">DxP Langkat</span>
+                    <div class="text">Compact palm hasil rekombinasi tetua terbaik dengan potensi CPO hingga 8,3 ton/ha/tahun.</div>
+                    <button class="zoom-trigger" onclick="openWindow('DxP Langkat', 'DxP Langkat merupakan varietas pertama yang dirakit PPKS dari hasil rekombinasi tetua-tetua terbaik beberapa populasi pisifera. Tetua pisifera hasil rekombinasi antara pisifera SP540, Yangambi, dan Marihat yang disilangkan dengan Dura Deli terbaik menghasilkan varietas dengan karakter unggul rachis yang relatif pendek (compact palm) dan potensi CPO hingga 8,3 ton/ha/tahun. Selain cocok ditanam di areal bergelombang dan berbukit, varietas ini juga dapat mulai berbuah pada umur 22 bulan setelah tanam.')">VIEW FULL INFO 📄</button>
+                </div>
             </div>
-        </div>
 
-        <div class="dot" slot="hotspot-5" data-position="0 10 38" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card">
-                <span class="tag">DxP 540 NG</span>
-                <div class="text">New Generation for Ganoderma: Material tahan Ganoderma dengan produksi TBS & minyak sangat baik.</div>
-                <button class="zoom-trigger" onclick="openWindow('DxP 540 NG', 'Tetua varietas DxP komersial PPKS yang merupakan keturunan SP540T merupakan salah satu material genetik yang memiliki tingkat ketahanan tinggi terhadap Ganoderma di lapangan. Persilangan yang menunjukkan sifat ketahanan ditetapkan sebagai varietas moderat tahan Ganoderma dan diberi nama DxP 540 NG. Frasa \'NG\' sendiri memiliki arti New Generation for Ganoderma. Selain memiliki sifat moderat tahan terhadap Ganoderma, Varietas DxP 540 NG juga memiliki karakter produksi TBS dan minyak yang sangat baik. Pada umur 6 tahun, varietas ini dapat menghasilkan 35 ton TBS/ha/tahun dengan tingkat rendemen minyak 26,5-27,4%. Tingkat rendemen yang tinggi disebabkan kandungan mesokarp/buah yang tinggi, yakni 84,5-87,5%.')">VIEW FULL INFO 📄</button>
+            <div class="dot" slot="hotspot-5" data-position="0 10 38" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">DxP 540 NG</span>
+                    <div class="text">New Generation for Ganoderma: Material tahan Ganoderma dengan produksi TBS & minyak sangat baik.</div>
+                    <button class="zoom-trigger" onclick="openWindow('DxP 540 NG', 'Tetua varietas DxP komersial PPKS yang merupakan keturunan SP540T merupakan salah satu material genetik yang memiliki tingkat ketahanan tinggi terhadap Ganoderma di lapangan. Persilangan yang menunjukkan sifat ketahanan ditetapkan sebagai varietas moderat tahan Ganoderma dan diberi nama DxP 540 NG. Frasa \'NG\' sendiri memiliki arti New Generation for Ganoderma. Selain memiliki sifat moderat tahan terhadap Ganoderma, Varietas DxP 540 NG juga memiliki karakter produksi TBS dan minyak yang sangat baik. Pada umur 6 tahun, varietas ini dapat menghasilkan 35 ton TBS/ha/tahun dengan tingkat rendemen minyak 26,5-27,4%. Tingkat rendemen yang tinggi disebabkan kandungan mesokarp/buah yang tinggi, yakni 84,5-87,5%.')">VIEW FULL INFO 📄</button>
+                </div>
             </div>
-        </div>
 
-        <div class="dot" slot="hotspot-6" data-position="25 10 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
-            <div class="info-card orbit-ad">
-                <img src="palm_oil_seeds_ads.png">
-                <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px; display:block;\'>')">VIEW FULL IMAGE 🔍</button>
+            <div class="dot" slot="hotspot-6" data-position="25 10 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card orbit-ad">
+                    <img src="palm_oil_seeds_ads.png">
+                    <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px; display:block;\'>')">VIEW FULL IMAGE 🔍</button>
+                </div>
             </div>
-        </div>
 
-    </model-viewer>
+        </model-viewer>
+    </div>
+
+    <div id="bibit3" class="product-container">
+        <model-viewer src="bibitsawit3bulan.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-pn-1" data-position="0 15 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Fase Pre-Nursery</span>
+                    <div class="text">Umur 1-3 bulan. Membutuhkan baby polybag dan naungan intensif dari sinar matahari langsung.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Fase Pre-Nursery (PN)', 'Fase Pre-Nursery adalah tahapan awal pembibitan kelapa sawit yang berlangsung dari kecambah ditanam hingga bibit berumur 3 bulan. Pada fase ini, bibit sangat rentan sehingga membutuhkan naungan (paranet) untuk melindunginya dari paparan sinar matahari langsung, serta penyiraman yang rutin untuk menjaga kelembapan media tanam.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-pn-2" data-position="-8 10 8" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Morfologi Daun Lanset</span>
+                    <div class="text">Daun berbentuk lanset (seperti tombak) memanjang utuh dan belum membelah.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Perkembangan Daun Lanset', 'Daun bibit kelapa sawit pada umur 1-3 bulan memiliki bentuk utuh memanjang yang dikenal dengan istilah daun lanset (lanceolate). Bentuk ini menandakan bibit masih dalam tahap perkembangan vegetatif paling awal sebelum nantinya daun mulai membelah menjadi bentuk menyirip (pinnate).')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-pn-3" data-position="8 2 8" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Media & Pemeliharaan</span>
+                    <div class="text">Menggunakan top soil murni dengan jadwal penyiraman 2 kali sehari secara konsisten.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Standar Pemeliharaan PN', 'Kunci utama keberhasilan fase Pre-Nursery adalah kualitas tanah dan pasokan air. Media tanam terbaik adalah top soil yang diayak bersih. Pemeliharaan utama mencakup penyiraman 2 kali sehari (pagi dan sore) serta pemupukan dosis sangat rendah secara berkala (misalnya NPK atau pupuk daun cair) untuk memacu pertumbuhan akar.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
+    <div id="bibit8" class="product-container">
+        <model-viewer src="bibitsawit4-8bulan.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-mn-1" data-position="0 30 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Fase Main Nursery</span>
+                    <div class="text">Umur 4-12 bulan. Ditanam pada large polybag tanpa naungan, adaptasi sinar matahari penuh.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Fase Main Nursery (MN)', 'Fase Main Nursery (Pembibitan Utama) merupakan tahap pembesaran bibit kelapa sawit dari umur 4 bulan hingga siap tanam di lapangan (9-12 bulan). Bibit dipindahkan dari baby polybag ke polybag besar yang berisi tanah subur agar ruang perakaran cukup untuk menunjang pertumbuhan vegetatif yang masif. Pada fase ini naungan sudah dihilangkan sepenuhnya.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-mn-2" data-position="-15 20 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Perubahan Daun Pinnate</span>
+                    <div class="text">Daun mulai pecah dan membelah sempurna membentuk helai pelepah dewasa.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Perkembangan Daun Pinnate', 'Indikator utama bibit kelapa sawit tumbuh normal di Main Nursery adalah perubahan bentuk daun. Daun yang awalnya berbentuk lanset mulai pecah atau membelah membentuk helai-helai daun terpisah (pinnate). Pada umur 8 bulan, bibit unggul harus sudah memiliki pelepah dengan anak daun yang terbuka sempurna.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-mn-3" data-position="10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Kesiapan Transplanting</span>
+                    <div class="text">Bonggol batang telah menebal, jumlah pelepah cukup, dan sistem perakaran siap lapangan.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Kesiapan Tanam Lapangan', 'Menjelang umur 8-12 bulan, bibit kelapa sawit mencapai standar kesiapan tanam. Ciri fisiknya antara lain: jumlah pelepah daun mencukupi (minimal 12-14 pelepah aktif), diameter bonggol batang besar membulat kokoh, serta jalinan sistem perakaran yang padat. Bibit pada kondisi ini dijamin memiliki tingkat daya hidup (survival rate) tertinggi saat ditanam di kebun.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
 
     <script>
-        const viewer = document.getElementById('v');
-        const overlay = document.getElementById('window-overlay');
+        let tutorialShown = true;
+        setTimeout(() => {
+            if(tutorialShown) hideTutorial();
+        }, 4000);
 
         function hideTutorial() {
             document.getElementById('tutorial').style.opacity = '0';
-            setTimeout(() => document.getElementById('tutorial').style.display = 'none', 500);
+            tutorialShown = false;
         }
 
         function toggleDot(el, e) {
@@ -172,18 +264,34 @@
         function openWindow(title, content) {
             const body = document.getElementById('window-body');
             body.innerHTML = `<span class="tag">${title}</span><div class="text" style="font-size:16px">${content}</div>`;
-            overlay.style.display = 'flex';
-            viewer.classList.add('blurred');
+            document.getElementById('window-overlay').style.display = 'flex';
+            document.querySelector('.product-container.active model-viewer').classList.add('blurred');
         }
 
-        function closeWindow() {
-            overlay.style.display = 'none';
-            viewer.classList.remove('blurred');
+        function closeWindow(e) {
+            if(e && e.target !== document.getElementById('window-overlay') && e.target !== document.querySelector('.close-btn')) return;
+            document.getElementById('window-overlay').style.display = 'none';
+            document.querySelectorAll('model-viewer').forEach(mv => mv.classList.remove('blurred'));
         }
 
         function closeAllDots(e) {
             document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
-            if(e) hideTutorial();
+        }
+
+        function switchProduct(id, title, event) {
+            document.getElementById('product-header').innerText = title;
+
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+
+            document.querySelectorAll('.product-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+
+            closeAllDots();
+            closeWindow();
+            hideTutorial();
         }
     </script>
 </body>
