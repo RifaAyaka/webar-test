@@ -27,6 +27,11 @@
         .nav-btn:hover { background: #e8f5e9; }
         .nav-btn.active { background: #2e7d32; color: white; border-color: #FBC02D; }
 
+        /* INSTAGRAM-STYLE TAP ZONES */
+        .nav-zone { position: fixed; top: 120px; bottom: 100px; width: 15%; z-index: 5; cursor: pointer; }
+        #l-zone { left: 0; }
+        #r-zone { right: 0; }
+
         #tutorial {
             position: fixed; inset: 0; background: rgba(0,0,0,0.7);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -45,7 +50,7 @@
             width: 35px; height: 35px; background: #2e7d32; border: 3px solid white;
             border-radius: 50%; cursor: pointer; box-shadow: 0 0 20px rgba(46,125,50,0.5);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s; pointer-events: auto; z-index: 1;
+            transition: transform 0.3s; pointer-events: auto; z-index: 20; /* Increased to stay above nav-zones */
         }
 
         .info-card {
@@ -109,6 +114,9 @@
         <button class="nav-btn" onclick="switchProduct('bibit8', 'BIBIT SAWIT 8 BULAN (MN)', event)">Bibit 8 Bulan</button>
     </div>
 
+    <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
+    <div id="r-zone" class="nav-zone" onclick="changeProduct(1)"></div>
+
     <div id="window-overlay" onclick="closeWindow(event)">
         <div class="window-box" onclick="event.stopPropagation()">
             <button class="close-btn" onclick="closeWindow()">✕</button>
@@ -118,7 +126,7 @@
 
     <div id="tutorial">
         <div class="hand-icon">👆</div>
-        <p style="font-weight: 800; margin-top: 20px; text-align: center;">CLICK DOTS FOR INFO<br>DRAG FOR 360° VIEW</p>
+        <p style="font-weight: 800; margin-top: 20px; text-align: center;">CLICK DOTS FOR INFO<br>DRAG FOR 360° VIEW<br>TAP EDGES TO SWITCH PRODUCTS</p>
     </div>
 
     <button class="ar-btn" onclick="document.querySelector('.product-container.active model-viewer').activateAR()">OPEN AR CATALOG</button>
@@ -253,6 +261,18 @@
             tutorialShown = false;
         }
 
+        // --- NEW: Instagram-style Navigation Array & Logic ---
+        let currentProdIndex = 0;
+        const productIds = ['kecambah', 'bibit3', 'bibit8'];
+        const productTitles = ['KECAMBAH SAWIT PPKS', 'BIBIT SAWIT 3 BULAN (PN)', 'BIBIT SAWIT 8 BULAN (MN)'];
+
+        function changeProduct(direction) {
+            currentProdIndex = (currentProdIndex + direction + productIds.length) % productIds.length;
+            const buttons = document.querySelectorAll('.nav-btn');
+            switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex], { target: buttons[currentProdIndex] });
+        }
+        // -----------------------------------------------------
+
         function toggleDot(el, e) {
             e.stopPropagation();
             hideTutorial();
@@ -281,8 +301,13 @@
         function switchProduct(id, title, event) {
             document.getElementById('product-header').innerText = title;
 
+            // Sync index so edge tapping stays in line with manual button clicks
+            currentProdIndex = productIds.indexOf(id); 
+
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            if(event) event.target.classList.add('active');
+            if(event && event.target) {
+                event.target.classList.add('active');
+            }
 
             document.querySelectorAll('.product-container').forEach(container => {
                 container.classList.remove('active');
