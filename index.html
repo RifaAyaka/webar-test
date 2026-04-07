@@ -50,7 +50,7 @@
             width: 35px; height: 35px; background: #2e7d32; border: 3px solid white;
             border-radius: 50%; cursor: pointer; box-shadow: 0 0 20px rgba(46,125,50,0.5);
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s; pointer-events: auto; z-index: 20; /* Increased to stay above nav-zones */
+            transition: transform 0.3s; pointer-events: auto; z-index: 20;
         }
 
         .info-card {
@@ -112,6 +112,8 @@
         <button class="nav-btn active" onclick="switchProduct('kecambah', 'KECAMBAH SAWIT PPKS', event)">Kecambah</button>
         <button class="nav-btn" onclick="switchProduct('bibit3', 'BIBIT SAWIT 3 BULAN (PN)', event)">Bibit 3 Bulan</button>
         <button class="nav-btn" onclick="switchProduct('bibit8', 'BIBIT SAWIT 8 BULAN (MN)', event)">Bibit 8 Bulan</button>
+        <button class="nav-btn" onclick="switchProduct('bibit12', 'BIBIT SAWIT 9-12 BULAN', event)">Bibit 12 Bulan</button>
+        <button class="nav-btn" onclick="switchProduct('bioneensis', 'BIONEENSIS PUPUK HAYATI', event)">Bioneensis</button>
     </div>
 
     <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
@@ -250,6 +252,54 @@
         </model-viewer>
     </div>
 
+    <div id="bibit12" class="product-container">
+        <model-viewer src="bibitsawit9-12bulan.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-12m-1" data-position="0 40 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Siap Tanam Lapangan</span>
+                    <div class="text">Umur 9-12 bulan. Bibit telah mencapai ukuran optimal dengan perakaran kokoh untuk ditanam di kebun.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Kesiapan 9-12 Bulan', 'Pada umur 9-12 bulan, bibit kelapa sawit sudah berada pada tahap akhir Main Nursery dan siap untuk proses transplanting ke lapangan. Tajuk daun telah berkembang penuh, bonggol sangat kuat, dan sistem perakaran mampu beradaptasi langsung dengan kondisi lahan sebenarnya.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
+    <div id="bioneensis" class="product-container">
+        <model-viewer src="bioneensis.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-bio-1" data-position="0 15 10" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Pupuk Hayati PGPR</span>
+                    <div class="text">Mengandung bakteri penambat N, pelarut P, dan penghasil hormon IAA.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Pupuk Hayati PGPR', 'BIONEENSIS merupakan pupuk hayati yang diformulasikan khusus untuk tanaman kelapa sawit. Produk ini mengandung konsorsium mikroba bermanfaat yang diisolasi langsung dari perakaran kelapa sawit. Mikroba ini berperan sebagai Plant Growth Promoting Rhizobacteria (PGPR) yang terdiri dari bakteri penambat nitrogen, pelarut fosfat, dan penghasil indole acetic acid (IAA).')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-bio-2" data-position="-10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Komposisi Organik</span>
+                    <div class="text">Dibuat menggunakan sumber daya lokal ramah lingkungan dari limbah sawit dan tebu.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Komposisi Berkelanjutan', 'Bioneensis mengedepankan prinsip keberlanjutan dengan memanfaatkan sumber daya lokal yang ramah lingkungan. Komposisi formula dan media pembawanya menggunakan by-product (limbah) organik dari industri tanaman kelapa sawit dan tanaman tebu.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+            <div class="dot" slot="hotspot-bio-3" data-position="10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Daya Adaptasi Tinggi</span>
+                    <div class="text">Asosiasi tinggi dengan tanaman dan adaptif pada berbagai kondisi pH tanah (4-11).</div>
+                    <button class="zoom-trigger" onclick="openWindow('Keunggulan Bioneensis', 'Keunggulan utama Bioneensis meliputi:<br><ul class=\'list\'><li>Bahan aktif (mikroba) diisolasi langsung dari perakaran kelapa sawit sehingga memiliki asosiasi tinggi dengan tanaman.</li><li>Komposisi formula menggunakan limbah kelapa sawit dan tebu.</li><li>Sangat mudah diaplikasikan di lapangan.</li><li>Memiliki daya adaptasi yang sangat tinggi di berbagai kondisi pH tanah ekstrim (pH 4-11).</li></ul>')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
     <script>
         let tutorialShown = true;
         setTimeout(() => {
@@ -261,10 +311,16 @@
             tutorialShown = false;
         }
 
-        // --- NEW: Instagram-style Navigation Array & Logic ---
+        // --- UPDATED: Instagram-style Navigation Array & Logic ---
         let currentProdIndex = 0;
-        const productIds = ['kecambah', 'bibit3', 'bibit8'];
-        const productTitles = ['KECAMBAH SAWIT PPKS', 'BIBIT SAWIT 3 BULAN (PN)', 'BIBIT SAWIT 8 BULAN (MN)'];
+        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis'];
+        const productTitles = [
+            'KECAMBAH SAWIT PPKS', 
+            'BIBIT SAWIT 3 BULAN (PN)', 
+            'BIBIT SAWIT 8 BULAN (MN)', 
+            'BIBIT SAWIT 9-12 BULAN', 
+            'BIONEENSIS PUPUK HAYATI'
+        ];
 
         function changeProduct(direction) {
             currentProdIndex = (currentProdIndex + direction + productIds.length) % productIds.length;
