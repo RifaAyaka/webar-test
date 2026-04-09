@@ -114,6 +114,7 @@
         <button class="nav-btn" onclick="switchProduct('bibit8', 'BIBIT SAWIT 8 BULAN (MN)', event)">Bibit 8 Bulan</button>
         <button class="nav-btn" onclick="switchProduct('bibit12', 'BIBIT SAWIT 9-12 BULAN', event)">Bibit 12 Bulan</button>
         <button class="nav-btn" onclick="switchProduct('bioneensis', 'BIONEENSIS PUPUK HAYATI', event)">Bioneensis</button>
+        <button class="nav-btn" onclick="switchProduct('feromonas', 'FEROMONAS', event)">Feromonas</button>
     </div>
 
     <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
@@ -181,7 +182,7 @@
             <div class="dot" slot="hotspot-6" data-position="25 10 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card orbit-ad">
                     <img src="palm_oil_seeds_ads.png">
-                    <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px; display:block;\'>')">VIEW FULL IMAGE 🔍</button>
+                    <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<a href=\'https://sawitlounge.iopri.co.id/index.php/welcome/product/7\' target=\'_blank\'><img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px; display:block; cursor:pointer;\' title=\'Click to visit our store!\'></a>')">VIEW FULL IMAGE 🔍</button>
                 </div>
             </div>
 
@@ -300,6 +301,22 @@
         </model-viewer>
     </div>
 
+    <div id="feromonas" class="product-container">
+        <model-viewer src="Feromonas.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-fero-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Feromonas</span>
+                    <div class="text">Atraktan efektif untuk mengendalikan hama Oryctes rhinoceros.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Feromonas PPKS', 'Feromonas adalah produk atraktan sintetis yang dirancang khusus untuk menarik hama kumbang tanduk (Oryctes rhinoceros). Produk ini digunakan dalam perangkap (ferotrap) untuk mengurangi populasi hama yang merusak tanaman kelapa sawit, baik pada fase belum menghasilkan (TBM) maupun menghasilkan (TM).')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
     <script>
         let tutorialShown = true;
         setTimeout(() => {
@@ -311,15 +328,16 @@
             tutorialShown = false;
         }
 
-        // --- UPDATED: Instagram-style Navigation Array & Logic ---
+        // --- UPDATED: Navigation Array & Logic (Added Feromonas) ---
         let currentProdIndex = 0;
-        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis'];
+        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas'];
         const productTitles = [
             'KECAMBAH SAWIT PPKS', 
             'BIBIT SAWIT 3 BULAN (PN)', 
             'BIBIT SAWIT 8 BULAN (MN)', 
             'BIBIT SAWIT 9-12 BULAN', 
-            'BIONEENSIS PUPUK HAYATI'
+            'BIONEENSIS PUPUK HAYATI',
+            'FEROMONAS'
         ];
 
         function changeProduct(direction) {
