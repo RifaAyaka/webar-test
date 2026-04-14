@@ -6,8 +6,27 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
-        body { margin: 0; background: #ffffff; font-family: 'Montserrat', sans-serif; overflow: hidden; }
+        body { 
+            margin: 0; 
+            background: url('background.png') no-repeat center center fixed; 
+            background-size: cover;
+            font-family: 'Montserrat', sans-serif; 
+            overflow: hidden; 
+        }
         
+        .logo-top-right {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            cursor: pointer;
+        }
+        
+        .logo-top-right img {
+            height: 50px;
+            width: auto;
+        }
+
         #product-header {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: #2e7d32; color: white; padding: 10px 25px;
@@ -27,7 +46,6 @@
         .nav-btn:hover { background: #e8f5e9; }
         .nav-btn.active { background: #2e7d32; color: white; border-color: #FBC02D; }
 
-        /* INSTAGRAM-STYLE TAP ZONES */
         .nav-zone { position: fixed; top: 120px; bottom: 100px; width: 15%; z-index: 5; cursor: pointer; }
         #l-zone { left: 0; }
         #r-zone { right: 0; }
@@ -106,6 +124,10 @@
 </head>
 <body onclick="closeAllDots(event)">
 
+    <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
+        <img src="logo-PPKS.png" alt="PPKS Logo">
+    </a>
+
     <div id="product-header">KECAMBAH SAWIT PPKS</div>
 
     <div class="nav-bar">
@@ -115,6 +137,7 @@
         <button class="nav-btn" onclick="switchProduct('bibit12', 'BIBIT SAWIT 9-12 BULAN', event)">Bibit 12 Bulan</button>
         <button class="nav-btn" onclick="switchProduct('bioneensis', 'BIONEENSIS PUPUK HAYATI', event)">Bioneensis</button>
         <button class="nav-btn" onclick="switchProduct('feromonas', 'FEROMONAS', event)">Feromonas</button>
+        <button class="nav-btn" onclick="switchProduct('fertoma', 'FERTOMAX', event)">Fertomax</button>
     </div>
 
     <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
@@ -317,6 +340,22 @@
         </model-viewer>
     </div>
 
+    <div id="fertoma" class="product-container">
+        <model-viewer src="FertoMax.glb" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-fertomax-1" data-position="0 0 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">FertoMax</span>
+                    <div class="text">Produk baru FertoMax.</div>
+                    <button class="zoom-trigger" onclick="openWindow('FertoMax', 'Informasi lebih lanjut tentang FertoMax akan segera hadir.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
     <script>
         let tutorialShown = true;
         setTimeout(() => {
@@ -328,16 +367,16 @@
             tutorialShown = false;
         }
 
-        // --- UPDATED: Navigation Array & Logic (Added Feromonas) ---
         let currentProdIndex = 0;
-        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas'];
+        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas', 'fertoma'];
         const productTitles = [
             'KECAMBAH SAWIT PPKS', 
             'BIBIT SAWIT 3 BULAN (PN)', 
             'BIBIT SAWIT 8 BULAN (MN)', 
             'BIBIT SAWIT 9-12 BULAN', 
             'BIONEENSIS PUPUK HAYATI',
-            'FEROMONAS'
+            'FEROMONAS',
+            'FERTOMAX'
         ];
 
         function changeProduct(direction) {
@@ -345,7 +384,6 @@
             const buttons = document.querySelectorAll('.nav-btn');
             switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex], { target: buttons[currentProdIndex] });
         }
-        // -----------------------------------------------------
 
         function toggleDot(el, e) {
             e.stopPropagation();
@@ -375,7 +413,6 @@
         function switchProduct(id, title, event) {
             document.getElementById('product-header').innerText = title;
 
-            // Sync index so edge tapping stays in line with manual button clicks
             currentProdIndex = productIds.indexOf(id); 
 
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
