@@ -34,18 +34,6 @@
             white-space: nowrap; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .nav-bar {
-            position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px; z-index: 1000; width: max-content;
-        }
-        .nav-btn {
-            background: white; color: #2e7d32; padding: 8px 16px;
-            border-radius: 20px; font-weight: 800; border: 2px solid #2e7d32;
-            cursor: pointer; transition: 0.3s; font-size: 11px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-btn:hover { background: #e8f5e9; }
-        .nav-btn.active { background: #2e7d32; color: white; border-color: #FBC02D; }
-
         .nav-zone { position: fixed; top: 120px; bottom: 100px; width: 15%; z-index: 5; cursor: pointer; }
         #l-zone { left: 0; }
         #r-zone { right: 0; }
@@ -129,16 +117,6 @@
     </a>
 
     <div id="product-header">KECAMBAH SAWIT PPKS</div>
-
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="switchProduct('kecambah', 'KECAMBAH SAWIT PPKS', event)">Kecambah</button>
-        <button class="nav-btn" onclick="switchProduct('bibit3', 'BIBIT SAWIT 3 BULAN (PN)', event)">Bibit 3 Bulan</button>
-        <button class="nav-btn" onclick="switchProduct('bibit8', 'BIBIT SAWIT 8 BULAN (MN)', event)">Bibit 8 Bulan</button>
-        <button class="nav-btn" onclick="switchProduct('bibit12', 'BIBIT SAWIT 9-12 BULAN', event)">Bibit 12 Bulan</button>
-        <button class="nav-btn" onclick="switchProduct('bioneensis', 'BIONEENSIS PUPUK HAYATI', event)">Bioneensis</button>
-        <button class="nav-btn" onclick="switchProduct('feromonas', 'FEROMONAS', event)">Feromonas</button>
-        <button class="nav-btn" onclick="switchProduct('fertoma', 'FERTOMAX', event)">Fertomax</button>
-    </div>
 
     <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
     <div id="r-zone" class="nav-zone" onclick="changeProduct(1)"></div>
@@ -325,7 +303,7 @@
     </div>
 
     <div id="feromonas" class="product-container">
-        <model-viewer src="Feromonas.glb" ar ar-modes="webxr" 
+        <model-viewer src="Feromonas.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
@@ -341,7 +319,7 @@
     </div>
 
     <div id="fertoma" class="product-container">
-        <model-viewer src="FertoMax.glb" ar ar-modes="webxr" 
+        <model-viewer src="FertoMax.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
@@ -381,8 +359,7 @@
 
         function changeProduct(direction) {
             currentProdIndex = (currentProdIndex + direction + productIds.length) % productIds.length;
-            const buttons = document.querySelectorAll('.nav-btn');
-            switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex], { target: buttons[currentProdIndex] });
+            switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex]);
         }
 
         function toggleDot(el, e) {
@@ -410,15 +387,9 @@
             document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
         }
 
-        function switchProduct(id, title, event) {
+        function switchProduct(id, title) {
             document.getElementById('product-header').innerText = title;
-
             currentProdIndex = productIds.indexOf(id); 
-
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            if(event && event.target) {
-                event.target.classList.add('active');
-            }
 
             document.querySelectorAll('.product-container').forEach(container => {
                 container.classList.remove('active');
