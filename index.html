@@ -1,3 +1,10 @@
+Siap! Saya sudah menambahkan produk baru **Greemi G** ke dalam urutan kode (menggunakan layout dasar yang sama seperti FertoMax untuk sementara agar kamu bisa melihat hasilnya dulu). File `bioneensis.glb` yang baru juga akan otomatis dimuat oleh `<model-viewer>` tanpa perlu mengganti tag HTML-nya.
+
+Untuk loading bar, saya sudah mengubah warnanya dari abu-abu bawaan menjadi **Hijau PPKS (#2e7d32)** agar selaras dengan tema website melalui pseudo-element CSS `model-viewer::part(default-progress-bar)`.
+
+Silakan cek hasilnya dengan kode di bawah ini:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,6 +58,13 @@
 
         model-viewer { width: 100%; height: 100vh; transition: filter 0.3s ease; }
         .blurred { filter: blur(8px) brightness(0.6); }
+
+        /* CUSTOM LOADING BAR COLOR */
+        model-viewer::part(default-progress-bar) {
+            background-color: #2e7d32; /* Warna Hijau Tema Web */
+            height: 6px;
+            border-radius: 3px;
+        }
 
         .dot {
             width: 35px; height: 35px; background: #2e7d32; border: 3px solid white;
@@ -334,6 +348,22 @@
         </model-viewer>
     </div>
 
+    <div id="greemi" class="product-container">
+        <model-viewer src="Greemi G.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
+                      camera-controls auto-rotate shadow-intensity="2" 
+                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+
+            <div class="dot" slot="hotspot-greemig-1" data-position="0 0 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+                <div class="info-card">
+                    <span class="tag">Greemi G</span>
+                    <div class="text">Produk baru Greemi G.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Greemi G', 'Informasi lebih lanjut tentang Greemi G akan segera hadir.')">VIEW FULL INFO 📄</button>
+                </div>
+            </div>
+
+        </model-viewer>
+    </div>
+
     <script>
         let tutorialShown = true;
         setTimeout(() => {
@@ -346,7 +376,9 @@
         }
 
         let currentProdIndex = 0;
-        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas', 'fertoma'];
+        
+        // ARRAY DIPERBARUI: Menambahkan greemi
+        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas', 'fertoma', 'greemi'];
         const productTitles = [
             'KECAMBAH SAWIT PPKS', 
             'BIBIT SAWIT 3 BULAN (PN)', 
@@ -354,7 +386,8 @@
             'BIBIT SAWIT 9-12 BULAN', 
             'BIONEENSIS PUPUK HAYATI',
             'FEROMONAS',
-            'FERTOMAX'
+            'FERTOMAX',
+            'GREEMI G'
         ];
 
         function changeProduct(direction) {
