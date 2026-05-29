@@ -143,7 +143,7 @@
     <button class="ar-btn" onclick="document.querySelector('.product-container.active model-viewer').activateAR()">OPEN AR CATALOG</button>
 
     <div id="kecambah" class="product-container active">
-        <model-viewer src="kecambah sawit.glb" ar ar-modes="webxr" 
+        <model-viewer src="kecambah_sawit.glb" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
@@ -329,8 +329,8 @@
         <model-viewer src="FertoMax.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
-
-            <div class="dot" slot="hotspot-fertomax-1" data-position="0 0 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+            
+            <div class="dot" slot="hotspot-fertomax-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card">
                     <span class="tag">FertoMax</span>
                     <div class="text">Produk baru FertoMax.</div>
@@ -346,7 +346,7 @@
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
-            <div class="dot" slot="hotspot-greemig-1" data-position="0 0 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+            <div class="dot" slot="hotspot-greemig-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card">
                     <span class="tag">Greemi G</span>
                     <div class="text">Produk baru Greemi G.</div>
@@ -370,7 +370,6 @@
 
         let currentProdIndex = 0;
         
-        // ARRAY DIPERBARUI: Menambahkan greemi
         const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas', 'fertoma', 'greemi'];
         const productTitles = [
             'KECAMBAH SAWIT PPKS', 
