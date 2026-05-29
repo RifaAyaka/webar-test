@@ -1,1501 +1,1348 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-
-    <script type="module"
-        src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
-            background: #f3f4f1;
-        }
-
-        body {
-            background:
-                url('background.png') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        .bg-overlay {
-            position: fixed;
-            inset: 0;
-            background:
-                radial-gradient(circle at top left,
-                    rgba(255, 255, 255, 0.5),
-                    transparent 40%),
-                radial-gradient(circle at bottom right,
-                    rgba(46, 125, 50, 0.05),
-                    transparent 30%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .logo-top-right {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 3000;
-            transition: 0.3s;
-        }
-
-        .logo-top-right:hover {
-            transform: scale(1.05);
-        }
-
-        .logo-top-right img {
-            width: auto;
-            height: 58px;
-            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
-        }
-
-        #product-header {
-            position: fixed;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2500;
-
-            background:
-                linear-gradient(145deg,
-                    #2e7d32,
-                    #388e3c);
-
-            color: white;
-
-            border:
-                2px solid #FBC02D;
-
-            border-radius: 999px;
-
-            padding:
-                14px 34px;
-
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-
-            box-shadow:
-                0 10px 25px rgba(46, 125, 50, 0.35),
-                inset 0 1px 2px rgba(255, 255, 255, 0.2);
-
-            backdrop-filter: blur(14px);
-
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .nav-zone {
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            width: 16%;
-            z-index: 100;
-            cursor: pointer;
-        }
-
-        #l-zone {
-            left: 0;
-        }
-
-        #r-zone {
-            right: 0;
-        }
-
-        .nav-indicator {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-
-            background:
-                rgba(255, 255, 255, 0.7);
-
-            backdrop-filter: blur(10px);
-
-            border-radius: 50%;
-            z-index: 101;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 20px;
-            font-weight: 900;
-
-            color: #2e7d32;
-
-            border: 2px solid rgba(46, 125, 50, 0.2);
-
-            box-shadow:
-                0 8px 20px rgba(0, 0, 0, 0.12);
-
-            pointer-events: none;
-        }
-
-        .nav-left {
-            left: 18px;
-        }
-
-        .nav-right {
-            right: 18px;
-        }
-
-        #tutorial {
-            position: fixed;
-            inset: 0;
-
-            background:
-                rgba(0, 0, 0, 0.72);
-
-            z-index: 9999;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-
-            color: white;
-
-            transition: opacity 0.5s ease;
-        }
-
-        .hand-icon {
-            font-size: 68px;
-            animation: swipe 2s infinite ease-in-out;
-        }
-
-        @keyframes swipe {
-
-            0%,
-            100% {
-                transform: translateX(-45px);
-            }
-
-            50% {
-                transform: translateX(45px);
-            }
-        }
-
-        .tutorial-text {
-            margin-top: 25px;
-            font-size: 18px;
-            font-weight: 800;
-            text-align: center;
-            line-height: 1.8;
-            letter-spacing: 0.6px;
-        }
-
-        .product-container {
-            position: absolute;
-            inset: 0;
-
-            opacity: 0;
-            visibility: hidden;
-
-            transition:
-                opacity 0.55s ease;
-
-            pointer-events: none;
-        }
-
-        .product-container.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        model-viewer {
-            width: 100%;
-            height: 100vh;
-
-            --progress-bar-color: #2e7d32;
-
-            transition:
-                filter 0.35s ease,
-                transform 0.35s ease;
-        }
-
-        model-viewer::part(default-progress-bar) {
-            background: #2e7d32;
-            height: 6px;
-            border-radius: 999px;
-        }
-
-        .blurred {
-            filter:
-                blur(8px)
-                brightness(0.5);
-        }
-
-        .dot {
-            width: 34px;
-            height: 34px;
-
-            background:
-                linear-gradient(145deg,
-                    #2e7d32,
-                    #3da942);
-
-            border-radius: 50%;
-
-            border: 3px solid white;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 0 22px rgba(46, 125, 50, 0.55);
-
-            transition:
-                transform 0.3s ease,
-                background 0.3s ease;
-
-            transform-style: preserve-3d;
-
-            position: relative;
-
-            z-index: 20;
-        }
-
-        .dot:hover {
-            transform:
-                scale(1.12);
-        }
-
-        .dot::before {
-            content: '';
-
-            position: absolute;
-
-            width: 100%;
-            height: 100%;
-
-            border-radius: 50%;
-
-            background:
-                rgba(46, 125, 50, 0.3);
-
-            animation:
-                pulse 2s infinite;
-
-            z-index: -1;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(2.3);
-                opacity: 0;
-            }
-        }
-
-        .dot.active {
-            background:
-                linear-gradient(145deg,
-                    #FBC02D,
-                    #ffd54f);
-
-            z-index: 500;
-        }
-
-        .info-card {
-            position: absolute;
-
-            bottom: 58px;
-            left: 50%;
-
-            transform:
-                translateX(-50%)
-                scale(0);
-
-            width: 290px;
-
-            padding: 20px;
-
-            border-radius: 24px;
-
-            background:
-                rgba(255, 255, 255, 0.78);
-
-            backdrop-filter:
-                blur(18px);
-
-            -webkit-backdrop-filter:
-                blur(18px);
-
-            border:
-                1px solid rgba(255, 255, 255, 0.4);
-
-            box-shadow:
-                0 20px 50px rgba(0, 0, 0, 0.18);
-
-            transition:
-                transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-            pointer-events: none;
-
-            overflow: hidden;
-        }
-
-        .dot.active .info-card {
-            transform:
-                translateX(-50%)
-                scale(1);
-
-            pointer-events: auto;
-        }
-
-        .card-glow {
-            position: absolute;
-            top: -60px;
-            right: -40px;
-
-            width: 120px;
-            height: 120px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(46, 125, 50, 0.12);
-
-            filter: blur(20px);
-        }
-
-        .tag {
-            position: relative;
-
-            font-size: 12px;
-            font-weight: 800;
-
-            color: #2e7d32;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1px;
-
-            display: inline-block;
-
-            padding-bottom: 8px;
-
-            margin-bottom: 12px;
-
-            border-bottom:
-                2px solid #FBC02D;
-        }
-
-        .text {
-            font-size: 14px;
-            font-weight: 600;
-
-            color: #333;
-
-            line-height: 1.8;
-            text-align: justify;
-        }
-
-        .zoom-trigger {
-            margin-top: 16px;
-
-            width: 100%;
-
-            padding:
-                14px;
-
-            border: none;
-
-            border-radius: 14px;
-
-            background:
-                linear-gradient(145deg,
-                    #2e7d32,
-                    #3da942);
-
-            color: white;
-
-            font-size: 12px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-
-            cursor: pointer;
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease;
-
-            box-shadow:
-                0 10px 18px rgba(46, 125, 50, 0.28);
-        }
-
-        .zoom-trigger:hover {
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                0 14px 24px rgba(46, 125, 50, 0.35);
-        }
-
-        #window-overlay {
-            position: fixed;
-            inset: 0;
-
-            z-index: 99999;
-
-            display: none;
-
-            align-items: center;
-            justify-content: center;
-
-            padding: 20px;
-
-            background:
-                rgba(0, 0, 0, 0.45);
-
-            backdrop-filter:
-                blur(10px);
-        }
-
-        .window-box {
-            position: relative;
-
-            width: 100%;
-            max-width: 650px;
-            max-height: 88vh;
-
-            overflow: hidden;
-
-            border-radius: 30px;
-
-            background:
-                rgba(255, 255, 255, 0.92);
-
-            backdrop-filter:
-                blur(22px);
-
-            border:
-                1px solid rgba(255, 255, 255, 0.4);
-
-            box-shadow:
-                0 35px 80px rgba(0, 0, 0, 0.35);
-
-            animation:
-                popup 0.35s ease;
-        }
-
-        @keyframes popup {
-            from {
-                transform:
-                    scale(0.85);
-                opacity: 0;
-            }
-
-            to {
-                transform:
-                    scale(1);
-                opacity: 1;
-            }
-        }
-
-        .window-content {
-            overflow-y: auto;
-            max-height: 88vh;
-
-            padding:
-                34px;
-        }
-
-        .close-btn {
-            position: absolute;
-
-            top: 16px;
-            right: 16px;
-
-            width: 42px;
-            height: 42px;
-
-            border: none;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(145deg,
-                    #ef5350,
-                    #d32f2f);
-
-            color: white;
-
-            font-size: 18px;
-            font-weight: 900;
-
-            cursor: pointer;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            box-shadow:
-                0 8px 18px rgba(211, 47, 47, 0.3);
-        }
-
-        .window-title {
-            font-size: 15px;
-            font-weight: 800;
-
-            color: #2e7d32;
-
-            margin-bottom: 18px;
-
-            text-transform: uppercase;
-            letter-spacing: 1px;
-
-            border-bottom:
-                2px solid #FBC02D;
-
-            padding-bottom: 10px;
-        }
-
-        .window-text {
-            font-size: 16px;
-            font-weight: 500;
-
-            line-height: 2;
-
-            color: #333;
-
-            text-align: justify;
-        }
-
-        .window-list {
-            margin-top: 18px;
-            padding-left: 20px;
-        }
-
-        .window-list li {
-            margin-bottom: 10px;
-            color: #2e7d32;
-            font-weight: 700;
-        }
-
-        .ar-btn {
-            position: fixed;
-
-            left: 50%;
-            bottom: 30px;
-
-            transform:
-                translateX(-50%);
-
-            z-index: 3000;
-
-            border: none;
-
-            border-radius: 20px;
-
-            padding:
-                18px 62px;
-
-            background:
-                linear-gradient(145deg,
-                    #2e7d32,
-                    #3da942);
-
-            color: white;
-
-            font-size: 15px;
-            font-weight: 800;
-
-            letter-spacing: 0.5px;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 16px 32px rgba(46, 125, 50, 0.35);
-
-            transition:
-                transform 0.3s ease,
-                box-shadow 0.3s ease;
-        }
-
-        .ar-btn:hover {
-            transform:
-                translateX(-50%)
-                translateY(-3px);
-
-            box-shadow:
-                0 20px 36px rgba(46, 125, 50, 0.45);
-        }
-
-        .ar-btn:active {
-            transform:
-                translateX(-50%)
-                scale(0.96);
-        }
-
-        @media (max-width: 768px) {
-
-            #product-header {
-                width: 76%;
-                font-size: 13px;
-                padding: 12px 18px;
-            }
-
-            .logo-top-right img {
-                height: 46px;
-            }
-
-            .nav-indicator {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .info-card {
-                width: 220px;
-                padding: 16px;
-            }
-
-            .text {
-                font-size: 12px;
-            }
-
-            .tag {
-                font-size: 10px;
-            }
-
-            .zoom-trigger {
-                font-size: 10px;
-                padding: 12px;
-            }
-
-            .dot {
-                width: 28px;
-                height: 28px;
-            }
-
-            .window-box {
-                width: 94%;
-                max-height: 85vh;
-            }
-
-            .window-content {
-                padding: 24px;
-            }
-
-            .window-text {
-                font-size: 14px;
-            }
-
-            .ar-btn {
-                width: 82%;
-                padding: 16px;
-                font-size: 14px;
-                bottom: 18px;
-            }
-
-            .tutorial-text {
-                font-size: 15px;
-                width: 80%;
-            }
-
-            .hand-icon {
-                font-size: 58px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:'Montserrat',sans-serif;
+background:#f3f4f1;
+}
+
+body{
+background:url('background.png') no-repeat center center fixed;
+background-size:cover;
+}
+
+.bg-overlay{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top left,rgba(255,255,255,.75),transparent 35%),
+radial-gradient(circle at bottom right,rgba(46,125,50,.08),transparent 30%);
+pointer-events:none;
+z-index:0;
+}
+
+.floating-light{
+position:fixed;
+width:500px;
+height:500px;
+border-radius:50%;
+background:rgba(76,175,80,.08);
+filter:blur(80px);
+z-index:0;
+animation:floatLight 12s ease-in-out infinite;
+}
+
+.floating-light.one{
+top:-150px;
+left:-120px;
+}
+
+.floating-light.two{
+bottom:-200px;
+right:-100px;
+animation-delay:3s;
+}
+
+@keyframes floatLight{
+0%{transform:translateY(0px) translateX(0px);}
+50%{transform:translateY(40px) translateX(20px);}
+100%{transform:translateY(0px) translateX(0px);}
+}
+
+.logo-top-right{
+position:fixed;
+top:18px;
+right:18px;
+z-index:9999;
+transition:.35s;
+}
+
+.logo-top-right:hover{
+transform:scale(1.08);
+}
+
+.logo-top-right img{
+height:60px;
+filter:drop-shadow(0 8px 20px rgba(0,0,0,.15));
+}
+
+#product-header{
+position:fixed;
+top:18px;
+left:50%;
+transform:translateX(-50%);
+z-index:5000;
+
+background:linear-gradient(145deg,#2e7d32,#3da942);
+
+border:2px solid #fbc02d;
+border-radius:999px;
+
+padding:14px 34px;
+
+font-size:18px;
+font-weight:900;
+letter-spacing:.5px;
+color:#fff;
+
+box-shadow:
+0 10px 25px rgba(46,125,50,.35),
+inset 0 1px 2px rgba(255,255,255,.25);
+
+backdrop-filter:blur(16px);
+white-space:nowrap;
+}
+
+.nav-zone{
+position:fixed;
+top:0;
+bottom:0;
+width:20%;
+z-index:4000;
+cursor:pointer;
+}
+
+#left-zone{
+left:0;
+}
+
+#right-zone{
+right:0;
+}
+
+.product-container{
+position:absolute;
+inset:0;
+opacity:0;
+visibility:hidden;
+pointer-events:none;
+transition:opacity .65s ease;
+}
+
+.product-container.active{
+opacity:1;
+visibility:visible;
+pointer-events:auto;
+}
+
+model-viewer{
+width:100%;
+height:100vh;
+--progress-bar-color:#2e7d32;
+}
+
+model-viewer::part(default-progress-bar){
+height:6px;
+border-radius:999px;
+}
+
+#tutorial{
+position:fixed;
+inset:0;
+z-index:99999;
+background:rgba(0,0,0,.72);
+
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+color:#fff;
+transition:.5s;
+}
+
+.hand{
+font-size:68px;
+animation:swipe 2s infinite ease-in-out;
+}
+
+@keyframes swipe{
+0%,100%{
+transform:translateX(-50px);
+}
+50%{
+transform:translateX(50px);
+}
+}
+
+.tutorial-text{
+margin-top:24px;
+text-align:center;
+line-height:1.9;
+font-weight:800;
+font-size:18px;
+letter-spacing:.5px;
+}
+
+.dot{
+width:36px;
+height:36px;
+border-radius:50%;
+background:linear-gradient(145deg,#2e7d32,#3da942);
+border:3px solid white;
+cursor:pointer;
+position:relative;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+box-shadow:
+0 0 0 rgba(46,125,50,.4),
+0 0 20px rgba(46,125,50,.55);
+
+transition:.35s;
+}
+
+.dot:hover{
+transform:scale(1.1);
+}
+
+.dot::before{
+content:'';
+position:absolute;
+width:100%;
+height:100%;
+border-radius:50%;
+background:rgba(76,175,80,.35);
+animation:pulse 2s infinite;
+z-index:-1;
+}
+
+@keyframes pulse{
+0%{
+transform:scale(1);
+opacity:1;
+}
+100%{
+transform:scale(2.4);
+opacity:0;
+}
+}
+
+.dot.active{
+background:linear-gradient(145deg,#fbc02d,#ffd54f);
+}
+
+.dot-center{
+position:absolute;
+width:10px;
+height:10px;
+background:white;
+border-radius:50%;
+}
+
+.orbit-ring{
+position:absolute;
+width:70px;
+height:70px;
+border-radius:50%;
+border:1.5px dashed rgba(255,255,255,.7);
+animation:orbitRotate 6s linear infinite;
+pointer-events:none;
+}
+
+@keyframes orbitRotate{
+from{
+transform:rotate(0deg);
+}
+to{
+transform:rotate(360deg);
+}
+}
+
+.info-card{
+position:absolute;
+bottom:60px;
+left:50%;
+transform:translateX(-50%) scale(0);
+
+width:300px;
+
+padding:22px;
+
+border-radius:26px;
+
+background:rgba(255,255,255,.82);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.5);
+
+box-shadow:
+0 25px 50px rgba(0,0,0,.18);
+
+transition:
+transform .45s cubic-bezier(.175,.885,.32,1.275);
+
+pointer-events:none;
+overflow:hidden;
+}
+
+.dot.active .info-card{
+transform:translateX(-50%) scale(1);
+pointer-events:auto;
+}
+
+.card-glow{
+position:absolute;
+top:-60px;
+right:-40px;
+
+width:120px;
+height:120px;
+
+background:rgba(46,125,50,.12);
+border-radius:50%;
+filter:blur(25px);
+}
+
+.tag{
+position:relative;
+display:inline-block;
+
+font-size:12px;
+font-weight:900;
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:#2e7d32;
+
+padding-bottom:8px;
+margin-bottom:12px;
+
+border-bottom:2px solid #fbc02d;
+}
+
+.text{
+font-size:14px;
+font-weight:600;
+line-height:1.8;
+color:#333;
+text-align:justify;
+}
+
+.zoom-trigger{
+margin-top:16px;
+width:100%;
+
+padding:14px;
+
+border:none;
+border-radius:14px;
+
+background:linear-gradient(145deg,#2e7d32,#3da942);
+
+font-size:12px;
+font-weight:800;
+letter-spacing:.5px;
+
+color:#fff;
+cursor:pointer;
+
+box-shadow:0 10px 20px rgba(46,125,50,.28);
+
+transition:.25s;
+}
+
+.zoom-trigger:hover{
+transform:translateY(-2px);
+box-shadow:0 15px 25px rgba(46,125,50,.38);
+}
+
+#window-overlay{
+position:fixed;
+inset:0;
+z-index:999999;
+
+display:none;
+align-items:center;
+justify-content:center;
+
+padding:20px;
+
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(12px);
+}
+
+.window-box{
+position:relative;
+
+width:100%;
+max-width:680px;
+max-height:88vh;
+
+overflow:hidden;
+
+border-radius:30px;
+
+background:rgba(255,255,255,.92);
+
+backdrop-filter:blur(24px);
+
+border:1px solid rgba(255,255,255,.45);
+
+box-shadow:0 35px 80px rgba(0,0,0,.35);
+
+animation:popup .35s ease;
+}
+
+@keyframes popup{
+from{
+transform:scale(.82);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+.window-content{
+padding:34px;
+overflow-y:auto;
+max-height:88vh;
+}
+
+.close-btn{
+position:absolute;
+top:16px;
+right:16px;
+
+width:44px;
+height:44px;
+
+border:none;
+border-radius:50%;
+
+background:linear-gradient(145deg,#ef5350,#d32f2f);
+
+color:#fff;
+font-size:18px;
+font-weight:900;
+
+cursor:pointer;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+box-shadow:0 8px 18px rgba(211,47,47,.35);
+}
+
+.window-title{
+font-size:16px;
+font-weight:900;
+letter-spacing:1px;
+text-transform:uppercase;
+
+color:#2e7d32;
+
+padding-bottom:10px;
+margin-bottom:16px;
+
+border-bottom:2px solid #fbc02d;
+}
+
+.window-text{
+font-size:16px;
+line-height:2;
+font-weight:500;
+text-align:justify;
+color:#333;
+}
+
+.ar-btn{
+position:fixed;
+left:50%;
+bottom:28px;
+transform:translateX(-50%);
+z-index:9999;
+
+border:none;
+border-radius:20px;
+
+padding:18px 65px;
+
+background:linear-gradient(145deg,#2e7d32,#3da942);
+
+font-size:15px;
+font-weight:900;
+letter-spacing:.5px;
+
+color:#fff;
+cursor:pointer;
+
+box-shadow:0 16px 32px rgba(46,125,50,.35);
+
+transition:.3s;
+}
+
+.ar-btn:hover{
+transform:translateX(-50%) translateY(-3px);
+box-shadow:0 20px 38px rgba(46,125,50,.45);
+}
+
+.ar-btn:active{
+transform:translateX(-50%) scale(.96);
+}
+
+.blurred{
+filter:blur(8px) brightness(.5);
+}
+
+@media(max-width:768px){
+
+#product-header{
+width:76%;
+font-size:13px;
+padding:12px 18px;
+}
+
+.logo-top-right img{
+height:46px;
+}
+
+.info-card{
+width:230px;
+padding:16px;
+}
+
+.text{
+font-size:12px;
+}
+
+.tag{
+font-size:10px;
+}
+
+.zoom-trigger{
+font-size:10px;
+padding:12px;
+}
+
+.dot{
+width:30px;
+height:30px;
+}
+
+.orbit-ring{
+width:58px;
+height:58px;
+}
+
+.window-content{
+padding:24px;
+}
+
+.window-text{
+font-size:14px;
+}
+
+.ar-btn{
+width:82%;
+padding:16px;
+font-size:14px;
+bottom:18px;
+}
+
+.hand{
+font-size:58px;
+}
+
+.tutorial-text{
+font-size:15px;
+width:80%;
+}
+
+}
+
+</style>
 </head>
 
 <body onclick="closeAllDots(event)">
 
-    <div class="bg-overlay"></div>
+<div class="bg-overlay"></div>
+<div class="floating-light one"></div>
+<div class="floating-light two"></div>
 
-    <a href="https://iopri.co.id/"
-        target="_blank"
-        class="logo-top-right">
+<a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
+<img src="logo-PPKS.png">
+</a>
 
-        <img src="logo-PPKS.png">
-    </a>
+<div id="product-header">
+KECAMBAH SAWIT PPKS
+</div>
 
-    <div id="product-header">
-        KECAMBAH SAWIT PPKS
-    </div>
+<div id="left-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
+<div id="right-zone" class="nav-zone" onclick="changeProduct(1)"></div>
 
-    <div id="l-zone"
-        class="nav-zone"
-        onclick="changeProduct(-1)">
-    </div>
+<div id="tutorial">
 
-    <div id="r-zone"
-        class="nav-zone"
-        onclick="changeProduct(1)">
-    </div>
+<div class="hand">👆</div>
 
-    <div class="nav-indicator nav-left">
-        ‹
-    </div>
+<div class="tutorial-text">
+CLICK HOTSPOT FOR INFORMATION<br>
+DRAG MODEL FOR 360° VIEW<br>
+TAP LEFT OR RIGHT SIDE TO SWITCH PRODUCT
+</div>
 
-    <div class="nav-indicator nav-right">
-        ›
-    </div>
+</div>
 
-    <div id="tutorial">
+<div id="window-overlay" onclick="closeWindow(event)">
 
-        <div class="hand-icon">
-            👆
-        </div>
+<div class="window-box" onclick="event.stopPropagation()">
 
-        <div class="tutorial-text">
-            CLICK HOTSPOTS FOR INFORMATION<br>
-            DRAG MODEL FOR 360° VIEW<br>
-            TAP SCREEN EDGE TO SWITCH PRODUCT
-        </div>
+<button class="close-btn" onclick="closeWindow()">✕</button>
 
-    </div>
+<div class="window-content" id="window-body"></div>
 
-    <div id="window-overlay"
-        onclick="closeWindow(event)">
+</div>
 
-        <div class="window-box"
-            onclick="event.stopPropagation()">
+</div>
 
-            <button class="close-btn"
-                onclick="closeWindow()">
-                ✕
-            </button>
+<button class="ar-btn" onclick="activateCurrentAR()">
+OPEN AR CATALOG
+</button>
 
-            <div class="window-content"
-                id="window-body">
-            </div>
 
-        </div>
 
-    </div>
 
-    <button class="ar-btn"
-        onclick="activateCurrentAR()">
 
-        OPEN AR CATALOG
+<!-- ====================================================== -->
+<!-- KECAMBAH -->
+<!-- ====================================================== -->
 
-    </button>
+<div id="kecambah" class="product-container active">
 
+<model-viewer
+src="kecambah_sawit.glb"
 
+ar
+ar-modes="webxr scene-viewer quick-look"
 
+camera-controls
+auto-rotate
 
+rotation-per-second="10deg"
 
-    <!-- KECAMBAH -->
+interaction-prompt="none"
 
-    <div id="kecambah"
-        class="product-container active">
+field-of-view="28deg"
 
-        <model-viewer
-            src="kecambah_sawit.glb"
+camera-orbit="0deg 75deg auto"
 
-            ar
-            ar-modes="webxr scene-viewer quick-look"
+min-camera-orbit="auto auto 40%"
+max-camera-orbit="auto auto 250%"
 
-            camera-controls
-            auto-rotate
+shadow-intensity="2"
+shadow-softness="1"
 
-            shadow-intensity="2"
+exposure="1.08"
 
-            rotation-per-second="8deg"
+environment-image="neutral"
 
-            interaction-prompt="none"
+onclick="hideTutorial()">
 
-            field-of-view="28deg"
+<!-- HOTSPOT 1 -->
 
-            camera-orbit="0deg 75deg auto"
+<div class="dot"
+slot="hotspot-1"
+data-position="-30 6 25"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-            min-camera-orbit="auto auto 40%"
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-            max-camera-orbit="auto auto 250%"
+<div class="info-card">
 
-            exposure="1.05"
+<div class="card-glow"></div>
 
-            shadow-softness="1"
+<span class="tag">
+Genetic Excellence
+</span>
 
-            environment-image="neutral"
+<div class="text">
+Benih unggul hasil pemuliaan PPKS dengan potensi produktivitas tinggi dan daya adaptasi kuat.
+</div>
 
-            onclick="hideTutorial()">
+<button class="zoom-trigger"
+onclick="openWindow(
+'Genetic Excellence',
+'Benih kecambah sawit PPKS merupakan hasil pemuliaan unggul dengan standar kualitas tinggi untuk mendukung produktivitas jangka panjang serta ketahanan terhadap lingkungan tropis ekstrem.'
+)">
+VIEW FULL INFO
+</button>
 
+</div>
 
-            <div class="dot"
-                slot="hotspot-1"
-                data-position="-30 6 25"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+</div>
 
-                <div class="info-card">
+<!-- HOTSPOT 2 -->
 
-                    <div class="card-glow"></div>
+<div class="dot"
+slot="hotspot-2"
+data-position="35 4 -20"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-                    <span class="tag">
-                        Genetic Excellence
-                    </span>
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-                    <div class="text">
-                        Benih unggul hasil pemuliaan PPKS dengan potensi produktivitas tinggi serta ketahanan terhadap lingkungan tropis ekstrem.
-                    </div>
+<div class="info-card">
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Genetic Excellence',
-                        'Benih kecambah kelapa sawit PPKS merupakan hasil pemuliaan unggul dengan standar kualitas tinggi untuk mendukung produktivitas jangka panjang. Material genetik dirancang agar mampu beradaptasi terhadap kondisi lingkungan tropis dan memiliki stabilitas pertumbuhan yang optimal.'
-                        )">
+<div class="card-glow"></div>
 
-                        VIEW FULL INFO
+<span class="tag">
+Adaptive Growth
+</span>
 
-                    </button>
+<div class="text">
+Memiliki pertumbuhan stabil dan sistem perakaran kuat untuk fase vegetatif awal.
+</div>
 
-                </div>
+<button class="zoom-trigger"
+onclick="openWindow(
+'Adaptive Growth',
+'Kecambah memiliki kemampuan adaptasi tinggi pada fase awal pertumbuhan dengan struktur akar primer yang berkembang lebih cepat.'
+)">
+VIEW FULL INFO
+</button>
 
-            </div>
+</div>
 
+</div>
 
+<!-- HOTSPOT 3 -->
 
+<div class="dot"
+slot="hotspot-3"
+data-position="-35 1 -30"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-            <div class="dot"
-                slot="hotspot-2"
-                data-position="35 4 -20"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+<div class="info-card">
 
-                <div class="info-card">
+<div class="card-glow"></div>
 
-                    <div class="card-glow"></div>
+<span class="tag">
+High Oil Potential
+</span>
 
-                    <span class="tag">
-                        Adaptive Growth
-                    </span>
+<div class="text">
+Dirancang untuk menghasilkan kandungan minyak optimal dan efisiensi tinggi.
+</div>
 
-                    <div class="text">
-                        Memiliki daya tumbuh stabil dengan sistem perakaran kuat untuk mendukung fase vegetatif awal.
-                    </div>
+<button class="zoom-trigger"
+onclick="openWindow(
+'High Oil Potential',
+'Varietas unggul PPKS dikembangkan dengan fokus pada efisiensi produksi minyak dan performa tandan buah segar.'
+)">
+VIEW FULL INFO
+</button>
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Adaptive Growth',
-                        'Kecambah dirancang memiliki kemampuan adaptasi tinggi pada fase awal pertumbuhan. Struktur akar primer berkembang lebih cepat untuk membantu penyerapan nutrisi dan menjaga kestabilan bibit saat proses pembibitan.'
-                        )">
+</div>
 
-                        VIEW FULL INFO
+</div>
 
-                    </button>
+<!-- HOTSPOT 4 -->
 
-                </div>
+<div class="dot"
+slot="hotspot-4"
+data-position="0 12 15"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-            </div>
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
+<div class="info-card">
 
+<div class="card-glow"></div>
 
+<span class="tag">
+Premium Selection
+</span>
 
+<div class="text">
+Setiap benih melalui proses seleksi ketat untuk menjaga kualitas pertumbuhan.
+</div>
 
-            <div class="dot"
-                slot="hotspot-3"
-                data-position="-35 1 -30"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+<button class="zoom-trigger"
+onclick="openWindow(
+'Premium Selection',
+'PPKS melakukan proses seleksi kualitas kecambah untuk memastikan hanya benih terbaik yang dipasarkan.'
+)">
+VIEW FULL INFO
+</button>
 
-                <div class="info-card">
+</div>
 
-                    <div class="card-glow"></div>
+</div>
 
-                    <span class="tag">
-                        High Oil Potential
-                    </span>
+</model-viewer>
 
-                    <div class="text">
-                        Dirancang untuk menghasilkan kandungan minyak optimal dengan efisiensi produksi jangka panjang.
-                    </div>
+</div>
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'High Oil Potential',
-                        'Varietas unggul PPKS dikembangkan dengan fokus pada efisiensi produksi minyak dan performa tandan buah segar. Potensi kandungan minyak yang tinggi menjadi salah satu indikator utama kualitas genetik kecambah.'
-                        )">
 
-                        VIEW FULL INFO
 
-                    </button>
 
-                </div>
 
-            </div>
+<!-- ====================================================== -->
+<!-- BIBIT 3 BULAN -->
+<!-- ====================================================== -->
 
-        </model-viewer>
+<div id="bibit3" class="product-container">
 
-    </div>
+<model-viewer
+src="bibitsawit3bulan.glb"
 
+ar
+ar-modes="webxr scene-viewer quick-look"
 
+camera-controls
+auto-rotate
 
+rotation-per-second="10deg"
 
+interaction-prompt="none"
 
-    <!-- BIBIT 3 BULAN -->
+field-of-view="28deg"
 
-    <div id="bibit3"
-        class="product-container">
+camera-orbit="0deg 75deg auto"
 
-        <model-viewer
-            src="bibitsawit3bulan.glb"
+min-camera-orbit="auto auto 40%"
+max-camera-orbit="auto auto 250%"
 
-            ar
-            ar-modes="webxr scene-viewer quick-look"
+shadow-intensity="2"
 
-            camera-controls
-            auto-rotate
+environment-image="neutral"
 
-            shadow-intensity="2"
+onclick="hideTutorial()">
 
-            rotation-per-second="8deg"
+<div class="dot"
+slot="hotspot-pn-1"
+data-position="0 15 0"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-            interaction-prompt="none"
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-            field-of-view="28deg"
+<div class="info-card">
 
-            camera-orbit="0deg 75deg auto"
+<div class="card-glow"></div>
 
-            min-camera-orbit="auto auto 40%"
+<span class="tag">
+Early Nursery
+</span>
 
-            max-camera-orbit="auto auto 250%"
+<div class="text">
+Tahap awal pembentukan akar dan adaptasi media tanam.
+</div>
 
-            exposure="1.05"
+<button class="zoom-trigger"
+onclick="openWindow(
+'Early Nursery',
+'Fase awal pembibitan yang membutuhkan kelembapan stabil dan pencahayaan terkontrol.'
+)">
+VIEW FULL INFO
+</button>
 
-            environment-image="neutral"
+</div>
 
-            onclick="hideTutorial()">
+</div>
 
+<div class="dot"
+slot="hotspot-pn-2"
+data-position="-8 10 8"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
+<div class="info-card">
 
-            <div class="dot"
-                slot="hotspot-pn-1"
-                data-position="0 15 0"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+<div class="card-glow"></div>
 
-                <div class="info-card">
+<span class="tag">
+Controlled Growth
+</span>
 
-                    <div class="card-glow"></div>
+<div class="text">
+Pengendalian lingkungan penting untuk menjaga stabilitas pertumbuhan.
+</div>
 
-                    <span class="tag">
-                        Early Nursery Phase
-                    </span>
+<button class="zoom-trigger"
+onclick="openWindow(
+'Controlled Growth',
+'Bibit membutuhkan pengendalian lingkungan dan penyiraman rutin untuk mengurangi stres tanaman.'
+)">
+VIEW FULL INFO
+</button>
 
-                    <div class="text">
-                        Tahap awal pertumbuhan dengan fokus pembentukan akar primer dan adaptasi media tanam.
-                    </div>
+</div>
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Early Nursery Phase',
-                        'Fase Pre Nursery merupakan tahap kritis perkembangan awal bibit kelapa sawit. Pada tahap ini bibit memerlukan kelembapan stabil dan perlindungan dari intensitas cahaya berlebih agar perkembangan akar dan daun berlangsung optimal.'
-                        )">
+</div>
 
-                        VIEW FULL INFO
+<div class="dot"
+slot="hotspot-pn-3"
+data-position="8 2 8"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-                    </button>
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-                </div>
+<div class="info-card">
 
-            </div>
+<div class="card-glow"></div>
 
+<span class="tag">
+Root Establishment
+</span>
 
+<div class="text">
+Fase pembentukan sistem akar sebelum menuju Main Nursery.
+</div>
 
+<button class="zoom-trigger"
+onclick="openWindow(
+'Root Establishment',
+'Perkembangan akar menentukan kualitas bibit pada tahap selanjutnya.'
+)">
+VIEW FULL INFO
+</button>
 
-            <div class="dot"
-                slot="hotspot-pn-2"
-                data-position="-8 10 8"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+</div>
 
-                <div class="info-card">
+</div>
 
-                    <div class="card-glow"></div>
+<div class="dot"
+slot="hotspot-pn-4"
+data-position="15 12 -10"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-                    <span class="tag">
-                        Controlled Development
-                    </span>
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-                    <div class="text">
-                        Membutuhkan intensitas cahaya terkontrol dan kelembapan stabil untuk pertumbuhan optimal.
-                    </div>
+<div class="info-card">
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Controlled Development',
-                        'Bibit usia dini membutuhkan pengendalian lingkungan yang konsisten, termasuk penyiraman rutin dan perlindungan naungan. Hal ini penting untuk mengurangi stres tanaman dan menjaga kestabilan pertumbuhan.'
-                        )">
+<div class="card-glow"></div>
 
-                        VIEW FULL INFO
+<span class="tag">
+Leaf Formation
+</span>
 
-                    </button>
+<div class="text">
+Daun awal mulai berkembang untuk mendukung fotosintesis maksimal.
+</div>
 
-                </div>
+<button class="zoom-trigger"
+onclick="openWindow(
+'Leaf Formation',
+'Pertumbuhan daun menjadi indikator penting kesehatan bibit pada fase awal.'
+)">
+VIEW FULL INFO
+</button>
 
-            </div>
+</div>
 
+</div>
 
+</model-viewer>
 
+</div>
 
-            <div class="dot"
-                slot="hotspot-pn-3"
-                data-position="8 2 8"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
 
-                <div class="info-card">
 
-                    <div class="card-glow"></div>
 
-                    <span class="tag">
-                        Root Establishment
-                    </span>
 
-                    <div class="text">
-                        Fase penting pembentukan struktur akar sebelum masuk Main Nursery.
-                    </div>
+<!-- ====================================================== -->
+<!-- BIBIT 8 BULAN -->
+<!-- ====================================================== -->
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Root Establishment',
-                        'Pembentukan sistem akar pada tahap awal menentukan kualitas bibit di masa depan. Bibit yang memiliki perkembangan akar baik akan lebih siap menghadapi proses transplanting ke tahap pembibitan utama.'
-                        )">
+<div id="bibit8" class="product-container">
 
-                        VIEW FULL INFO
+<model-viewer
+src="bibitsawit4-8bulan.glb"
 
-                    </button>
+ar
+ar-modes="webxr scene-viewer quick-look"
 
-                </div>
+camera-controls
+auto-rotate
 
-            </div>
+rotation-per-second="10deg"
 
-        </model-viewer>
+interaction-prompt="none"
 
-    </div>
+field-of-view="28deg"
 
+camera-orbit="0deg 75deg auto"
 
+min-camera-orbit="auto auto 40%"
+max-camera-orbit="auto auto 250%"
 
+shadow-intensity="2"
 
+environment-image="neutral"
 
-    <!-- BIBIT 8 BULAN -->
+onclick="hideTutorial()">
 
-    <div id="bibit8"
-        class="product-container">
+<div class="dot"
+slot="hotspot-mn-1"
+data-position="0 30 0"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-        <model-viewer
-            src="bibitsawit4-8bulan.glb"
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-            ar
-            ar-modes="webxr scene-viewer quick-look"
+<div class="info-card">
 
-            camera-controls
-            auto-rotate
+<div class="card-glow"></div>
 
-            shadow-intensity="2"
+<span class="tag">
+Main Nursery
+</span>
 
-            rotation-per-second="8deg"
+<div class="text">
+Pertumbuhan vegetatif aktif dengan struktur daun lebih kompleks.
+</div>
 
-            interaction-prompt="none"
+<button class="zoom-trigger"
+onclick="openWindow(
+'Main Nursery',
+'Tahap percepatan pertumbuhan vegetatif untuk persiapan tanam lapangan.'
+)">
+VIEW FULL INFO
+</button>
 
-            field-of-view="28deg"
+</div>
 
-            camera-orbit="0deg 75deg auto"
+</div>
 
-            min-camera-orbit="auto auto 40%"
+<div class="dot"
+slot="hotspot-mn-2"
+data-position="-15 20 15"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-            max-camera-orbit="auto auto 250%"
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-            exposure="1.05"
+<div class="info-card">
 
-            environment-image="neutral"
+<div class="card-glow"></div>
 
-            onclick="hideTutorial()">
+<span class="tag">
+Structural Strength
+</span>
 
+<div class="text">
+Pembentukan batang dan bonggol untuk meningkatkan survival rate.
+</div>
 
+<button class="zoom-trigger"
+onclick="openWindow(
+'Structural Strength',
+'Bibit dengan struktur batang yang kuat memiliki ketahanan lebih tinggi saat transplanting.'
+)">
+VIEW FULL INFO
+</button>
 
+</div>
 
-            <div class="dot"
-                slot="hotspot-mn-1"
-                data-position="0 30 0"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+</div>
 
-                <div class="info-card">
+<div class="dot"
+slot="hotspot-mn-3"
+data-position="10 5 15"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
-                    <div class="card-glow"></div>
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
-                    <span class="tag">
-                        Main Nursery Development
-                    </span>
+<div class="info-card">
 
-                    <div class="text">
-                        Fase pertumbuhan aktif dengan perkembangan daun dan pelepah lebih kompleks.
-                    </div>
+<div class="card-glow"></div>
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Main Nursery Development',
-                        'Tahap Main Nursery merupakan periode percepatan pertumbuhan vegetatif bibit kelapa sawit. Bibit mulai membentuk struktur daun dan batang yang lebih kuat sebagai persiapan sebelum ditanam di lapangan.'
-                        )">
+<span class="tag">
+Nutrient Efficiency
+</span>
 
-                        VIEW FULL INFO
+<div class="text">
+Mampu menyerap unsur hara tinggi untuk pertumbuhan maksimal.
+</div>
 
-                    </button>
+<button class="zoom-trigger"
+onclick="openWindow(
+'Nutrient Efficiency',
+'Pengelolaan nutrisi menjadi faktor penting untuk menghasilkan bibit premium.'
+)">
+VIEW FULL INFO
+</button>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
+<div class="dot"
+slot="hotspot-mn-4"
+data-position="18 28 -10"
+data-normal="0 0 1"
+onclick="toggleDot(this,event)">
 
+<div class="orbit-ring"></div>
+<div class="dot-center"></div>
 
+<div class="info-card">
 
-            <div class="dot"
-                slot="hotspot-mn-2"
-                data-position="-15 20 15"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+<div class="card-glow"></div>
 
-                <div class="info-card">
+<span class="tag">
+Field Ready
+</span>
 
-                    <div class="card-glow"></div>
+<div class="text">
+Bibit siap dipindahkan ke lahan utama dengan tingkat adaptasi tinggi.
+</div>
 
-                    <span class="tag">
-                        Structural Strength
-                    </span>
+<button class="zoom-trigger"
+onclick="openWindow(
+'Field Ready',
+'Bibit usia 8 bulan telah memiliki kesiapan tinggi untuk proses penanaman lapangan.'
+)">
+VIEW FULL INFO
+</button>
 
-                    <div class="text">
-                        Mulai membentuk bonggol dan struktur batang yang kokoh untuk transplanting.
-                    </div>
+</div>
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Structural Strength',
-                        'Pembentukan bonggol dan batang menjadi indikator utama kesiapan bibit memasuki fase berikutnya. Bibit dengan struktur kuat memiliki tingkat survival lebih tinggi saat ditanam di lahan.'
-                        )">
+</div>
 
-                        VIEW FULL INFO
+</model-viewer>
 
-                    </button>
+</div>
 
-                </div>
 
-            </div>
 
 
 
+<script>
 
-            <div class="dot"
-                slot="hotspot-mn-3"
-                data-position="10 5 15"
-                data-normal="0 0 1"
-                onclick="toggleDot(this,event)">
+let tutorialShown=true;
 
-                <div class="info-card">
+setTimeout(()=>{
+if(tutorialShown){
+hideTutorial();
+}
+},4500);
 
-                    <div class="card-glow"></div>
+function hideTutorial(){
 
-                    <span class="tag">
-                        Nutrient Efficiency
-                    </span>
+const tutorial=document.getElementById('tutorial');
 
-                    <div class="text">
-                        Memiliki penyerapan nutrisi tinggi untuk mendukung pertumbuhan vegetatif maksimal.
-                    </div>
+tutorial.style.opacity='0';
 
-                    <button class="zoom-trigger"
-                        onclick="openWindow(
-                        'Nutrient Efficiency',
-                        'Pada fase ini kemampuan penyerapan unsur hara meningkat secara signifikan. Pemupukan dan pengelolaan nutrisi menjadi faktor penting untuk menghasilkan bibit premium.'
-                        )">
+setTimeout(()=>{
+tutorial.style.display='none';
+},500);
 
-                        VIEW FULL INFO
+tutorialShown=false;
 
-                    </button>
+}
 
-                </div>
+const productIds=[
+'kecambah',
+'bibit3',
+'bibit8'
+];
 
-            </div>
+const productTitles=[
+'KECAMBAH SAWIT PPKS',
+'BIBIT SAWIT 3 BULAN (PN)',
+'BIBIT SAWIT 8 BULAN (MN)'
+];
 
-        </model-viewer>
+let currentProdIndex=0;
 
-    </div>
+function changeProduct(direction){
 
+currentProdIndex=
+(currentProdIndex+direction+productIds.length)
+%productIds.length;
 
+switchProduct(
+productIds[currentProdIndex],
+productTitles[currentProdIndex]
+);
 
+}
 
+function switchProduct(id,title){
 
-    <script>
+document.getElementById('product-header').innerText=title;
 
-        let tutorialShown = true;
+currentProdIndex=productIds.indexOf(id);
 
-        setTimeout(() => {
+document.querySelectorAll('.product-container')
+.forEach(container=>{
+container.classList.remove('active');
+});
 
-            if (tutorialShown) {
-                hideTutorial();
-            }
+document.getElementById(id)
+.classList.add('active');
 
-        }, 4500);
+closeAllDots();
+closeWindow();
+hideTutorial();
 
+}
 
+function toggleDot(el,e){
 
+e.stopPropagation();
 
-        function hideTutorial() {
+hideTutorial();
 
-            const tutorial = document.getElementById('tutorial');
+const active=el.classList.contains('active');
 
-            tutorial.style.opacity = '0';
+closeAllDots();
 
-            setTimeout(() => {
+if(!active){
+el.classList.add('active');
+}
 
-                tutorial.style.display = 'none';
+}
 
-            }, 500);
+function closeAllDots(){
 
-            tutorialShown = false;
+document.querySelectorAll('.dot')
+.forEach(dot=>{
+dot.classList.remove('active');
+});
 
-        }
+}
 
+function openWindow(title,content){
 
+const body=document.getElementById('window-body');
 
+body.innerHTML=`
 
-        const productIds = [
-            'kecambah',
-            'bibit3',
-            'bibit8'
-        ];
+<div class="window-title">
+${title}
+</div>
 
-        const productTitles = [
-            'KECAMBAH SAWIT PPKS',
-            'BIBIT SAWIT 3 BULAN (PN)',
-            'BIBIT SAWIT 8 BULAN (MN)'
-        ];
+<div class="window-text">
+${content}
+</div>
 
-        let currentProdIndex = 0;
+`;
 
+document.getElementById('window-overlay')
+.style.display='flex';
 
+document.querySelector('.product-container.active model-viewer')
+.classList.add('blurred');
 
+}
 
-        function changeProduct(direction) {
+function closeWindow(e){
 
-            currentProdIndex =
-                (currentProdIndex + direction + productIds.length)
-                % productIds.length;
+if(
+e &&
+e.target!==document.getElementById('window-overlay') &&
+e.target!==document.querySelector('.close-btn')
+)return;
 
-            switchProduct(
-                productIds[currentProdIndex],
-                productTitles[currentProdIndex]
-            );
+document.getElementById('window-overlay')
+.style.display='none';
 
-        }
+document.querySelectorAll('model-viewer')
+.forEach(model=>{
+model.classList.remove('blurred');
+});
 
+}
 
+function activateCurrentAR(){
 
+const currentViewer=
+document.querySelector('.product-container.active model-viewer');
 
-        function switchProduct(id, title) {
+currentViewer.activateAR();
 
-            document.getElementById('product-header').innerText = title;
+}
 
-            currentProdIndex = productIds.indexOf(id);
+window.addEventListener('keydown',(e)=>{
 
-            document
-                .querySelectorAll('.product-container')
-                .forEach(container => {
+if(e.key==='ArrowRight'){
+changeProduct(1);
+}
 
-                    container.classList.remove('active');
+if(e.key==='ArrowLeft'){
+changeProduct(-1);
+}
 
-                });
+});
 
-            document
-                .getElementById(id)
-                .classList.add('active');
+let touchStartX=0;
 
-            closeAllDots();
-            closeWindow();
-            hideTutorial();
+window.addEventListener('touchstart',e=>{
+touchStartX=e.changedTouches[0].screenX;
+});
 
-        }
+window.addEventListener('touchend',e=>{
 
+const touchEndX=e.changedTouches[0].screenX;
 
+const diff=touchStartX-touchEndX;
 
+if(Math.abs(diff)>100){
 
-        function toggleDot(el, e) {
+if(diff>0){
+changeProduct(1);
+}else{
+changeProduct(-1);
+}
 
-            e.stopPropagation();
+}
 
-            hideTutorial();
+});
 
-            const isActive =
-                el.classList.contains('active');
-
-            closeAllDots();
-
-            if (!isActive) {
-                el.classList.add('active');
-            }
-
-        }
-
-
-
-
-        function closeAllDots() {
-
-            document
-                .querySelectorAll('.dot')
-                .forEach(dot => {
-
-                    dot.classList.remove('active');
-
-                });
-
-        }
-
-
-
-
-        function openWindow(title, content) {
-
-            const body =
-                document.getElementById('window-body');
-
-            body.innerHTML = `
-            
-            <div class="window-title">
-                ${title}
-            </div>
-
-            <div class="window-text">
-                ${content}
-            </div>
-
-            `;
-
-            document
-                .getElementById('window-overlay')
-                .style.display = 'flex';
-
-            document
-                .querySelector('.product-container.active model-viewer')
-                .classList.add('blurred');
-
-        }
-
-
-
-
-        function closeWindow(e) {
-
-            if (
-                e &&
-                e.target !== document.getElementById('window-overlay') &&
-                e.target !== document.querySelector('.close-btn')
-            ) return;
-
-            document
-                .getElementById('window-overlay')
-                .style.display = 'none';
-
-            document
-                .querySelectorAll('model-viewer')
-                .forEach(model => {
-
-                    model.classList.remove('blurred');
-
-                });
-
-        }
-
-
-
-
-        function activateCurrentAR() {
-
-            const currentViewer =
-                document.querySelector('.product-container.active model-viewer');
-
-            currentViewer.activateAR();
-
-        }
-
-
-
-
-        window.addEventListener('keydown', (e) => {
-
-            if (e.key === 'ArrowRight') {
-                changeProduct(1);
-            }
-
-            if (e.key === 'ArrowLeft') {
-                changeProduct(-1);
-            }
-
-        });
-
-
-
-
-        let touchStartX = 0;
-
-        window.addEventListener('touchstart', e => {
-
-            touchStartX = e.changedTouches[0].screenX;
-
-        });
-
-
-
-
-        window.addEventListener('touchend', e => {
-
-            const touchEndX =
-                e.changedTouches[0].screenX;
-
-            const diff =
-                touchStartX - touchEndX;
-
-            if (Math.abs(diff) > 100) {
-
-                if (diff > 0) {
-                    changeProduct(1);
-                } else {
-                    changeProduct(-1);
-                }
-
-            }
-
-        });
-
-    </script>
+</script>
 
 </body>
-
 </html>
