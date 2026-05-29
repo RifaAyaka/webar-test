@@ -1,467 +1,1501 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+    <script type="module"
+        src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
-        body { 
-            margin: 0; 
-            background: url('background.png') no-repeat center center fixed; 
-            background-size: cover;
-            font-family: 'Montserrat', sans-serif; 
-            overflow: hidden; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* ----- DEBUGGER UI ----- */
-        #debug-log {
-            position: fixed;
-            top: 80px;
-            left: 10px;
-            background: rgba(0,0,0,0.8);
-            color: #ff4d4d;
-            padding: 15px;
-            border-radius: 8px;
-            z-index: 9999;
-            font-family: monospace;
-            font-size: 12px;
-            max-width: 80%;
-            display: none;
-            border-left: 5px solid red;
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            background: #f3f4f1;
         }
-        
+
+        body {
+            background:
+                url('background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at top left,
+                    rgba(255, 255, 255, 0.5),
+                    transparent 40%),
+                radial-gradient(circle at bottom right,
+                    rgba(46, 125, 50, 0.05),
+                    transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .logo-top-right {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-            cursor: pointer;
+            top: 18px;
+            right: 18px;
+            z-index: 3000;
+            transition: 0.3s;
         }
-        
+
+        .logo-top-right:hover {
+            transform: scale(1.05);
+        }
+
         .logo-top-right img {
-            height: 50px;
             width: auto;
+            height: 58px;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.15));
         }
 
         #product-header {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 10px 25px;
-            border-radius: 30px; font-weight: 800; z-index: 1000; border: 2px solid #FBC02D;
-            white-space: nowrap; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2500;
+
+            background:
+                linear-gradient(145deg,
+                    #2e7d32,
+                    #388e3c);
+
+            color: white;
+
+            border:
+                2px solid #FBC02D;
+
+            border-radius: 999px;
+
+            padding:
+                14px 34px;
+
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+
+            box-shadow:
+                0 10px 25px rgba(46, 125, 50, 0.35),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+
+            backdrop-filter: blur(14px);
+
+            white-space: nowrap;
+            text-align: center;
         }
 
-        .nav-zone { position: fixed; top: 120px; bottom: 100px; width: 15%; z-index: 5; cursor: pointer; }
-        #l-zone { left: 0; }
-        #r-zone { right: 0; }
+        .nav-zone {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            width: 16%;
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        #l-zone {
+            left: 0;
+        }
+
+        #r-zone {
+            right: 0;
+        }
+
+        .nav-indicator {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 48px;
+
+            background:
+                rgba(255, 255, 255, 0.7);
+
+            backdrop-filter: blur(10px);
+
+            border-radius: 50%;
+            z-index: 101;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+            font-weight: 900;
+
+            color: #2e7d32;
+
+            border: 2px solid rgba(46, 125, 50, 0.2);
+
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.12);
+
+            pointer-events: none;
+        }
+
+        .nav-left {
+            left: 18px;
+        }
+
+        .nav-right {
+            right: 18px;
+        }
 
         #tutorial {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: white; z-index: 3000; transition: opacity 0.5s; pointer-events: none;
+            position: fixed;
+            inset: 0;
+
+            background:
+                rgba(0, 0, 0, 0.72);
+
+            z-index: 9999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            color: white;
+
+            transition: opacity 0.5s ease;
         }
-        .hand-icon { font-size: 50px; animation: swipe 2s infinite; }
-        @keyframes swipe { 0%, 100% { transform: translateX(-30px); } 50% { transform: translateX(30px); } }
 
-        .product-container { display: none; width: 100%; height: 100vh; position: absolute; top: 0; left: 0; }
-        .product-container.active { display: block; }
+        .hand-icon {
+            font-size: 68px;
+            animation: swipe 2s infinite ease-in-out;
+        }
 
-        model-viewer { width: 100%; height: 100vh; transition: filter 0.3s ease; }
-        .blurred { filter: blur(8px) brightness(0.6); }
+        @keyframes swipe {
+
+            0%,
+            100% {
+                transform: translateX(-45px);
+            }
+
+            50% {
+                transform: translateX(45px);
+            }
+        }
+
+        .tutorial-text {
+            margin-top: 25px;
+            font-size: 18px;
+            font-weight: 800;
+            text-align: center;
+            line-height: 1.8;
+            letter-spacing: 0.6px;
+        }
+
+        .product-container {
+            position: absolute;
+            inset: 0;
+
+            opacity: 0;
+            visibility: hidden;
+
+            transition:
+                opacity 0.55s ease;
+
+            pointer-events: none;
+        }
+
+        .product-container.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+
+            --progress-bar-color: #2e7d32;
+
+            transition:
+                filter 0.35s ease,
+                transform 0.35s ease;
+        }
 
         model-viewer::part(default-progress-bar) {
-            background-color: #2e7d32;
+            background: #2e7d32;
             height: 6px;
-            border-radius: 3px;
+            border-radius: 999px;
+        }
+
+        .blurred {
+            filter:
+                blur(8px)
+                brightness(0.5);
         }
 
         .dot {
-            width: 35px; height: 35px; background: #2e7d32; border: 3px solid white;
-            border-radius: 50%; cursor: pointer; box-shadow: 0 0 20px rgba(46,125,50,0.5);
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s; pointer-events: auto; z-index: 20;
+            width: 34px;
+            height: 34px;
+
+            background:
+                linear-gradient(145deg,
+                    #2e7d32,
+                    #3da942);
+
+            border-radius: 50%;
+
+            border: 3px solid white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 0 22px rgba(46, 125, 50, 0.55);
+
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+
+            transform-style: preserve-3d;
+
+            position: relative;
+
+            z-index: 20;
+        }
+
+        .dot:hover {
+            transform:
+                scale(1.12);
+        }
+
+        .dot::before {
+            content: '';
+
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+
+            border-radius: 50%;
+
+            background:
+                rgba(46, 125, 50, 0.3);
+
+            animation:
+                pulse 2s infinite;
+
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(2.3);
+                opacity: 0;
+            }
+        }
+
+        .dot.active {
+            background:
+                linear-gradient(145deg,
+                    #FBC02D,
+                    #ffd54f);
+
+            z-index: 500;
         }
 
         .info-card {
-            position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%) scale(0);
-            background: white; border-radius: 15px; padding: 18px; width: 280px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-left: 10px solid #2e7d32;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none; z-index: 10;
+            position: absolute;
+
+            bottom: 58px;
+            left: 50%;
+
+            transform:
+                translateX(-50%)
+                scale(0);
+
+            width: 290px;
+
+            padding: 20px;
+
+            border-radius: 24px;
+
+            background:
+                rgba(255, 255, 255, 0.78);
+
+            backdrop-filter:
+                blur(18px);
+
+            -webkit-backdrop-filter:
+                blur(18px);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.4);
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.18);
+
+            transition:
+                transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+            pointer-events: none;
+
+            overflow: hidden;
         }
-        .dot.active .info-card { transform: translateX(-50%) scale(1); pointer-events: auto; }
-        .dot.active { background: #FBC02D; z-index: 100; }
+
+        .dot.active .info-card {
+            transform:
+                translateX(-50%)
+                scale(1);
+
+            pointer-events: auto;
+        }
+
+        .card-glow {
+            position: absolute;
+            top: -60px;
+            right: -40px;
+
+            width: 120px;
+            height: 120px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(46, 125, 50, 0.12);
+
+            filter: blur(20px);
+        }
+
+        .tag {
+            position: relative;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            color: #2e7d32;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            display: inline-block;
+
+            padding-bottom: 8px;
+
+            margin-bottom: 12px;
+
+            border-bottom:
+                2px solid #FBC02D;
+        }
+
+        .text {
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #333;
+
+            line-height: 1.8;
+            text-align: justify;
+        }
 
         .zoom-trigger {
-            margin-top: 15px; width: 100%; padding: 12px; background: #f9f9f9; 
-            border: 2px solid #2e7d32; border-radius: 10px; cursor: pointer;
-            font-size: 11px; font-weight: 800; color: #2e7d32; transition: 0.3s;
+            margin-top: 16px;
+
+            width: 100%;
+
+            padding:
+                14px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(145deg,
+                    #2e7d32,
+                    #3da942);
+
+            color: white;
+
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+
+            box-shadow:
+                0 10px 18px rgba(46, 125, 50, 0.28);
         }
-        .zoom-trigger:hover { background: #2e7d32; color: white; }
+
+        .zoom-trigger:hover {
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 14px 24px rgba(46, 125, 50, 0.35);
+        }
 
         #window-overlay {
-            position: fixed; inset: 0; z-index: 5000;
-            display: none; align-items: center; justify-content: center;
-            padding: 20px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+            position: fixed;
+            inset: 0;
+
+            z-index: 99999;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                rgba(0, 0, 0, 0.45);
+
+            backdrop-filter:
+                blur(10px);
         }
+
         .window-box {
-            background: white; width: 100%; max-width: 500px; max-height: 80vh;
-            border-radius: 24px; position: relative; display: flex; flex-direction: column;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); overflow: hidden;
-            border-top: 12px solid #2e7d32;
+            position: relative;
+
+            width: 100%;
+            max-width: 650px;
+            max-height: 88vh;
+
+            overflow: hidden;
+
+            border-radius: 30px;
+
+            background:
+                rgba(255, 255, 255, 0.92);
+
+            backdrop-filter:
+                blur(22px);
+
+            border:
+                1px solid rgba(255, 255, 255, 0.4);
+
+            box-shadow:
+                0 35px 80px rgba(0, 0, 0, 0.35);
+
+            animation:
+                popup 0.35s ease;
         }
-        .window-content { padding: 30px; overflow-y: auto; }
+
+        @keyframes popup {
+            from {
+                transform:
+                    scale(0.85);
+                opacity: 0;
+            }
+
+            to {
+                transform:
+                    scale(1);
+                opacity: 1;
+            }
+        }
+
+        .window-content {
+            overflow-y: auto;
+            max-height: 88vh;
+
+            padding:
+                34px;
+        }
+
         .close-btn {
-            position: absolute; top: 15px; right: 15px; width: 40px; height: 40px;
-            background: #e74c3c; color: white; border-radius: 50%; border: none;
-            font-size: 20px; font-weight: bold; cursor: pointer; z-index: 5001;
-            display: flex; align-items: center; justify-content: center;
+            position: absolute;
+
+            top: 16px;
+            right: 16px;
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(145deg,
+                    #ef5350,
+                    #d32f2f);
+
+            color: white;
+
+            font-size: 18px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                0 8px 18px rgba(211, 47, 47, 0.3);
         }
 
-        .tag { font-size: 12px; font-weight: 800; color: #2e7d32; text-transform: uppercase; margin-bottom: 10px; display: block; border-bottom: 2px solid #FBC02D; padding-bottom: 5px; }
-        .text { font-size: 14px; font-weight: 600; color: #333; line-height: 1.6; text-align: justify; }
-        .list { margin: 15px 0; padding-left: 20px; color: #2e7d32; font-weight: 700; line-height: 2; }
+        .window-title {
+            font-size: 15px;
+            font-weight: 800;
 
-        .orbit-ad img { max-height: 120px; width: auto; max-width: 100%; border-radius: 8px; margin: 0 auto 10px auto; display: block; }
+            color: #2e7d32;
+
+            margin-bottom: 18px;
+
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            border-bottom:
+                2px solid #FBC02D;
+
+            padding-bottom: 10px;
+        }
+
+        .window-text {
+            font-size: 16px;
+            font-weight: 500;
+
+            line-height: 2;
+
+            color: #333;
+
+            text-align: justify;
+        }
+
+        .window-list {
+            margin-top: 18px;
+            padding-left: 20px;
+        }
+
+        .window-list li {
+            margin-bottom: 10px;
+            color: #2e7d32;
+            font-weight: 700;
+        }
 
         .ar-btn {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #2e7d32; color: white; padding: 18px 60px;
-            border-radius: 16px; font-weight: 800; border: none; z-index: 1000;
-            box-shadow: 0 10px 20px rgba(46,125,50,0.4); cursor: pointer; transition: 0.3s;
+            position: fixed;
+
+            left: 50%;
+            bottom: 30px;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 3000;
+
+            border: none;
+
+            border-radius: 20px;
+
+            padding:
+                18px 62px;
+
+            background:
+                linear-gradient(145deg,
+                    #2e7d32,
+                    #3da942);
+
+            color: white;
+
+            font-size: 15px;
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 16px 32px rgba(46, 125, 50, 0.35);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
         }
-        .ar-btn:active { transform: translateX(-50%) scale(0.95); }
+
+        .ar-btn:hover {
+            transform:
+                translateX(-50%)
+                translateY(-3px);
+
+            box-shadow:
+                0 20px 36px rgba(46, 125, 50, 0.45);
+        }
+
+        .ar-btn:active {
+            transform:
+                translateX(-50%)
+                scale(0.96);
+        }
+
+        @media (max-width: 768px) {
+
+            #product-header {
+                width: 76%;
+                font-size: 13px;
+                padding: 12px 18px;
+            }
+
+            .logo-top-right img {
+                height: 46px;
+            }
+
+            .nav-indicator {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .info-card {
+                width: 220px;
+                padding: 16px;
+            }
+
+            .text {
+                font-size: 12px;
+            }
+
+            .tag {
+                font-size: 10px;
+            }
+
+            .zoom-trigger {
+                font-size: 10px;
+                padding: 12px;
+            }
+
+            .dot {
+                width: 28px;
+                height: 28px;
+            }
+
+            .window-box {
+                width: 94%;
+                max-height: 85vh;
+            }
+
+            .window-content {
+                padding: 24px;
+            }
+
+            .window-text {
+                font-size: 14px;
+            }
+
+            .ar-btn {
+                width: 82%;
+                padding: 16px;
+                font-size: 14px;
+                bottom: 18px;
+            }
+
+            .tutorial-text {
+                font-size: 15px;
+                width: 80%;
+            }
+
+            .hand-icon {
+                font-size: 58px;
+            }
+        }
     </style>
 </head>
+
 <body onclick="closeAllDots(event)">
 
-    <div id="debug-log">
-        <strong>ERROR LOG:</strong><br>
-    </div>
+    <div class="bg-overlay"></div>
 
-    <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
-        <img src="logo-PPKS.png" alt="PPKS Logo">
+    <a href="https://iopri.co.id/"
+        target="_blank"
+        class="logo-top-right">
+
+        <img src="logo-PPKS.png">
     </a>
 
-    <div id="product-header">KECAMBAH SAWIT PPKS</div>
+    <div id="product-header">
+        KECAMBAH SAWIT PPKS
+    </div>
 
-    <div id="l-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
-    <div id="r-zone" class="nav-zone" onclick="changeProduct(1)"></div>
+    <div id="l-zone"
+        class="nav-zone"
+        onclick="changeProduct(-1)">
+    </div>
 
-    <div id="window-overlay" onclick="closeWindow(event)">
-        <div class="window-box" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeWindow()">✕</button>
-            <div class="window-content" id="window-body"></div>
-        </div>
+    <div id="r-zone"
+        class="nav-zone"
+        onclick="changeProduct(1)">
+    </div>
+
+    <div class="nav-indicator nav-left">
+        ‹
+    </div>
+
+    <div class="nav-indicator nav-right">
+        ›
     </div>
 
     <div id="tutorial">
-        <div class="hand-icon">👆</div>
-        <p style="font-weight: 800; margin-top: 20px; text-align: center;">CLICK DOTS FOR INFO<br>DRAG FOR 360° VIEW<br>TAP EDGES TO SWITCH PRODUCTS</p>
+
+        <div class="hand-icon">
+            👆
+        </div>
+
+        <div class="tutorial-text">
+            CLICK HOTSPOTS FOR INFORMATION<br>
+            DRAG MODEL FOR 360° VIEW<br>
+            TAP SCREEN EDGE TO SWITCH PRODUCT
+        </div>
+
     </div>
 
-    <button class="ar-btn" onclick="document.querySelector('.product-container.active model-viewer').activateAR()">OPEN AR CATALOG</button>
+    <div id="window-overlay"
+        onclick="closeWindow(event)">
 
-    <div id="kecambah" class="product-container active">
-        <model-viewer src="kecambah_sawit.glb" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
+        <div class="window-box"
+            onclick="event.stopPropagation()">
 
-            <div class="dot" slot="hotspot-1" data-position="-30 6 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Description</span>
-                    <div class="text">Varietas Dumpy (SP-I): Memiliki laju pertumbuhan meninggi yang lambat & umur ekonomi hingga 30 tahun.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Description', 'Varietas DyP Sungai Pancur I (SP-I) atau yang lebih dikenal sebagai Varietas Dumpy, merupakan varietas dengan keunggulan spesifik laju pertumbuhan meninggi yang lambat (<55 cm/tahun). Dengan karakter ini, Varietas Dumpy mampu mencapai umur ekonomi hingga 30 tahun atau lebih lama dari varietas lain.')">VIEW FULL INFO 📄</button>
-                </div>
+            <button class="close-btn"
+                onclick="closeWindow()">
+                ✕
+            </button>
+
+            <div class="window-content"
+                id="window-body">
             </div>
 
-            <div class="dot" slot="hotspot-2" data-position="35 4 -20" data-normal="0 0 1" onclick="toggleDot(this, event)">
+        </div>
+
+    </div>
+
+    <button class="ar-btn"
+        onclick="activateCurrentAR()">
+
+        OPEN AR CATALOG
+
+    </button>
+
+
+
+
+
+    <!-- KECAMBAH -->
+
+    <div id="kecambah"
+        class="product-container active">
+
+        <model-viewer
+            src="kecambah_sawit.glb"
+
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+
+            camera-controls
+            auto-rotate
+
+            shadow-intensity="2"
+
+            rotation-per-second="8deg"
+
+            interaction-prompt="none"
+
+            field-of-view="28deg"
+
+            camera-orbit="0deg 75deg auto"
+
+            min-camera-orbit="auto auto 40%"
+
+            max-camera-orbit="auto auto 250%"
+
+            exposure="1.05"
+
+            shadow-softness="1"
+
+            environment-image="neutral"
+
+            onclick="hideTutorial()">
+
+
+            <div class="dot"
+                slot="hotspot-1"
+                data-position="-30 6 25"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Turunan SP540</span>
-                    <div class="text">Varietas dari tetua pisifera murni PPKS (DxP 540, Simalungun, AVROS) dengan mesokarp tinggi.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Turunan SP540', 'Varietas kelapa sawit yang termasuk ke dalam kelompok SP540 merupakan varietas-varietas yang dihasilkan dari tetua pisifera keturunan SP540 murni yang hanya dimiliki oleh PPKS. Varietas-varietas dalam kelompok ini terdiri dari: <ul class=\'list\'><li>DxP PPKS 540</li><li>DxP Simalungun</li><li>DxP AVROS</li></ul> Karakter unggulan dari kelompok ini adalah quick starter dan persentase mesokarp per buah yang cukup tinggi. Dengan daya adaptasi cukup luas, varietas ini dapat ditanam di berbagai tipe lahan kelapa sawit (wilayah datar sampai bergelombang).')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Genetic Excellence
+                    </span>
+
+                    <div class="text">
+                        Benih unggul hasil pemuliaan PPKS dengan potensi produktivitas tinggi serta ketahanan terhadap lingkungan tropis ekstrem.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Genetic Excellence',
+                        'Benih kecambah kelapa sawit PPKS merupakan hasil pemuliaan unggul dengan standar kualitas tinggi untuk mendukung produktivitas jangka panjang. Material genetik dirancang agar mampu beradaptasi terhadap kondisi lingkungan tropis dan memiliki stabilitas pertumbuhan yang optimal.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-3" data-position="-35 1 -30" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+
+            <div class="dot"
+                slot="hotspot-2"
+                data-position="35 4 -20"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Turunan Yangambi</span>
-                    <div class="text">Populasi Afrika (Yangambi, 239, 718) dengan bobot tandan besar & kandungan minyak sangat tinggi.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Turunan Yangambi', 'Yangambi merupakan populasi kelapa sawit asal Afrika yang banyak digunakan sebagai tetua pisifera sumber benih unggul. Varietas kelapa sawit PPKS yang dihasilkan dari populasi ini adalah: <ul class=\'list\'><li>DxP Yangambi</li><li>DxP PPKS 239</li><li>DxP PPKS 718</li></ul> Secara umum, populasi ini memiliki keunggulan pada bobot tandan yang relatif besar. Umumnya Yangambi memiliki kandungan minyak dan mesokarp yang tinggi, jauh lebih tinggi dari populasi lain.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Adaptive Growth
+                    </span>
+
+                    <div class="text">
+                        Memiliki daya tumbuh stabil dengan sistem perakaran kuat untuk mendukung fase vegetatif awal.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Adaptive Growth',
+                        'Kecambah dirancang memiliki kemampuan adaptasi tinggi pada fase awal pertumbuhan. Struktur akar primer berkembang lebih cepat untuk membantu penyerapan nutrisi dan menjaga kestabilan bibit saat proses pembibitan.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-4" data-position="32 -5 20" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">DxP Langkat</span>
-                    <div class="text">Compact palm hasil rekombinasi tetua terbaik dengan potensi CPO hingga 8,3 ton/ha/tahun.</div>
-                    <button class="zoom-trigger" onclick="openWindow('DxP Langkat', 'DxP Langkat merupakan varietas pertama yang dirakit PPKS dari hasil rekombinasi tetua-tetua terbaik beberapa populasi pisifera. Tetua pisifera hasil rekombinasi antara pisifera SP540, Yangambi, dan Marihat yang disilangkan dengan Dura Deli terbaik menghasilkan varietas dengan karakter unggul rachis yang relatif pendek (compact palm) dan potensi CPO hingga 8,3 ton/ha/tahun. Selain cocok ditanam di areal bergelombang dan berbukit, varietas ini juga dapat mulai berbuah pada umur 22 bulan setelah tanam.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
 
-            <div class="dot" slot="hotspot-5" data-position="0 10 38" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">DxP 540 NG</span>
-                    <div class="text">New Generation for Ganoderma: Material tahan Ganoderma dengan produksi TBS & minyak sangat baik.</div>
-                    <button class="zoom-trigger" onclick="openWindow('DxP 540 NG', 'Tetua varietas DxP komersial PPKS yang merupakan keturunan SP540T merupakan salah satu material genetik yang memiliki tingkat ketahanan tinggi terhadap Ganoderma di lapangan. Persilangan yang menunjukkan sifat ketahanan ditetapkan sebagai varietas moderat tahan Ganoderma dan diberi nama DxP 540 NG. Frasa \'NG\' sendiri memiliki arti New Generation for Ganoderma. Selain memiliki sifat moderat tahan terhadap Ganoderma, Varietas DxP 540 NG juga memiliki karakter produksi TBS dan minyak yang sangat baik. Pada umur 6 tahun, varietas ini dapat menghasilkan 35 ton TBS/ha/tahun dengan tingkat rendemen minyak 26,5-27,4%. Tingkat rendemen yang tinggi disebabkan kandungan mesokarp/buah yang tinggi, yakni 84,5-87,5%.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
 
-            <div class="dot" slot="hotspot-6" data-position="25 10 25" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card orbit-ad">
-                    <img src="palm_oil_seeds_ads.png">
-                    <button class="zoom-trigger" onclick="openWindow('Product Catalog', '<a href=\'https://sawitlounge.iopri.co.id/index.php/welcome/product/7\' target=\'_blank\'><img src=\'palm_oil_seeds_ads.png\' style=\'width:100%; border-radius:15px; display:block; cursor:pointer;\' title=\'Click to visit our store!\'></a>')">VIEW FULL IMAGE 🔍</button>
+
+
+            <div class="dot"
+                slot="hotspot-3"
+                data-position="-35 1 -30"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
+                <div class="info-card">
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        High Oil Potential
+                    </span>
+
+                    <div class="text">
+                        Dirancang untuk menghasilkan kandungan minyak optimal dengan efisiensi produksi jangka panjang.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'High Oil Potential',
+                        'Varietas unggul PPKS dikembangkan dengan fokus pada efisiensi produksi minyak dan performa tandan buah segar. Potensi kandungan minyak yang tinggi menjadi salah satu indikator utama kualitas genetik kecambah.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
         </model-viewer>
+
     </div>
 
-    <div id="bibit3" class="product-container">
-        <model-viewer src="bibitsawit3bulan.glb" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
-            <div class="dot" slot="hotspot-pn-1" data-position="0 15 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+    <!-- BIBIT 3 BULAN -->
+
+    <div id="bibit3"
+        class="product-container">
+
+        <model-viewer
+            src="bibitsawit3bulan.glb"
+
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+
+            camera-controls
+            auto-rotate
+
+            shadow-intensity="2"
+
+            rotation-per-second="8deg"
+
+            interaction-prompt="none"
+
+            field-of-view="28deg"
+
+            camera-orbit="0deg 75deg auto"
+
+            min-camera-orbit="auto auto 40%"
+
+            max-camera-orbit="auto auto 250%"
+
+            exposure="1.05"
+
+            environment-image="neutral"
+
+            onclick="hideTutorial()">
+
+
+
+
+            <div class="dot"
+                slot="hotspot-pn-1"
+                data-position="0 15 0"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Fase Pre-Nursery</span>
-                    <div class="text">Umur 1-3 bulan. Membutuhkan baby polybag dan naungan intensif dari sinar matahari langsung.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Fase Pre-Nursery (PN)', 'Fase Pre-Nursery adalah tahapan awal pembibitan kelapa sawit yang berlangsung dari kecambah ditanam hingga bibit berumur 3 bulan. Pada fase ini, bibit sangat rentan sehingga membutuhkan naungan (paranet) untuk melindunginya dari paparan sinar matahari langsung, serta penyiraman yang rutin untuk menjaga kelembapan media tanam.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Early Nursery Phase
+                    </span>
+
+                    <div class="text">
+                        Tahap awal pertumbuhan dengan fokus pembentukan akar primer dan adaptasi media tanam.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Early Nursery Phase',
+                        'Fase Pre Nursery merupakan tahap kritis perkembangan awal bibit kelapa sawit. Pada tahap ini bibit memerlukan kelembapan stabil dan perlindungan dari intensitas cahaya berlebih agar perkembangan akar dan daun berlangsung optimal.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-pn-2" data-position="-8 10 8" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+            <div class="dot"
+                slot="hotspot-pn-2"
+                data-position="-8 10 8"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Morfologi Daun Lanset</span>
-                    <div class="text">Daun berbentuk lanset (seperti tombak) memanjang utuh dan belum membelah.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Perkembangan Daun Lanset', 'Daun bibit kelapa sawit pada umur 1-3 bulan memiliki bentuk utuh memanjang yang dikenal dengan istilah daun lanset (lanceolate). Bentuk ini menandakan bibit masih dalam tahap perkembangan vegetatif paling awal sebelum nantinya daun mulai membelah menjadi bentuk menyirip (pinnate).')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Controlled Development
+                    </span>
+
+                    <div class="text">
+                        Membutuhkan intensitas cahaya terkontrol dan kelembapan stabil untuk pertumbuhan optimal.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Controlled Development',
+                        'Bibit usia dini membutuhkan pengendalian lingkungan yang konsisten, termasuk penyiraman rutin dan perlindungan naungan. Hal ini penting untuk mengurangi stres tanaman dan menjaga kestabilan pertumbuhan.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-pn-3" data-position="8 2 8" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+            <div class="dot"
+                slot="hotspot-pn-3"
+                data-position="8 2 8"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Media & Pemeliharaan</span>
-                    <div class="text">Menggunakan top soil murni dengan jadwal penyiraman 2 kali sehari secara konsisten.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Standar Pemeliharaan PN', 'Kunci utama keberhasilan fase Pre-Nursery adalah kualitas tanah dan pasokan air. Media tanam terbaik adalah top soil yang diayak bersih. Pemeliharaan utama mencakup penyiraman 2 kali sehari (pagi dan sore) serta pemupukan dosis sangat rendah secara berkala (misalnya NPK atau pupuk daun cair) untuk memacu pertumbuhan akar.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Root Establishment
+                    </span>
+
+                    <div class="text">
+                        Fase penting pembentukan struktur akar sebelum masuk Main Nursery.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Root Establishment',
+                        'Pembentukan sistem akar pada tahap awal menentukan kualitas bibit di masa depan. Bibit yang memiliki perkembangan akar baik akan lebih siap menghadapi proses transplanting ke tahap pembibitan utama.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
         </model-viewer>
+
     </div>
 
-    <div id="bibit8" class="product-container">
-        <model-viewer src="bibitsawit4-8bulan.glb" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
-            <div class="dot" slot="hotspot-mn-1" data-position="0 30 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+    <!-- BIBIT 8 BULAN -->
+
+    <div id="bibit8"
+        class="product-container">
+
+        <model-viewer
+            src="bibitsawit4-8bulan.glb"
+
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+
+            camera-controls
+            auto-rotate
+
+            shadow-intensity="2"
+
+            rotation-per-second="8deg"
+
+            interaction-prompt="none"
+
+            field-of-view="28deg"
+
+            camera-orbit="0deg 75deg auto"
+
+            min-camera-orbit="auto auto 40%"
+
+            max-camera-orbit="auto auto 250%"
+
+            exposure="1.05"
+
+            environment-image="neutral"
+
+            onclick="hideTutorial()">
+
+
+
+
+            <div class="dot"
+                slot="hotspot-mn-1"
+                data-position="0 30 0"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Fase Main Nursery</span>
-                    <div class="text">Umur 4-12 bulan. Ditanam pada large polybag tanpa naungan, adaptasi sinar matahari penuh.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Fase Main Nursery (MN)', 'Fase Main Nursery (Pembibitan Utama) merupakan tahap pembesaran bibit kelapa sawit dari umur 4 bulan hingga siap tanam di lapangan (9-12 bulan). Bibit dipindahkan dari baby polybag ke polybag besar yang berisi tanah subur agar ruang perakaran cukup untuk menunjang pertumbuhan vegetatif yang masif. Pada fase ini naungan sudah dihilangkan sepenuhnya.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Main Nursery Development
+                    </span>
+
+                    <div class="text">
+                        Fase pertumbuhan aktif dengan perkembangan daun dan pelepah lebih kompleks.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Main Nursery Development',
+                        'Tahap Main Nursery merupakan periode percepatan pertumbuhan vegetatif bibit kelapa sawit. Bibit mulai membentuk struktur daun dan batang yang lebih kuat sebagai persiapan sebelum ditanam di lapangan.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-mn-2" data-position="-15 20 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+            <div class="dot"
+                slot="hotspot-mn-2"
+                data-position="-15 20 15"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Perubahan Daun Pinnate</span>
-                    <div class="text">Daun mulai pecah dan membelah sempurna membentuk helai pelepah dewasa.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Perkembangan Daun Pinnate', 'Indikator utama bibit kelapa sawit tumbuh normal di Main Nursery adalah perubahan bentuk daun. Daun yang awalnya berbentuk lanset mulai pecah atau membelah membentuk helai-helai daun terpisah (pinnate). Pada umur 8 bulan, bibit unggul harus sudah memiliki pelepah dengan anak daun yang terbuka sempurna.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Structural Strength
+                    </span>
+
+                    <div class="text">
+                        Mulai membentuk bonggol dan struktur batang yang kokoh untuk transplanting.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Structural Strength',
+                        'Pembentukan bonggol dan batang menjadi indikator utama kesiapan bibit memasuki fase berikutnya. Bibit dengan struktur kuat memiliki tingkat survival lebih tinggi saat ditanam di lahan.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
-            <div class="dot" slot="hotspot-mn-3" data-position="10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
+
+
+
+            <div class="dot"
+                slot="hotspot-mn-3"
+                data-position="10 5 15"
+                data-normal="0 0 1"
+                onclick="toggleDot(this,event)">
+
                 <div class="info-card">
-                    <span class="tag">Kesiapan Transplanting</span>
-                    <div class="text">Bonggol batang telah menebal, jumlah pelepah cukup, dan sistem perakaran siap lapangan.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Kesiapan Tanam Lapangan', 'Menjelang umur 8-12 bulan, bibit kelapa sawit mencapai standar kesiapan tanam. Ciri fisiknya antara lain: jumlah pelepah daun mencukupi (minimal 12-14 pelepah aktif), diameter bonggol batang besar membulat kokoh, serta jalinan sistem perakaran yang padat. Bibit pada kondisi ini dijamin memiliki tingkat daya hidup (survival rate) tertinggi saat ditanam di kebun.')">VIEW FULL INFO 📄</button>
+
+                    <div class="card-glow"></div>
+
+                    <span class="tag">
+                        Nutrient Efficiency
+                    </span>
+
+                    <div class="text">
+                        Memiliki penyerapan nutrisi tinggi untuk mendukung pertumbuhan vegetatif maksimal.
+                    </div>
+
+                    <button class="zoom-trigger"
+                        onclick="openWindow(
+                        'Nutrient Efficiency',
+                        'Pada fase ini kemampuan penyerapan unsur hara meningkat secara signifikan. Pemupukan dan pengelolaan nutrisi menjadi faktor penting untuk menghasilkan bibit premium.'
+                        )">
+
+                        VIEW FULL INFO
+
+                    </button>
+
                 </div>
+
             </div>
 
         </model-viewer>
+
     </div>
 
-    <div id="bibit12" class="product-container">
-        <model-viewer src="bibitsawit9-12bulan.glb" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
-            <div class="dot" slot="hotspot-12m-1" data-position="0 40 0" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Siap Tanam Lapangan</span>
-                    <div class="text">Umur 9-12 bulan. Bibit telah mencapai ukuran optimal dengan perakaran kokoh untuk ditanam di kebun.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Kesiapan 9-12 Bulan', 'Pada umur 9-12 bulan, bibit kelapa sawit sudah berada pada tahap akhir Main Nursery dan siap untuk proses transplanting ke lapangan. Tajuk daun telah berkembang penuh, bonggol sangat kuat, dan sistem perakaran mampu beradaptasi langsung dengan kondisi lahan sebenarnya.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
 
-        </model-viewer>
-    </div>
 
-    <div id="bioneensis" class="product-container">
-        <model-viewer src="bioneensis.glb" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
-
-            <div class="dot" slot="hotspot-bio-1" data-position="0 15 10" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Pupuk Hayati PGPR</span>
-                    <div class="text">Mengandung bakteri penambat N, pelarut P, dan penghasil hormon IAA.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Pupuk Hayati PGPR', 'BIONEENSIS merupakan pupuk hayati yang diformulasikan khusus untuk tanaman kelapa sawit. Produk ini mengandung konsorsium mikroba bermanfaat yang diisolasi langsung dari perakaran kelapa sawit. Mikroba ini berperan sebagai Plant Growth Promoting Rhizobacteria (PGPR) yang terdiri dari bakteri penambat nitrogen, pelarut fosfat, dan penghasil indole acetic acid (IAA).')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-            <div class="dot" slot="hotspot-bio-2" data-position="-10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Komposisi Organik</span>
-                    <div class="text">Dibuat menggunakan sumber daya lokal ramah lingkungan dari limbah sawit dan tebu.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Komposisi Berkelanjutan', 'Bioneensis mengedepankan prinsip keberlanjutan dengan memanfaatkan sumber daya lokal yang ramah lingkungan. Komposisi formula dan media pembawanya menggunakan by-product (limbah) organik dari industri tanaman kelapa sawit dan tanaman tebu.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-            <div class="dot" slot="hotspot-bio-3" data-position="10 5 15" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Daya Adaptasi Tinggi</span>
-                    <div class="text">Asosiasi tinggi dengan tanaman dan adaptif pada berbagai kondisi pH tanah (4-11).</div>
-                    <button class="zoom-trigger" onclick="openWindow('Keunggulan Bioneensis', 'Keunggulan utama Bioneensis meliputi:<br><ul class=\'list\'><li>Bahan aktif (mikroba) diisolasi langsung dari perakaran kelapa sawit sehingga memiliki asosiasi tinggi dengan tanaman.</li><li>Komposisi formula menggunakan limbah kelapa sawit dan tebu.</li><li>Sangat mudah diaplikasikan di lapangan.</li><li>Memiliki daya adaptasi yang sangat tinggi di berbagai kondisi pH tanah ekstrim (pH 4-11).</li></ul>')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-        </model-viewer>
-    </div>
-
-    <div id="feromonas" class="product-container">
-        <model-viewer src="Feromonas.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
-
-            <div class="dot" slot="hotspot-fero-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Feromonas</span>
-                    <div class="text">Atraktan efektif untuk mengendalikan hama Oryctes rhinoceros (Kumbang Tanduk).</div>
-                    <button class="zoom-trigger" onclick="openWindow('Feromonas PPKS', 'FEROMONAS adalah produk feromon agregat sintetik yang dirancang khusus untuk menarik hama kumbang tanduk (Oryctes rhinoceros). Produk ini sangat efektif digunakan sebagai alat sensus hama sekaligus pemerangkapan massal (mass trapping), khususnya di areal replanting (peremajaan) kebun kelapa sawit dan bersifat ramah lingkungan.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-        </model-viewer>
-    </div>
-
-    <div id="fertoma" class="product-container">
-        <model-viewer src="FertoMax.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
-
-            <div class="dot" slot="hotspot-fertomax-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Pupuk Hayati Cair</span>
-                    <div class="text">FertoMAX adalah pupuk hayati cair inovasi terbaru PPKS untuk kesehatan tanaman.</div>
-                    <button class="zoom-trigger" onclick="openWindow('FertoMAX', 'FertoMAX merupakan produk pupuk hayati cair yang diluncurkan oleh PPKS untuk memberikan solusi pemupukan yang praktis dan ramah lingkungan. Dirancang khusus untuk memacu kesehatan dan pertumbuhan tanaman secara berkelanjutan, FertoMAX sangat mudah diaplikasikan untuk menunjang efisiensi serapan nutrisi tanaman secara optimal.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-        </model-viewer>
-    </div>
-
-    <div id="greemi" class="product-container">
-        <model-viewer src="Greemi%20G.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
-                      camera-controls auto-rotate shadow-intensity="2" 
-                      rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
-
-            <div class="dot" slot="hotspot-greemig-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
-                <div class="info-card">
-                    <span class="tag">Biofungisida Hayati</span>
-                    <div class="text">Greemi-G adalah biofungisida berbasis cendawan Trichoderma untuk mengendalikan Ganoderma.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Greemi-G', 'Greemi-G merupakan biofungisida inovasi Pusat Penelitian Kelapa Sawit (PPKS) yang diformulasikan secara khusus untuk mengendalikan penyakit Busuk Pangkal Batang akibat serangan jamur patogen Ganoderma. Kandungan agen hayati Trichoderma spp. di dalamnya dapat menghasilkan enzim Kitinase yang mendegradasi dinding sel Ganoderma tanpa menimbulkan resistensi dan dijamin 100% ramah lingkungan.')">VIEW FULL INFO 📄</button>
-                </div>
-            </div>
-
-        </model-viewer>
-    </div>
 
     <script>
-        // --- TROUBLESHOOTING SCRIPT ---
-        document.querySelectorAll('model-viewer').forEach(mv => {
-            mv.addEventListener('error', (event) => {
-                const debugBox = document.getElementById('debug-log');
-                debugBox.style.display = 'block';
-                const fileTarget = mv.getAttribute('src');
-                
-                debugBox.innerHTML += `<div style="margin-bottom: 5px;">❌ <b>Gagal memuat:</b> ${fileTarget}<br><span style="color:#ffa5a5;">Sebab: File tidak ditemukan atau diblokir CORS. Cek apakah ada file 3D bernama ini di dalam foldermu.</span></div>`;
-                console.error("Gagal memuat model 3D:", fileTarget, event);
-            });
-            
-            mv.addEventListener('load', () => {
-                console.log(`✅ Berhasil memuat model: ${mv.getAttribute('src')}`);
-            });
-        });
-        // ------------------------------
 
         let tutorialShown = true;
+
         setTimeout(() => {
-            if(tutorialShown) hideTutorial();
-        }, 4000);
+
+            if (tutorialShown) {
+                hideTutorial();
+            }
+
+        }, 4500);
+
+
+
 
         function hideTutorial() {
-            document.getElementById('tutorial').style.opacity = '0';
+
+            const tutorial = document.getElementById('tutorial');
+
+            tutorial.style.opacity = '0';
+
+            setTimeout(() => {
+
+                tutorial.style.display = 'none';
+
+            }, 500);
+
             tutorialShown = false;
+
         }
 
-        let currentProdIndex = 0;
-        
-        const productIds = ['kecambah', 'bibit3', 'bibit8', 'bibit12', 'bioneensis', 'feromonas', 'fertoma', 'greemi'];
-        const productTitles = [
-            'KECAMBAH SAWIT PPKS', 
-            'BIBIT SAWIT 3 BULAN (PN)', 
-            'BIBIT SAWIT 8 BULAN (MN)', 
-            'BIBIT SAWIT 9-12 BULAN', 
-            'BIONEENSIS PUPUK HAYATI',
-            'FEROMONAS',
-            'FERTOMAX',
-            'GREEMI G'
+
+
+
+        const productIds = [
+            'kecambah',
+            'bibit3',
+            'bibit8'
         ];
 
+        const productTitles = [
+            'KECAMBAH SAWIT PPKS',
+            'BIBIT SAWIT 3 BULAN (PN)',
+            'BIBIT SAWIT 8 BULAN (MN)'
+        ];
+
+        let currentProdIndex = 0;
+
+
+
+
         function changeProduct(direction) {
-            currentProdIndex = (currentProdIndex + direction + productIds.length) % productIds.length;
-            switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex]);
+
+            currentProdIndex =
+                (currentProdIndex + direction + productIds.length)
+                % productIds.length;
+
+            switchProduct(
+                productIds[currentProdIndex],
+                productTitles[currentProdIndex]
+            );
+
         }
 
-        function toggleDot(el, e) {
-            e.stopPropagation();
-            hideTutorial();
-            const isActive = el.classList.contains('active');
-            closeAllDots();
-            if (!isActive) el.classList.add('active');
-        }
 
-        function openWindow(title, content) {
-            const body = document.getElementById('window-body');
-            body.innerHTML = `<span class="tag">${title}</span><div class="text" style="font-size:16px">${content}</div>`;
-            document.getElementById('window-overlay').style.display = 'flex';
-            document.querySelector('.product-container.active model-viewer').classList.add('blurred');
-        }
 
-        function closeWindow(e) {
-            if(e && e.target !== document.getElementById('window-overlay') && e.target !== document.querySelector('.close-btn')) return;
-            document.getElementById('window-overlay').style.display = 'none';
-            document.querySelectorAll('model-viewer').forEach(mv => mv.classList.remove('blurred'));
-        }
-
-        function closeAllDots(e) {
-            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
-        }
 
         function switchProduct(id, title) {
-            document.getElementById('product-header').innerText = title;
-            currentProdIndex = productIds.indexOf(id); 
 
-            document.querySelectorAll('.product-container').forEach(container => {
-                container.classList.remove('active');
-            });
-            document.getElementById(id).classList.add('active');
+            document.getElementById('product-header').innerText = title;
+
+            currentProdIndex = productIds.indexOf(id);
+
+            document
+                .querySelectorAll('.product-container')
+                .forEach(container => {
+
+                    container.classList.remove('active');
+
+                });
+
+            document
+                .getElementById(id)
+                .classList.add('active');
 
             closeAllDots();
             closeWindow();
             hideTutorial();
+
         }
+
+
+
+
+        function toggleDot(el, e) {
+
+            e.stopPropagation();
+
+            hideTutorial();
+
+            const isActive =
+                el.classList.contains('active');
+
+            closeAllDots();
+
+            if (!isActive) {
+                el.classList.add('active');
+            }
+
+        }
+
+
+
+
+        function closeAllDots() {
+
+            document
+                .querySelectorAll('.dot')
+                .forEach(dot => {
+
+                    dot.classList.remove('active');
+
+                });
+
+        }
+
+
+
+
+        function openWindow(title, content) {
+
+            const body =
+                document.getElementById('window-body');
+
+            body.innerHTML = `
+            
+            <div class="window-title">
+                ${title}
+            </div>
+
+            <div class="window-text">
+                ${content}
+            </div>
+
+            `;
+
+            document
+                .getElementById('window-overlay')
+                .style.display = 'flex';
+
+            document
+                .querySelector('.product-container.active model-viewer')
+                .classList.add('blurred');
+
+        }
+
+
+
+
+        function closeWindow(e) {
+
+            if (
+                e &&
+                e.target !== document.getElementById('window-overlay') &&
+                e.target !== document.querySelector('.close-btn')
+            ) return;
+
+            document
+                .getElementById('window-overlay')
+                .style.display = 'none';
+
+            document
+                .querySelectorAll('model-viewer')
+                .forEach(model => {
+
+                    model.classList.remove('blurred');
+
+                });
+
+        }
+
+
+
+
+        function activateCurrentAR() {
+
+            const currentViewer =
+                document.querySelector('.product-container.active model-viewer');
+
+            currentViewer.activateAR();
+
+        }
+
+
+
+
+        window.addEventListener('keydown', (e) => {
+
+            if (e.key === 'ArrowRight') {
+                changeProduct(1);
+            }
+
+            if (e.key === 'ArrowLeft') {
+                changeProduct(-1);
+            }
+
+        });
+
+
+
+
+        let touchStartX = 0;
+
+        window.addEventListener('touchstart', e => {
+
+            touchStartX = e.changedTouches[0].screenX;
+
+        });
+
+
+
+
+        window.addEventListener('touchend', e => {
+
+            const touchEndX =
+                e.changedTouches[0].screenX;
+
+            const diff =
+                touchStartX - touchEndX;
+
+            if (Math.abs(diff) > 100) {
+
+                if (diff > 0) {
+                    changeProduct(1);
+                } else {
+                    changeProduct(-1);
+                }
+
+            }
+
+        });
+
     </script>
+
 </body>
+
 </html>
