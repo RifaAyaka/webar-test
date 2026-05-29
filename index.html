@@ -27,7 +27,7 @@
             font-family: monospace;
             font-size: 12px;
             max-width: 80%;
-            display: none; /* Akan muncul otomatis kalau ada error */
+            display: none;
             border-left: 5px solid red;
         }
         
@@ -163,7 +163,7 @@
     <button class="ar-btn" onclick="document.querySelector('.product-container.active model-viewer').activateAR()">OPEN AR CATALOG</button>
 
     <div id="kecambah" class="product-container active">
-        <model-viewer src="kecambah_sawit.glb" ar ar-modes="webxr" 
+        <model-viewer src="kecambah%20sawit.glb" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
@@ -337,8 +337,8 @@
             <div class="dot" slot="hotspot-fero-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card">
                     <span class="tag">Feromonas</span>
-                    <div class="text">Atraktan efektif untuk mengendalikan hama Oryctes rhinoceros.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Feromonas PPKS', 'Feromonas adalah produk atraktan sintetis yang dirancang khusus untuk menarik hama kumbang tanduk (Oryctes rhinoceros). Produk ini digunakan dalam perangkap (ferotrap) untuk mengurangi populasi hama yang merusak tanaman kelapa sawit, baik pada fase belum menghasilkan (TBM) maupun menghasilkan (TM).')">VIEW FULL INFO 📄</button>
+                    <div class="text">Atraktan efektif untuk mengendalikan hama Oryctes rhinoceros (Kumbang Tanduk).</div>
+                    <button class="zoom-trigger" onclick="openWindow('Feromonas PPKS', 'FEROMONAS adalah produk feromon agregat sintetik yang dirancang khusus untuk menarik hama kumbang tanduk (Oryctes rhinoceros). Produk ini sangat efektif digunakan sebagai alat sensus hama sekaligus pemerangkapan massal (mass trapping), khususnya di areal replanting (peremajaan) kebun kelapa sawit dan bersifat ramah lingkungan.')">VIEW FULL INFO 📄</button>
                 </div>
             </div>
 
@@ -352,9 +352,9 @@
 
             <div class="dot" slot="hotspot-fertomax-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card">
-                    <span class="tag">FertoMax</span>
-                    <div class="text">Produk baru FertoMax.</div>
-                    <button class="zoom-trigger" onclick="openWindow('FertoMax', 'Informasi lebih lanjut tentang FertoMax akan segera hadir.')">VIEW FULL INFO 📄</button>
+                    <span class="tag">Pupuk Hayati Cair</span>
+                    <div class="text">FertoMAX adalah pupuk hayati cair inovasi terbaru PPKS untuk kesehatan tanaman.</div>
+                    <button class="zoom-trigger" onclick="openWindow('FertoMAX', 'FertoMAX merupakan produk pupuk hayati cair yang diluncurkan oleh PPKS untuk memberikan solusi pemupukan yang praktis dan ramah lingkungan. Dirancang khusus untuk memacu kesehatan dan pertumbuhan tanaman secara berkelanjutan, FertoMAX sangat mudah diaplikasikan untuk menunjang efisiensi serapan nutrisi tanaman secara optimal.')">VIEW FULL INFO 📄</button>
                 </div>
             </div>
 
@@ -362,15 +362,15 @@
     </div>
 
     <div id="greemi" class="product-container">
-        <model-viewer src="Greemi G.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
+        <model-viewer src="Greemi%20G.glb" scale="0.6 0.6 0.6" ar ar-modes="webxr" 
                       camera-controls auto-rotate shadow-intensity="2" 
                       rotation-per-second="8deg" interaction-prompt="none" onclick="hideTutorial()">
 
             <div class="dot" slot="hotspot-greemig-1" data-position="0 0.5 0.2" data-normal="0 0 1" onclick="toggleDot(this, event)">
                 <div class="info-card">
-                    <span class="tag">Greemi G</span>
-                    <div class="text">Produk baru Greemi G.</div>
-                    <button class="zoom-trigger" onclick="openWindow('Greemi G', 'Informasi lebih lanjut tentang Greemi G akan segera hadir.')">VIEW FULL INFO 📄</button>
+                    <span class="tag">Biofungisida Hayati</span>
+                    <div class="text">Greemi-G adalah biofungisida berbasis cendawan Trichoderma untuk mengendalikan Ganoderma.</div>
+                    <button class="zoom-trigger" onclick="openWindow('Greemi-G', 'Greemi-G merupakan biofungisida inovasi Pusat Penelitian Kelapa Sawit (PPKS) yang diformulasikan secara khusus untuk mengendalikan penyakit Busuk Pangkal Batang akibat serangan jamur patogen Ganoderma. Kandungan agen hayati Trichoderma spp. di dalamnya dapat menghasilkan enzim Kitinase yang mendegradasi dinding sel Ganoderma tanpa menimbulkan resistensi dan dijamin 100% ramah lingkungan.')">VIEW FULL INFO 📄</button>
                 </div>
             </div>
 
@@ -379,16 +379,13 @@
 
     <script>
         // --- TROUBLESHOOTING SCRIPT ---
-        // Mendeteksi error saat model gagal diload
         document.querySelectorAll('model-viewer').forEach(mv => {
             mv.addEventListener('error', (event) => {
                 const debugBox = document.getElementById('debug-log');
                 debugBox.style.display = 'block';
                 const fileTarget = mv.getAttribute('src');
                 
-                // Menulis pesan error di layar UI
-                debugBox.innerHTML += `<div style="margin-bottom: 5px;">❌ <b>Gagal memuat:</b> ${fileTarget}<br><span style="color:#ffa5a5;">Sebab: File tidak ditemukan atau diblokir CORS.</span></div>`;
-                
+                debugBox.innerHTML += `<div style="margin-bottom: 5px;">❌ <b>Gagal memuat:</b> ${fileTarget}<br><span style="color:#ffa5a5;">Sebab: File tidak ditemukan atau diblokir CORS. Cek apakah ada file 3D bernama ini di dalam foldermu.</span></div>`;
                 console.error("Gagal memuat model 3D:", fileTarget, event);
             });
             
