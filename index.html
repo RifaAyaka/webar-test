@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 
+<!-- Model-Viewer Resmi Google -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,10 +70,7 @@ body{
     transition:.3s;
 }
 
-.logo-top-right:hover{
-    transform:scale(1.05);
-}
-
+.logo-top-right:hover{ transform:scale(1.05); }
 .logo-top-right img{
     height:60px;
     filter:drop-shadow(0 8px 20px rgba(0,0,0,.18));
@@ -105,23 +103,18 @@ body{
     z-index:999;
     cursor:pointer;
 }
-
 #left-zone{ left:0; }
 #right-zone{ right:0; }
 
+/* PERBAIKAN UTAMA: Menggunakan Sistem Display untuk Keamanan Render 3D Canvas */
 .product-container{
     position:absolute;
     inset:0;
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transition:opacity .4s ease;
+    display:none;
 }
 
 .product-container.active{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
+    display:block;
     z-index:10;
 }
 
@@ -131,6 +124,7 @@ model-viewer{
     --progress-bar-color:transparent;
 }
 
+/* INDIKATOR LOADING BAR DI TENGAH LAYAR */
 .loading-overlay {
     position: absolute;
     inset: 0;
@@ -166,253 +160,199 @@ model-viewer{
     100% { transform: rotate(360deg); }
 }
 
-#tutorial{
-    position:fixed;
-    inset:0;
-    z-index:999999;
-    background:rgba(0,0,0,.72);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    color:white;
-    transition:.5s;
+/* DESAIN DOT/LINGKARAN HOTSPOT YANG MENEMPEL/MENGORBIT BARANG */
+.dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2e7d32, #43a047);
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 0 20px rgba(46,125,50,0.6);
+    transition: transform 0.3s ease;
 }
 
-.hand{
-    font-size:70px;
-    animation:swipe 2s infinite ease-in-out;
+.dot:hover {
+    transform: scale(1.15);
 }
 
-@keyframes swipe{
-    0%,100%{ transform:translateX(-50px); }
-    50%{ transform:translateX(50px); }
+.dot::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(76,175,80,0.4);
+    animation: pulse 2s infinite;
+    z-index: -1;
 }
 
-.tutorial-text{
-    margin-top:24px;
-    text-align:center;
-    font-size:18px;
-    font-weight:800;
-    line-height:1.9;
-    letter-spacing:.5px;
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.2); opacity: 0; }
 }
 
-.dot{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    background:linear-gradient(145deg,#2e7d32,#43a047);
-    border:3px solid white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    position:relative;
-    box-shadow: 0 0 25px rgba(46,125,50,.45);
-    transition:.35s;
+.dot-center {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
 }
 
-.dot:hover{ transform:scale(1.08); }
-
-.dot::before{
-    content:'';
-    position:absolute;
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    background:rgba(76,175,80,.35);
-    animation:pulse 2s infinite;
-    z-index:-1;
+/* POPUP MINI TABLE CARD (MUNCUL PAS DI-HOVER / DI-KLIK) */
+.info-card {
+    position: absolute;
+    bottom: 45px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    width: 280px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    z-index: 1000;
 }
 
-@keyframes pulse{
-    0%{ transform:scale(1); opacity:1; }
-    100%{ transform:scale(2.3); opacity:0; }
+/* Trigger Hover & Active State */
+.dot:hover .info-card, .dot.active .info-card {
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
 }
 
-.dot.active{ background:linear-gradient(145deg,#fbc02d,#ffd54f); z-index:999; }
-
-.dot-center{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:white;
+.mini-spec-title {
+    font-size: 11px;
+    font-weight: 900;
+    color: #2e7d32;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed #cedfce;
+    padding-bottom: 4px;
 }
 
-.orbit-ring{
-    position:absolute;
-    width:72px;
-    height:72px;
-    border-radius:50%;
-    border:1.5px dashed rgba(255,255,255,.8);
-    animation:orbitRotate 6s linear infinite;
-    pointer-events:none;
+.mini-table {
+    width: 100%;
+    font-size: 12px;
+    margin-bottom: 12px;
+    color: #444;
 }
 
-@keyframes orbitRotate{
-    from{ transform:rotate(0deg); }
-    to{ transform:rotate(360deg); }
+.mini-table td {
+    padding: 3px 0;
 }
 
-.info-card{
-    position:absolute;
-    bottom:60px;
-    left:50%;
-    transform:translateX(-50%) scale(0);
-    width:300px;
-    padding:22px;
-    border-radius:26px;
-    background:rgba(255,255,255,.84);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,.45);
-    box-shadow: 0 25px 55px rgba(0,0,0,.18);
-    transition: transform .45s cubic-bezier(.175,.885,.32,1.275);
-    pointer-events:none;
-    overflow:hidden;
-    z-index:1000;
+.mini-table td.lbl {
+    font-weight: 700;
+    color: #666;
 }
 
-.dot.active .info-card{
-    transform:translateX(-50%) scale(1);
-    pointer-events:auto;
+.zoom-trigger {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #2e7d32, #43a047);
+    font-size: 11px;
+    font-weight: 800;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(46,125,50,0.2);
+    transition: 0.2s;
 }
 
-.card-glow{
-    position:absolute;
-    top:-60px;
-    right:-40px;
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    background:rgba(46,125,50,.12);
-    filter:blur(24px);
+.zoom-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(46,125,50,0.3);
 }
 
-.tag{
-    position:relative;
-    display:inline-block;
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:#2e7d32;
-    padding-bottom:8px;
-    margin-bottom:12px;
-    border-bottom:2px solid #fbc02d;
+/* OVERLAY MODAL BESAR DI TENGAH LAYAR */
+#window-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(12px);
 }
 
-.text{
-    font-size:14px;
-    font-weight:600;
-    line-height:1.8;
-    color:#333;
-    text-align:justify;
+.window-box {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow: hidden;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.97);
+    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: 0 40px 90px rgba(0,0,0,0.35);
+    animation: popup 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.zoom-trigger{
-    margin-top:16px;
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    background:linear-gradient(145deg,#2e7d32,#43a047);
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:.5px;
-    color:white;
-    cursor:pointer;
-    box-shadow: 0 10px 20px rgba(46,125,50,.3);
-    transition:.25s;
+@keyframes popup {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-.zoom-trigger:hover{
-    transform:translateY(-2px);
-    box-shadow: 0 15px 28px rgba(46,125,50,.4);
+.window-content {
+    padding: 30px;
+    overflow-y: auto;
+    max-height: 85vh;
 }
 
-#window-overlay{
-    position:fixed;
-    inset:0;
-    z-index:999999;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.45);
-    backdrop-filter:blur(12px);
+.close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ef5350, #d32f2f);
+    font-size: 16px;
+    font-weight: 900;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(211,47,47,0.3);
+    z-index: 10;
 }
 
-.window-box{
-    position:relative;
-    width:100%;
-    max-width:700px;
-    max-height:88vh;
-    overflow:hidden;
-    border-radius:32px;
-    background:rgba(255,255,255,.95);
-    backdrop-filter:blur(25px);
-    border:1px solid rgba(255,255,255,.45);
-    box-shadow: 0 40px 90px rgba(0,0,0,.35);
-    animation:popup .35s ease;
+.window-title {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #2e7d32;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #fbc02d;
 }
 
-@keyframes popup{
-    from{ transform:scale(.82); opacity:0; }
-    to{ transform:scale(1); opacity:1; }
-}
-
-.window-content{
-    padding:34px;
-    overflow-y:auto;
-    max-height:88vh;
-}
-
-.close-btn{
-    position:absolute;
-    top:16px;
-    right:16px;
-    width:44px;
-    height:44px;
-    border:none;
-    border-radius:50%;
-    background:linear-gradient(145deg,#ef5350,#d32f2f);
-    font-size:18px;
-    font-weight:900;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    box-shadow: 0 10px 18px rgba(211,47,47,.35);
-}
-
-.window-title{
-    font-size:16px;
-    font-weight:900;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    color:#2e7d32;
-    padding-bottom:10px;
-    margin-bottom:18px;
-    border-bottom:2px solid #fbc02d;
-}
-
-/* STYLE TABEL SPESIFIKASI KUSTOM */
+/* TABEL OFFICIAL DETAIL */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
-    margin-top: 15px;
+    margin-top: 10px;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .official-spec-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
-    text-align: left;
-    background: white;
 }
 
 .official-spec-table th, .official-spec-table td {
@@ -427,60 +367,69 @@ model-viewer{
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 0.5px;
+    text-align: left;
 }
 
-.official-spec-table tr:nth-child(even) {
-    background-color: #f9fbf9;
+.official-spec-table tr:nth-child(even) { background-color: #f9fbf9; }
+.official-spec-table td.param-name { font-weight: 700; color: #2e7d32; width: 35%; }
+.official-spec-table td.param-value { color: #333; font-weight: 500; }
+
+#tutorial {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    transition: 0.4s;
 }
 
-.official-spec-table td.param-name {
-    font-weight: 700;
-    color: #2e7d32;
-    width: 35%;
+.hand { font-size: 60px; animation: swipe 2s infinite ease-in-out; }
+@keyframes swipe {
+    0%, 100% { transform: translateX(-40px); }
+    50% { transform: translateX(40px); }
 }
 
-.official-spec-table td.param-value {
-    color: #333;
-    font-weight: 500;
+.tutorial-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.8;
 }
 
-.ar-btn{
-    position:fixed;
-    left:50%;
-    bottom:26px;
-    transform:translateX(-50%);
-    z-index:99999;
-    padding:18px 68px;
-    border:none;
-    border-radius:20px;
-    background:linear-gradient(145deg,#2e7d32,#43a047);
-    font-size:15px;
-    font-weight:900;
-    letter-spacing:.5px;
-    color:white;
-    cursor:pointer;
-    box-shadow: 0 18px 35px rgba(46,125,50,.35);
-    transition:.3s;
+.ar-btn {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translateX(-50%);
+    z-index: 99999;
+    padding: 16px 60px;
+    border: none;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #2e7d32, #43a047);
+    font-size: 14px;
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 15px 30px rgba(46,125,50,0.3);
+    transition: 0.3s;
 }
 
-.ar-btn:hover{ transform:translateX(-50%) translateY(-3px); }
-.blurred{ filter:blur(8px) brightness(.5); }
+.ar-btn:hover { transform: translateX(-50%) translateY(-2px); }
+.blurred { filter: blur(6px) brightness(0.6); }
 
 @media(max-width:768px){
-    #product-header{ width:76%; font-size:13px; padding:12px 18px; }
-    .logo-top-right img{ height:46px; }
-    .info-card{ width:230px; padding:16px; }
-    .text{ font-size:12px; }
-    .tag{ font-size:10px; }
-    .zoom-trigger{ font-size:10px; padding:12px; }
-    .dot{ width:30px; height:30px; }
-    .orbit-ring{ width:58px; height:58px; }
-    .window-content{ padding:24px; }
+    #product-header { width: 78%; font-size: 13px; padding: 12px 16px; }
+    .logo-top-right img { height: 44px; }
+    .info-card { width: 240px; }
+    .window-content { padding: 20px; }
     .official-spec-table { font-size: 13px; }
-    .official-spec-table th, .official-spec-table td { padding: 10px 12px; }
-    .ar-btn{ width:82%; padding:16px; font-size:14px; bottom:18px; }
-    .hand{ font-size:58px; }
-    .tutorial-text{ font-size:15px; width:80%; }
+    .official-spec-table th, .official-spec-table td { padding: 10px; }
+    .ar-btn { width: 85%; padding: 14px; bottom: 18px; }
 }
 </style>
 </head>
@@ -503,9 +452,9 @@ model-viewer{
 <div id="tutorial" onclick="hideTutorial()">
     <div class="hand">👆</div>
     <div class="tutorial-text">
-        CLICK HOTSPOT FOR INFORMATION<br>
-        DRAG MODEL FOR 360° VIEW<br>
-        TAP LEFT OR RIGHT SIDE TO SWITCH PRODUCT
+        HOVER / CLICK DOT FOR INFO TABLE<br>
+        DRAG MODEL FOR 360° ORBIT VIEW<br>
+        TAP SIDE BOUNDS TO SWITCH ITEM
     </div>
 </div>
 
@@ -518,7 +467,11 @@ model-viewer{
 
 <button class="ar-btn" onclick="activateCurrentAR()">OPEN AR CATALOG</button>
 
+<!-- ====================================================== -->
+<!-- 1. KECAMBAH SAWIT -->
+<!-- ====================================================== -->
 <div id="kecambah" class="product-container active">
+    <!-- Perbaikan Koordinat data-position agar menempel pas mengorbit barang -->
     <model-viewer data-src="kecambah_sawit.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
         <div slot="poster" class="loading-overlay">
@@ -526,19 +479,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-k1" data-position="-30 6 25" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-k1" data-position="0.0 0.1 0.15" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Genetik Unggul</span>
-                <div class="text">Benih varietas DxP PPKS memiliki potensi produksi CPO maksimal dan bersertifikat.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">DxP PPKS</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">TBS:</td><td>28-34 Ton/Ha/Thn</td></tr>
+                    <tr><td class="lbl">OER:</td><td>26.0% - 28.5%</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 2. BIBIT 3 BULAN -->
+<!-- ====================================================== -->
 <div id="bibit3" class="product-container">
     <model-viewer data-src="bibitsawit3bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -547,19 +504,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b3a" data-position="0 15 0" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-b3" data-position="0.0 0.2 0.15" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Pre-Nursery</span>
-                <div class="text">Fase pembibitan awal usia 1-3 bulan dengan perawatan hara yang intensif.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('bibit3')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Pre-Nursery</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Fase:</td><td>Awal (1-3 Bulan)</td></tr>
+                    <tr><td class="lbl">Polybag:</td><td>15 cm x 23 cm</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit3')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 3. BIBIT 4-8 BULAN -->
+<!-- ====================================================== -->
 <div id="bibit8" class="product-container">
     <model-viewer data-src="bibitsawit4-8bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -568,19 +529,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b8a" data-position="0 30 0" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-b8" data-position="0.0 0.4 0.2" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Main Nursery</span>
-                <div class="text">Tahap pembibitan utama dengan perluasan ruang tumbuh tanaman vegetatif.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('bibit8')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Main Nursery</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Usia:</td><td>4 - 8 Bulan</td></tr>
+                    <tr><td class="lbl">Pola:</td><td>Segitiga Sama Sisi</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit8')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 4. BIBIT 9-12 BULAN -->
+<!-- ====================================================== -->
 <div id="bibit12" class="product-container">
     <model-viewer data-src="bibitsawit9-12bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -589,19 +554,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b12a" data-position="0 35 0" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-b12" data-position="0.0 0.5 0.2" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Field Ready</span>
-                <div class="text">Kondisi morfologi bibit prima dan siap dipindahkan langsung ke lahan utama.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('bibit12')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Siap Tanam</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Tinggi:</td><td>70 - 110 cm</td></tr>
+                    <tr><td class="lbl">Bonggol:</td><td>&gt; 10 cm</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit12')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 5. BIONEENSIS -->
+<!-- ====================================================== -->
 <div id="bioneensis" class="product-container">
     <model-viewer data-src="bioneensis.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -610,19 +579,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-bioa" data-position="0 10 15" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-bio" data-position="0.0 0.2 0.15" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Pupuk Hayati</span>
-                <div class="text">Inokulan konsorsium mikroba penambat N dan pelarut P pelindung akar sawit.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('bioneensis')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Pupuk Hayati</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Bentuk:</td><td>Padat / Serbuk</td></tr>
+                    <tr><td class="lbl">Mikroba:</td><td>Bacillus sp.</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bioneensis')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 6. FEROMONAS -->
+<!-- ====================================================== -->
 <div id="feromonas" class="product-container">
     <model-viewer data-src="Feromonas.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -631,19 +604,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-fera" data-position="0 5 10" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-fer" data-position="0.0 0.15 0.12" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Atraktan Hama</span>
-                <div class="text">Senyawa feromon pengendali hama Oryctes rhinoceros (Kumbang Tanduk).</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('feromonas')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Atraktan Hama</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Target:</td><td>Oryctes rhinoceros</td></tr>
+                    <tr><td class="lbl">Radius:</td><td>100 - 150 Meter</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('feromonas')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 7. FERTOMAX -->
+<!-- ====================================================== -->
 <div id="fertomax" class="product-container">
     <model-viewer data-src="FertoMax.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -652,19 +629,23 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-fma" data-position="0 8 12" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-fm" data-position="0.0 0.2 0.12" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Nutrient Booster</span>
-                <div class="text">Formula booster hayati cair inovatif untuk memacu penyerapan pupuk makro.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('fertomax')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Nutrient Booster</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Formulasi:</td><td>Cairan Konsentrat</td></tr>
+                    <tr><td class="lbl">Efisiensi:</td><td>Up to 30% Serapan</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('fertomax')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
+<!-- ====================================================== -->
+<!-- 8. GREEMI G -->
+<!-- ====================================================== -->
 <div id="greemig" class="product-container">
     <model-viewer data-src="Greemi G.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -673,30 +654,29 @@ model-viewer{
             <div class="loading-text">Memuat Model 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-gga" data-position="0 10 15" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
+        <div class="dot" slot="hotspot-gg" data-position="0.0 0.2 0.15" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Biofungisida Sawit</span>
-                <div class="text">Proteksi hayati preventif berbahan Trichoderma penahan Ganoderma.</div>
-                <button class="zoom-trigger" onclick="openOfficialWindow('greemig')">VIEW SPEC TABLE</button>
+            <div class="info-card" onclick="event.stopPropagation()">
+                <div class="mini-spec-title">Biofungisida</div>
+                <table class="mini-table">
+                    <tr><td class="lbl">Bahan Aktif:</td><td>Trichoderma sp.</td></tr>
+                    <tr><td class="lbl">Proteksi:</td><td>Ganoderma</td></tr>
+                </table>
+                <button class="zoom-trigger" onclick="openOfficialWindow('greemig')">LIHAT SELENGKAPNYA</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
 <script>
-// DATA SPESIFIKASI RESMI TERINTEGRASI (SUMBER: PPKS / IOPRI / SAWIT LOUNGE)
+// DATA SPESIFIKASI OFFICIAL (SUMBER VALID: PPKS / IOPRI)
 const officialData = {
     kecambah: {
         title: "Kecambah Kelapa Sawit Unggul DxP PPKS",
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Kelompok Varietas</td><td class="param-value">DxP Unggul (Simalungun, Yangambi, Avros, Langkat, PPKS 540)</td></tr>
                         <tr><td class="param-name">Potensi TBS</td><td class="param-value">28 - 34 Ton / Ha / Tahun</td></tr>
@@ -714,9 +694,7 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Rentang Usia</td><td class="param-value">1 - 3 Bulan setelah semai kecambah</td></tr>
                         <tr><td class="param-name">Ukuran Polybag</td><td class="param-value">15 cm x 23 cm (Kategori Polybag Kecil hitam)</td></tr>
@@ -729,13 +707,11 @@ const officialData = {
         `
     },
     bibit8: {
-        title: "Bibit Kelapa Sawit Fase Main Nursery (MN) - Awal",
+        title: "Bibit Kelapa Sawit Fase Main Nursery (MN)",
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Rentang Usia</td><td class="param-value">4 - 8 Bulan (Pasca transplantasi dari Pre-Nursery)</td></tr>
                         <tr><td class="param-name">Ukuran Polybag</td><td class="param-value">40 cm x 50 cm (Kategori Polybag Besar)</td></tr>
@@ -752,9 +728,7 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Rentang Usia Ideal</td><td class="param-value">9 - 12 Bulan (Maksimal toleransi lahan 14 bulan)</td></tr>
                         <tr><td class="param-name">Tinggi Fisik Tanaman</td><td class="param-value">70 - 110 cm terukur presisi</td></tr>
@@ -771,15 +745,12 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Kategori Produk</td><td class="param-value">Pupuk Organik Hayati (Bentuk Padat Paduan Serbuk)</td></tr>
                         <tr><td class="param-name">Formulasi Aktif</td><td class="param-value">Mikroba indigenos kelapa sawit (Bacillus sp., Pseudomonas group)</td></tr>
                         <tr><td class="param-name">Fungsi Utama</td><td class="param-value">Penambat Nitrogen (N) bebas & Pelarut Fosfat (P) terikat tanah</td></tr>
                         <tr><td class="param-name">Keunggulan</td><td class="param-value">Memacu pertumbuhan akar lateral serabut sawit (PGPR alami)</td></tr>
-                        <tr><td class="param-name">Anjuran Dosis</td><td class="param-value">Pembibitan: 10-20g/polybag | Lapangan TBM/TM: 150-250g/pohon</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -790,15 +761,12 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Jenis Komponen</td><td class="param-value">Atraktan Feromon Sintetik Agregat (Sachet semi-permeabel)</td></tr>
                         <tr><td class="param-name">Bahan Aktif Utama</td><td class="param-value">Ethyl 4-methyloctanoate (Kemurnian Standardized IOPRI)</td></tr>
                         <tr><td class="param-name">Target Kendali Hama</td><td class="param-value">Oryctes rhinoceros (Kumbang Tanduk / Srengenge) Dewasa</td></tr>
                         <tr><td class="param-name">Radius Jangkauan</td><td class="param-value">Efektif menarik hama dalam radius 100 - 150 Meter Persegi</td></tr>
-                        <tr><td class="param-name">Masa Umur Aktif</td><td class="param-value">2 - 3 Bulan konstan bertahan di lapangan (Aplikasi Perangkap Ember)</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -809,15 +777,11 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Formulasi Fisik</td><td class="param-value">Cairan Konsentrat Organik (Kombinasi Mikroba & Bio-Stimulan)</td></tr>
                         <tr><td class="param-name">Kandungan Utama</td><td class="param-value">Mikroba pendukung fiksasi hara, Asam Amino, ZPT Alami</td></tr>
                         <tr><td class="param-name">Efisiensi Teknis</td><td class="param-value">Meningkatkan efisiensi serapan pupuk kimia makro hingga 25% - 30%</td></tr>
-                        <tr><td class="param-name">Kegunaan</td><td class="param-value">Mempercepat fase vegetatif pembibitan dan mempertebal imun bibit</td></tr>
-                        <tr><td class="param-name">Aplikasi Kerja</td><td class="param-value">Pengenceran dengan media air bersih, dikocor merata ke piringan sawit</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -828,15 +792,11 @@ const officialData = {
         html: `
             <div class="table-responsive">
                 <table class="official-spec-table">
-                    <thead>
-                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
-                    </thead>
+                    <thead><tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr></thead>
                     <tbody>
                         <tr><td class="param-name">Bentuk Fisik</td><td class="param-value">Butiran Padat Granul (Mudah diaplikasikan ke tanah)</td></tr>
                         <tr><td class="param-name">Bahan Aktif Unggul</td><td class="param-value">Spora & Miselium Trichoderma harzianum Indigenos PPKS</td></tr>
                         <tr><td class="param-name">Sasaran Utama</td><td class="param-value">Pencegahan Penyakit Busuk Pangkal Batang (Ganoderma boninense)</td></tr>
-                        <tr><td class="param-name">Cara Kerja</td><td class="param-value">Hiperparasitisme biologi, kolonisasi ruang akar, & lisis dinding sel jamur</td></tr>
-                        <tr><td class="param-name">Rekomendasi Wajib</td><td class="param-value">Sangat dianjurkan ditaruh di lubang tanam saat Replanting / Main Nursery</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -845,17 +805,12 @@ const officialData = {
 };
 
 let tutorialShown=true;
-
-setTimeout(()=>{
-    if(tutorialShown) hideTutorial();
-},4500);
+setTimeout(()=>{ if(tutorialShown) hideTutorial(); },4500);
 
 function hideTutorial(){
     const tutorial=document.getElementById('tutorial');
     tutorial.style.opacity='0';
-    setTimeout(()=>{
-        tutorial.style.display='none';
-    },500);
+    setTimeout(()=>{ tutorial.style.display='none'; },500);
     tutorialShown=false;
 }
 
@@ -870,7 +825,6 @@ const productTitles=[
     'FERTOMAX',
     'GREEMI G'
 ];
-
 let currentProdIndex=0;
 
 function changeProduct(direction){
@@ -893,7 +847,7 @@ function switchProduct(id, title){
         } else {
             container.classList.remove('active');
             if (viewer) {
-                viewer.removeAttribute('src');
+                viewer.removeAttribute('src'); // Isolasi GPU ram penuh
             }
         }
     });
@@ -917,7 +871,6 @@ function closeAllDots(){
     });
 }
 
-// FUNGSI MEMBUKA TABEL SPESIFIKASI DARI DATA RESMI DICTIONARY
 function openOfficialWindow(key) {
     const data = officialData[key];
     if(!data) return;
@@ -937,7 +890,7 @@ function closeWindow(e){
     if(e && e.target!==document.getElementById('window-overlay') && e.target!==document.querySelector('.close-btn')) return;
     document.getElementById('window-overlay').style.display='none';
     document.querySelectorAll('model-viewer').forEach(model=>{
-        model.classList.remove('blurred');
+        model.xl = model.classList.remove('blurred');
     });
 }
 
@@ -956,9 +909,7 @@ window.addEventListener('keydown',(e)=>{
 });
 
 let touchStartX=0;
-window.addEventListener('touchstart',e=>{
-    touchStartX=e.changedTouches[0].screenX;
-});
+window.addEventListener('touchstart',e=>{ touchStartX=e.changedTouches[0].screenX; });
 window.addEventListener('touchend',e=>{
     const touchEndX=e.changedTouches[0].screenX;
     const diff=touchStartX-touchEndX;
