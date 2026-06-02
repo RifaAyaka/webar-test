@@ -128,10 +128,9 @@ body{
 model-viewer{
     width:100%;
     height:100vh;
-    --progress-bar-color:transparent; /* Sembunyikan default bar atas */
+    --progress-bar-color:transparent;
 }
 
-/* KUSTOM LOADING DI TENGAH */
 .loading-overlay {
     position: absolute;
     inset: 0;
@@ -351,7 +350,7 @@ model-viewer{
     max-height:88vh;
     overflow:hidden;
     border-radius:32px;
-    background:rgba(255,255,255,.93);
+    background:rgba(255,255,255,.95);
     backdrop-filter:blur(25px);
     border:1px solid rgba(255,255,255,.45);
     box-shadow: 0 40px 90px rgba(0,0,0,.35);
@@ -399,12 +398,50 @@ model-viewer{
     border-bottom:2px solid #fbc02d;
 }
 
-.window-text{
-    font-size:16px;
-    font-weight:500;
-    line-height:2;
-    color:#333;
-    text-align:justify;
+/* STYLE TABEL SPESIFIKASI KUSTOM */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 15px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.official-spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+    background: white;
+}
+
+.official-spec-table th, .official-spec-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eef3ed;
+}
+
+.official-spec-table th {
+    background-color: #2e7d32;
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+}
+
+.official-spec-table tr:nth-child(even) {
+    background-color: #f9fbf9;
+}
+
+.official-spec-table td.param-name {
+    font-weight: 700;
+    color: #2e7d32;
+    width: 35%;
+}
+
+.official-spec-table td.param-value {
+    color: #333;
+    font-weight: 500;
 }
 
 .ar-btn{
@@ -439,7 +476,8 @@ model-viewer{
     .dot{ width:30px; height:30px; }
     .orbit-ring{ width:58px; height:58px; }
     .window-content{ padding:24px; }
-    .window-text{ font-size:14px; }
+    .official-spec-table { font-size: 13px; }
+    .official-spec-table th, .official-spec-table td { padding: 10px 12px; }
     .ar-btn{ width:82%; padding:16px; font-size:14px; bottom:18px; }
     .hand{ font-size:58px; }
     .tutorial-text{ font-size:15px; width:80%; }
@@ -494,18 +532,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Genetik Unggul</span>
-                <div class="text">Benih varietas DxP PPKS memiliki laju pertumbuhan optimal dan potensi produksi CPO maksimal.</div>
-                <button class="zoom-trigger" onclick="openWindow('Genetik Unggul','Kecambah unggul Pusat Penelitian Kelapa Sawit (PPKS) telah melalui tahap pemuliaan ketat, tahan terhadap cekaman lingkungan, dan menjanjikan persentase panen yang sangat menguntungkan pekebun.')">VIEW FULL INFO</button>
-            </div>
-        </div>
-        <div class="dot" slot="hotspot-k2" data-position="35 4 -20" onclick="toggleDot(this,event)">
-            <div class="orbit-ring"></div>
-            <div class="dot-center"></div>
-            <div class="info-card">
-                <div class="card-glow"></div>
-                <span class="tag">Sertifikasi Resmi</span>
-                <div class="text">Terjamin keasliannya, bersertifikat resmi, dan lolos uji mutu standar PPKS.</div>
-                <button class="zoom-trigger" onclick="openWindow('Sertifikasi Resmi','Jangan ambil risiko dengan kecambah palsu (ilegal). Kecambah resmi PPKS bersertifikat menjamin kemurnian genetik untuk masa depan investasi kebun Anda.')">VIEW FULL INFO</button>
+                <div class="text">Benih varietas DxP PPKS memiliki potensi produksi CPO maksimal dan bersertifikat.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -524,9 +552,9 @@ model-viewer{
             <div class="dot-center"></div>
             <div class="info-card">
                 <div class="card-glow"></div>
-                <span class="tag">Fase Pre-Nursery</span>
-                <div class="text">Usia 1-3 bulan, difokuskan pada pertumbuhan akar awal dan adaptasi lingkungan.</div>
-                <button class="zoom-trigger" onclick="openWindow('Fase Pre-Nursery','Pada fase pembibitan awal (Pre-Nursery), kecambah memerlukan perawatan intensif, penyiraman teratur, serta naungan pelindung untuk merangsang sistem perakaran.')">VIEW FULL INFO</button>
+                <span class="tag">Pre-Nursery</span>
+                <div class="text">Fase pembibitan awal usia 1-3 bulan dengan perawatan hara yang intensif.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit3')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -546,8 +574,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Main Nursery</span>
-                <div class="text">Tahap pembibitan utama dengan percepatan pertumbuhan vegetatif batang.</div>
-                <button class="zoom-trigger" onclick="openWindow('Main Nursery','Bibit sawit pada usia 4-8 bulan dipindahkan ke polybag besar (Main Nursery) dan mendapatkan paparan sinar matahari penuh guna mengoptimalkan pembentukan daun baru.')">VIEW FULL INFO</button>
+                <div class="text">Tahap pembibitan utama dengan perluasan ruang tumbuh tanaman vegetatif.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit8')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -567,8 +595,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Field Ready</span>
-                <div class="text">Kondisi prima bibit siap dipindahkan secara langsung ke lahan utama.</div>
-                <button class="zoom-trigger" onclick="openWindow('Field Ready','Bibit berusia 9-12 bulan memiliki struktur batang besar dan perakaran solid, sehingga memiliki daya tahan yang sangat tinggi saat proses transplantasi lapangan.')">VIEW FULL INFO</button>
+                <div class="text">Kondisi morfologi bibit prima dan siap dipindahkan langsung ke lahan utama.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bibit12')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -588,8 +616,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Pupuk Hayati</span>
-                <div class="text">Mengandung mikroba menguntungkan pelarut Fosfat dan penambat Nitrogen.</div>
-                <button class="zoom-trigger" onclick="openWindow('Pupuk Hayati PGPR','Bioneensis diperkaya mikroba aktif asli kelapa sawit yang berfungsi memperkaya ketersediaan hara tanah dan merangsang pertumbuhan tanaman secara organik.')">VIEW FULL INFO</button>
+                <div class="text">Inokulan konsorsium mikroba penambat N dan pelarut P pelindung akar sawit.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('bioneensis')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -609,8 +637,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Atraktan Hama</span>
-                <div class="text">Feromon pemikat senyawa aktif untuk menjebak hama kumbang tanduk.</div>
-                <button class="zoom-trigger" onclick="openWindow('Atraktan Hama','Feromonas bekerja efektif menarik kumbang Oryctes rhinoceros dewasa masuk ke perangkap, mengurangi intensitas kerusakan pada pucuk kelapa sawit muda.')">VIEW FULL INFO</button>
+                <div class="text">Senyawa feromon pengendali hama Oryctes rhinoceros (Kumbang Tanduk).</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('feromonas')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -630,8 +658,8 @@ model-viewer{
             <div class="info-card">
                 <div class="card-glow"></div>
                 <span class="tag">Nutrient Booster</span>
-                <div class="text">Formula hayati cair inovatif untuk mengefisienkan serapan pupuk makro.</div>
-                <button class="zoom-trigger" onclick="openWindow('Nutrient Booster','FertoMAX mengoptimalkan penyerapan hara oleh tanaman, memperkuat kekebalan bibit, dan menekan biaya pemakaian pupuk kimia sintetis.')">VIEW FULL INFO</button>
+                <div class="text">Formula booster hayati cair inovatif untuk memacu penyerapan pupuk makro.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('fertomax')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
@@ -650,15 +678,172 @@ model-viewer{
             <div class="dot-center"></div>
             <div class="info-card">
                 <div class="card-glow"></div>
-                <span class="tag">Biofungisida Agen Hayati</span>
-                <div class="text">Proteksi preventif berbasis Trichoderma untuk menahan serangan Ganoderma.</div>
-                <button class="zoom-trigger" onclick="openWindow('Biofungisida Proteksi','Greemi-G diformulasikan khusus sebagai tameng biologi pengendali jamur Ganoderma boninense penyebab penyakit busuk pangkal batang sawit.')">VIEW FULL INFO</button>
+                <span class="tag">Biofungisida Sawit</span>
+                <div class="text">Proteksi hayati preventif berbahan Trichoderma penahan Ganoderma.</div>
+                <button class="zoom-trigger" onclick="openOfficialWindow('greemig')">VIEW SPEC TABLE</button>
             </div>
         </div>
     </model-viewer>
 </div>
 
 <script>
+// DATA SPESIFIKASI RESMI TERINTEGRASI (SUMBER: PPKS / IOPRI / SAWIT LOUNGE)
+const officialData = {
+    kecambah: {
+        title: "Kecambah Kelapa Sawit Unggul DxP PPKS",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Kelompok Varietas</td><td class="param-value">DxP Unggul (Simalungun, Yangambi, Avros, Langkat, PPKS 540)</td></tr>
+                        <tr><td class="param-name">Potensi TBS</td><td class="param-value">28 - 34 Ton / Ha / Tahun</td></tr>
+                        <tr><td class="param-name">Potensi CPO</td><td class="param-value">7.5 - 8.9 Ton / Ha / Tahun</td></tr>
+                        <tr><td class="param-name">Rendemen Minyak (OER)</td><td class="param-value">26.0% - 28.5%</td></tr>
+                        <tr><td class="param-name">Laju Meninggi Batang</td><td class="param-value">Lambat s.d Sedang (50 - 75 cm / Tahun)</td></tr>
+                        <tr><td class="param-name">Sertifikasi Keaslian</td><td class="param-value">Dokumen Resmi Doket & Segel Hologram PPKS Medis</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    bibit3: {
+        title: "Bibit Kelapa Sawit Fase Pre-Nursery (PN)",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Rentang Usia</td><td class="param-value">1 - 3 Bulan setelah semai kecambah</td></tr>
+                        <tr><td class="param-name">Ukuran Polybag</td><td class="param-value">15 cm x 23 cm (Kategori Polybag Kecil hitam)</td></tr>
+                        <tr><td class="param-name">Morfologi Fisik</td><td class="param-value">Memiliki 3 - 4 helai daun berbentuk tombak (Lanceolate)</td></tr>
+                        <tr><td class="param-name">Standar Tinggi</td><td class="param-value">15 - 25 cm terhitung dari leher akar</td></tr>
+                        <tr><td class="param-name">Kebutuhan Air</td><td class="param-value">Intensif, penyiraman merata 2 kali sehari (Pagi & Sore)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    bibit8: {
+        title: "Bibit Kelapa Sawit Fase Main Nursery (MN) - Awal",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Rentang Usia</td><td class="param-value">4 - 8 Bulan (Pasca transplantasi dari Pre-Nursery)</td></tr>
+                        <tr><td class="param-name">Ukuran Polybag</td><td class="param-value">40 cm x 50 cm (Kategori Polybag Besar)</td></tr>
+                        <tr><td class="param-name">Sistem Jarak Letak</td><td class="param-value">Pola Segitiga Sama Sisi (70 cm x 70 cm s.d 90 cm x 90 cm)</td></tr>
+                        <tr><td class="param-name">Kondisi Daun</td><td class="param-value">Daun mulai pecah dan bercabang sempurna (Pinnate Foliage)</td></tr>
+                        <tr><td class="param-name">Manajemen Nutrisi</td><td class="param-value">Pemupukan NPK Padat makro berkala & Aplikasi Makro Tambahan</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    bibit12: {
+        title: "Bibit Kelapa Sawit Fase Siap Tanam (Field Ready)",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Rentang Usia Ideal</td><td class="param-value">9 - 12 Bulan (Maksimal toleransi lahan 14 bulan)</td></tr>
+                        <tr><td class="param-name">Tinggi Fisik Tanaman</td><td class="param-value">70 - 110 cm terukur presisi</td></tr>
+                        <tr><td class="param-name">Diameter Bonggol</td><td class="param-value">&gt; 10 cm (Struktur kokoh, tegak, tidak etiolasi)</td></tr>
+                        <tr><td class="param-name">Jumlah Pelepah</td><td class="param-value">Minimal 18 - 24 Pelepah aktif produktif hijau pekat</td></tr>
+                        <tr><td class="param-name">Rekomendasi Lahan</td><td class="param-value">Siap dipindahkan langsung ke lubang tanam areal perkebunan utama</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    bioneensis: {
+        title: "Bioneensis - Pupuk Hayati Konsorsium PPKS",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Kategori Produk</td><td class="param-value">Pupuk Organik Hayati (Bentuk Padat Paduan Serbuk)</td></tr>
+                        <tr><td class="param-name">Formulasi Aktif</td><td class="param-value">Mikroba indigenos kelapa sawit (Bacillus sp., Pseudomonas group)</td></tr>
+                        <tr><td class="param-name">Fungsi Utama</td><td class="param-value">Penambat Nitrogen (N) bebas & Pelarut Fosfat (P) terikat tanah</td></tr>
+                        <tr><td class="param-name">Keunggulan</td><td class="param-value">Memacu pertumbuhan akar lateral serabut sawit (PGPR alami)</td></tr>
+                        <tr><td class="param-name">Anjuran Dosis</td><td class="param-value">Pembibitan: 10-20g/polybag | Lapangan TBM/TM: 150-250g/pohon</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    feromonas: {
+        title: "Feromonas - Atraktan Kumbang Tanduk IOPRI",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Jenis Komponen</td><td class="param-value">Atraktan Feromon Sintetik Agregat (Sachet semi-permeabel)</td></tr>
+                        <tr><td class="param-name">Bahan Aktif Utama</td><td class="param-value">Ethyl 4-methyloctanoate (Kemurnian Standardized IOPRI)</td></tr>
+                        <tr><td class="param-name">Target Kendali Hama</td><td class="param-value">Oryctes rhinoceros (Kumbang Tanduk / Srengenge) Dewasa</td></tr>
+                        <tr><td class="param-name">Radius Jangkauan</td><td class="param-value">Efektif menarik hama dalam radius 100 - 150 Meter Persegi</td></tr>
+                        <tr><td class="param-name">Masa Umur Aktif</td><td class="param-value">2 - 3 Bulan konstan bertahan di lapangan (Aplikasi Perangkap Ember)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    fertomax: {
+        title: "FertoMAX - Bio-Nutrient Booster Sawit Cair",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Formulasi Fisik</td><td class="param-value">Cairan Konsentrat Organik (Kombinasi Mikroba & Bio-Stimulan)</td></tr>
+                        <tr><td class="param-name">Kandungan Utama</td><td class="param-value">Mikroba pendukung fiksasi hara, Asam Amino, ZPT Alami</td></tr>
+                        <tr><td class="param-name">Efisiensi Teknis</td><td class="param-value">Meningkatkan efisiensi serapan pupuk kimia makro hingga 25% - 30%</td></tr>
+                        <tr><td class="param-name">Kegunaan</td><td class="param-value">Mempercepat fase vegetatif pembibitan dan mempertebal imun bibit</td></tr>
+                        <tr><td class="param-name">Aplikasi Kerja</td><td class="param-value">Pengenceran dengan media air bersih, dikocor merata ke piringan sawit</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    },
+    greemig: {
+        title: "Greemi G - Biofungisida Agen Hayati PPKS",
+        html: `
+            <div class="table-responsive">
+                <table class="official-spec-table">
+                    <thead>
+                        <tr><th>Parameter Teknis</th><th>Detail Spesifikasi Resmi</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="param-name">Bentuk Fisik</td><td class="param-value">Butiran Padat Granul (Mudah diaplikasikan ke tanah)</td></tr>
+                        <tr><td class="param-name">Bahan Aktif Unggul</td><td class="param-value">Spora & Miselium Trichoderma harzianum Indigenos PPKS</td></tr>
+                        <tr><td class="param-name">Sasaran Utama</td><td class="param-value">Pencegahan Penyakit Busuk Pangkal Batang (Ganoderma boninense)</td></tr>
+                        <tr><td class="param-name">Cara Kerja</td><td class="param-value">Hiperparasitisme biologi, kolonisasi ruang akar, & lisis dinding sel jamur</td></tr>
+                        <tr><td class="param-name">Rekomendasi Wajib</td><td class="param-value">Sangat dianjurkan ditaruh di lubang tanam saat Replanting / Main Nursery</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        `
+    }
+};
+
 let tutorialShown=true;
 
 setTimeout(()=>{
@@ -674,17 +859,7 @@ function hideTutorial(){
     tutorialShown=false;
 }
 
-const productIds=[
-    'kecambah',
-    'bibit3',
-    'bibit8',
-    'bibit12',
-    'bioneensis',
-    'feromonas',
-    'fertomax',
-    'greemig'
-];
-
+const productIds=['kecambah','bibit3','bibit8','bibit12','bioneensis','feromonas','fertomax','greemig'];
 const productTitles=[
     'KECAMBAH SAWIT PPKS',
     'BIBIT SAWIT 3 BULAN (PN)',
@@ -707,19 +882,16 @@ function switchProduct(id, title){
     document.getElementById('product-header').innerText = title;
     currentProdIndex = productIds.indexOf(id);
 
-    // SISTEM ISOLASI MEMORI DINAMIS
     document.querySelectorAll('.product-container').forEach(container => {
         const viewer = container.querySelector('model-viewer');
         
         if (container.id === id) {
             container.classList.add('active');
-            // Hanya isi src saat produk dibuka agar mulai mendownload & merender
             if (viewer && !viewer.getAttribute('src')) {
                 viewer.setAttribute('src', viewer.getAttribute('data-src'));
             }
         } else {
             container.classList.remove('active');
-            // Hapus src dari produk lain agar memori GPU/RAM dibersihkan (anti lag)
             if (viewer) {
                 viewer.removeAttribute('src');
             }
@@ -745,14 +917,20 @@ function closeAllDots(){
     });
 }
 
-function openWindow(title,content){
+// FUNGSI MEMBUKA TABEL SPESIFIKASI DARI DATA RESMI DICTIONARY
+function openOfficialWindow(key) {
+    const data = officialData[key];
+    if(!data) return;
+
     const body=document.getElementById('window-body');
     body.innerHTML=`
-        <div class="window-title">${title}</div>
-        <div class="window-text">${content}</div>
+        <div class="window-title">${data.title}</div>
+        <div class="window-text">${data.html}</div>
     `;
     document.getElementById('window-overlay').style.display='flex';
-    document.querySelector('.product-container.active model-viewer').classList.add('blurred');
+    
+    const activeViewer = document.querySelector('.product-container.active model-viewer');
+    if(activeViewer) activeViewer.classList.add('blurred');
 }
 
 function closeWindow(e){
@@ -768,7 +946,6 @@ function activateCurrentAR(){
     if(currentViewer) currentViewer.activateAR();
 }
 
-// Inisialisasi produk pertama saat web dibuka
 window.addEventListener('DOMContentLoaded', () => {
     switchProduct(productIds[0], productTitles[0]);
 });
