@@ -8,1131 +8,761 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:'Montserrat',sans-serif;
-background:#eef3ed;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:'Montserrat',sans-serif;
+    background:#eef3ed;
 }
 
 body{
-background:url('background.png') no-repeat center center fixed;
-background-size:cover;
+    background:url('background.png') no-repeat center center fixed;
+    background-size:cover;
 }
 
 .bg-overlay{
-position:fixed;
-inset:0;
-background:
-radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
-radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 30%);
-pointer-events:none;
-z-index:0;
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 30%);
+    pointer-events:none;
+    z-index:0;
 }
 
 .floating-light{
-position:fixed;
-width:500px;
-height:500px;
-border-radius:50%;
-filter:blur(80px);
-background:rgba(76,175,80,.09);
-z-index:0;
-animation:floatLight 10s ease-in-out infinite;
+    position:fixed;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    filter:blur(80px);
+    background:rgba(76,175,80,.09);
+    z-index:0;
+    animation:floatLight 10s ease-in-out infinite;
 }
 
-.floating-light.one{
-top:-180px;
-left:-120px;
-}
-
-.floating-light.two{
-bottom:-220px;
-right:-120px;
-animation-delay:3s;
-}
+.floating-light.one{ top:-180px; left:-120px; }
+.floating-light.two{ bottom:-220px; right:-120px; animation-delay:3s; }
 
 @keyframes floatLight{
-0%{
-transform:translate(0,0);
-}
-50%{
-transform:translate(40px,30px);
-}
-100%{
-transform:translate(0,0);
-}
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(40px,30px); }
+    100%{ transform:translate(0,0); }
 }
 
 .logo-top-right{
-position:fixed;
-top:18px;
-right:18px;
-z-index:9999;
-transition:.3s;
+    position:fixed;
+    top:18px;
+    right:18px;
+    z-index:9999;
+    transition:.3s;
 }
 
 .logo-top-right:hover{
-transform:scale(1.05);
+    transform:scale(1.05);
 }
 
 .logo-top-right img{
-height:60px;
-filter:drop-shadow(0 8px 20px rgba(0,0,0,.18));
+    height:60px;
+    filter:drop-shadow(0 8px 20px rgba(0,0,0,.18));
 }
 
 #product-header{
-position:fixed;
-top:18px;
-left:50%;
-transform:translateX(-50%);
-z-index:9999;
-
-background:linear-gradient(145deg,#2e7d32,#43a047);
-
-padding:14px 34px;
-
-border-radius:999px;
-
-border:2px solid #fbc02d;
-
-font-size:18px;
-font-weight:900;
-letter-spacing:.5px;
-color:white;
-
-box-shadow:
-0 15px 35px rgba(46,125,50,.35),
-inset 0 1px 2px rgba(255,255,255,.2);
-
-backdrop-filter:blur(18px);
-white-space:nowrap;
+    position:fixed;
+    top:18px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:9999;
+    background:linear-gradient(145deg,#2e7d32,#43a047);
+    padding:14px 34px;
+    border-radius:999px;
+    border:2px solid #fbc02d;
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.5px;
+    color:white;
+    box-shadow: 0 15px 35px rgba(46,125,50,.35), inset 0 1px 2px rgba(255,255,255,.2);
+    backdrop-filter:blur(18px);
+    white-space:nowrap;
 }
 
 .nav-zone{
-position:fixed;
-top:0;
-bottom:0;
-width:18%;
-z-index:999;
-cursor:pointer;
+    position:fixed;
+    top:0;
+    bottom:0;
+    width:18%;
+    z-index:999;
+    cursor:pointer;
 }
 
-#left-zone{
-left:0;
-}
-
-#right-zone{
-right:0;
-}
+#left-zone{ left:0; }
+#right-zone{ right:0; }
 
 .product-container{
-position:absolute;
-inset:0;
-
-opacity:0;
-visibility:hidden;
-pointer-events:none;
-
-transition:opacity .65s ease;
+    position:absolute;
+    inset:0;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity .65s ease;
 }
 
 .product-container.active{
-opacity:1;
-visibility:visible;
-pointer-events:auto;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    z-index:10;
 }
 
 model-viewer{
-width:100%;
-height:100vh;
---progress-bar-color:#2e7d32;
+    width:100%;
+    height:100vh;
+    --progress-bar-color:#2e7d32;
 }
 
 model-viewer::part(default-progress-bar){
-height:6px;
-border-radius:999px;
+    height:6px;
+    border-radius:999px;
 }
 
 #tutorial{
-position:fixed;
-inset:0;
-z-index:999999;
-
-background:rgba(0,0,0,.72);
-
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-
-color:white;
-transition:.5s;
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    background:rgba(0,0,0,.72);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    color:white;
+    transition:.5s;
 }
 
 .hand{
-font-size:70px;
-animation:swipe 2s infinite ease-in-out;
+    font-size:70px;
+    animation:swipe 2s infinite ease-in-out;
 }
 
 @keyframes swipe{
-0%,100%{
-transform:translateX(-50px);
-}
-50%{
-transform:translateX(50px);
-}
+    0%,100%{ transform:translateX(-50px); }
+    50%{ transform:translateX(50px); }
 }
 
 .tutorial-text{
-margin-top:24px;
-text-align:center;
-font-size:18px;
-font-weight:800;
-line-height:1.9;
-letter-spacing:.5px;
+    margin-top:24px;
+    text-align:center;
+    font-size:18px;
+    font-weight:800;
+    line-height:1.9;
+    letter-spacing:.5px;
 }
 
 .dot{
-width:36px;
-height:36px;
-
-border-radius:50%;
-
-background:linear-gradient(145deg,#2e7d32,#43a047);
-
-border:3px solid white;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-cursor:pointer;
-
-position:relative;
-
-box-shadow:
-0 0 25px rgba(46,125,50,.45);
-
-transition:.35s;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#2e7d32,#43a047);
+    border:3px solid white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    position:relative;
+    box-shadow: 0 0 25px rgba(46,125,50,.45);
+    transition:.35s;
 }
 
-.dot:hover{
-transform:scale(1.08);
-}
+.dot:hover{ transform:scale(1.08); }
 
 .dot::before{
-content:'';
-
-position:absolute;
-
-width:100%;
-height:100%;
-
-border-radius:50%;
-
-background:rgba(76,175,80,.35);
-
-animation:pulse 2s infinite;
-
-z-index:-1;
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:rgba(76,175,80,.35);
+    animation:pulse 2s infinite;
+    z-index:-1;
 }
 
 @keyframes pulse{
-0%{
-transform:scale(1);
-opacity:1;
-}
-100%{
-transform:scale(2.3);
-opacity:0;
-}
+    0%{ transform:scale(1); opacity:1; }
+    100%{ transform:scale(2.3); opacity:0; }
 }
 
-.dot.active{
-background:linear-gradient(145deg,#fbc02d,#ffd54f);
-}
+.dot.active{ background:linear-gradient(145deg,#fbc02d,#ffd54f); z-index:999; }
 
 .dot-center{
-width:10px;
-height:10px;
-border-radius:50%;
-background:white;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:white;
 }
 
 .orbit-ring{
-position:absolute;
-width:72px;
-height:72px;
-border-radius:50%;
-border:1.5px dashed rgba(255,255,255,.8);
-animation:orbitRotate 6s linear infinite;
-pointer-events:none;
+    position:absolute;
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    border:1.5px dashed rgba(255,255,255,.8);
+    animation:orbitRotate 6s linear infinite;
+    pointer-events:none;
 }
 
 @keyframes orbitRotate{
-from{
-transform:rotate(0deg);
-}
-to{
-transform:rotate(360deg);
-}
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
 }
 
 .info-card{
-position:absolute;
-
-bottom:60px;
-left:50%;
-
-transform:translateX(-50%) scale(0);
-
-width:300px;
-
-padding:22px;
-
-border-radius:26px;
-
-background:rgba(255,255,255,.84);
-
-backdrop-filter:blur(18px);
-
-border:1px solid rgba(255,255,255,.45);
-
-box-shadow:
-0 25px 55px rgba(0,0,0,.18);
-
-transition:
-transform .45s cubic-bezier(.175,.885,.32,1.275);
-
-pointer-events:none;
-
-overflow:hidden;
+    position:absolute;
+    bottom:60px;
+    left:50%;
+    transform:translateX(-50%) scale(0);
+    width:300px;
+    padding:22px;
+    border-radius:26px;
+    background:rgba(255,255,255,.84);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.45);
+    box-shadow: 0 25px 55px rgba(0,0,0,.18);
+    transition: transform .45s cubic-bezier(.175,.885,.32,1.275);
+    pointer-events:none;
+    overflow:hidden;
+    z-index:1000;
 }
 
 .dot.active .info-card{
-transform:translateX(-50%) scale(1);
-pointer-events:auto;
+    transform:translateX(-50%) scale(1);
+    pointer-events:auto;
 }
 
 .card-glow{
-position:absolute;
-top:-60px;
-right:-40px;
-
-width:120px;
-height:120px;
-
-border-radius:50%;
-
-background:rgba(46,125,50,.12);
-
-filter:blur(24px);
+    position:absolute;
+    top:-60px;
+    right:-40px;
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:rgba(46,125,50,.12);
+    filter:blur(24px);
 }
 
 .tag{
-position:relative;
-
-display:inline-block;
-
-font-size:12px;
-font-weight:900;
-letter-spacing:1px;
-
-text-transform:uppercase;
-
-color:#2e7d32;
-
-padding-bottom:8px;
-margin-bottom:12px;
-
-border-bottom:2px solid #fbc02d;
+    position:relative;
+    display:inline-block;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#2e7d32;
+    padding-bottom:8px;
+    margin-bottom:12px;
+    border-bottom:2px solid #fbc02d;
 }
 
 .text{
-font-size:14px;
-font-weight:600;
-line-height:1.8;
-color:#333;
-text-align:justify;
+    font-size:14px;
+    font-weight:600;
+    line-height:1.8;
+    color:#333;
+    text-align:justify;
 }
 
 .zoom-trigger{
-margin-top:16px;
-width:100%;
-
-padding:14px;
-
-border:none;
-border-radius:14px;
-
-background:linear-gradient(145deg,#2e7d32,#43a047);
-
-font-size:12px;
-font-weight:800;
-letter-spacing:.5px;
-
-color:white;
-
-cursor:pointer;
-
-box-shadow:
-0 10px 20px rgba(46,125,50,.3);
-
-transition:.25s;
+    margin-top:16px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(145deg,#2e7d32,#43a047);
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:white;
+    cursor:pointer;
+    box-shadow: 0 10px 20px rgba(46,125,50,.3);
+    transition:.25s;
 }
 
 .zoom-trigger:hover{
-transform:translateY(-2px);
-box-shadow:
-0 15px 28px rgba(46,125,50,.4);
+    transform:translateY(-2px);
+    box-shadow: 0 15px 28px rgba(46,125,50,.4);
 }
 
 #window-overlay{
-position:fixed;
-inset:0;
-z-index:999999;
-
-display:none;
-align-items:center;
-justify-content:center;
-
-padding:20px;
-
-background:rgba(0,0,0,.45);
-
-backdrop-filter:blur(12px);
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(12px);
 }
 
 .window-box{
-position:relative;
-
-width:100%;
-max-width:700px;
-max-height:88vh;
-
-overflow:hidden;
-
-border-radius:32px;
-
-background:rgba(255,255,255,.93);
-
-backdrop-filter:blur(25px);
-
-border:1px solid rgba(255,255,255,.45);
-
-box-shadow:
-0 40px 90px rgba(0,0,0,.35);
-
-animation:popup .35s ease;
+    position:relative;
+    width:100%;
+    max-width:700px;
+    max-height:88vh;
+    overflow:hidden;
+    border-radius:32px;
+    background:rgba(255,255,255,.93);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.45);
+    box-shadow: 0 40px 90px rgba(0,0,0,.35);
+    animation:popup .35s ease;
 }
 
 @keyframes popup{
-from{
-transform:scale(.82);
-opacity:0;
-}
-to{
-transform:scale(1);
-opacity:1;
-}
+    from{ transform:scale(.82); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
 }
 
 .window-content{
-padding:34px;
-overflow-y:auto;
-max-height:88vh;
+    padding:34px;
+    overflow-y:auto;
+    max-height:88vh;
 }
 
 .close-btn{
-position:absolute;
-top:16px;
-right:16px;
-
-width:44px;
-height:44px;
-
-border:none;
-border-radius:50%;
-
-background:linear-gradient(145deg,#ef5350,#d32f2f);
-
-font-size:18px;
-font-weight:900;
-color:white;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-cursor:pointer;
-
-box-shadow:
-0 10px 18px rgba(211,47,47,.35);
+    position:absolute;
+    top:16px;
+    right:16px;
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:50%;
+    background:linear-gradient(145deg,#ef5350,#d32f2f);
+    font-size:18px;
+    font-weight:900;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow: 0 10px 18px rgba(211,47,47,.35);
 }
 
 .window-title{
-font-size:16px;
-font-weight:900;
-letter-spacing:1px;
-
-text-transform:uppercase;
-
-color:#2e7d32;
-
-padding-bottom:10px;
-margin-bottom:18px;
-
-border-bottom:2px solid #fbc02d;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:#2e7d32;
+    padding-bottom:10px;
+    margin-bottom:18px;
+    border-bottom:2px solid #fbc02d;
 }
 
 .window-text{
-font-size:16px;
-font-weight:500;
-line-height:2;
-color:#333;
-text-align:justify;
+    font-size:16px;
+    font-weight:500;
+    line-height:2;
+    color:#333;
+    text-align:justify;
 }
 
 .ar-btn{
-position:fixed;
-
-left:50%;
-bottom:26px;
-
-transform:translateX(-50%);
-
-z-index:99999;
-
-padding:18px 68px;
-
-border:none;
-border-radius:20px;
-
-background:linear-gradient(145deg,#2e7d32,#43a047);
-
-font-size:15px;
-font-weight:900;
-letter-spacing:.5px;
-
-color:white;
-
-cursor:pointer;
-
-box-shadow:
-0 18px 35px rgba(46,125,50,.35);
-
-transition:.3s;
+    position:fixed;
+    left:50%;
+    bottom:26px;
+    transform:translateX(-50%);
+    z-index:99999;
+    padding:18px 68px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(145deg,#2e7d32,#43a047);
+    font-size:15px;
+    font-weight:900;
+    letter-spacing:.5px;
+    color:white;
+    cursor:pointer;
+    box-shadow: 0 18px 35px rgba(46,125,50,.35);
+    transition:.3s;
 }
 
-.ar-btn:hover{
-transform:translateX(-50%) translateY(-3px);
-}
-
-.blurred{
-filter:blur(8px) brightness(.5);
-}
+.ar-btn:hover{ transform:translateX(-50%) translateY(-3px); }
+.blurred{ filter:blur(8px) brightness(.5); }
 
 @media(max-width:768px){
-
-#product-header{
-width:76%;
-font-size:13px;
-padding:12px 18px;
+    #product-header{ width:76%; font-size:13px; padding:12px 18px; }
+    .logo-top-right img{ height:46px; }
+    .info-card{ width:230px; padding:16px; }
+    .text{ font-size:12px; }
+    .tag{ font-size:10px; }
+    .zoom-trigger{ font-size:10px; padding:12px; }
+    .dot{ width:30px; height:30px; }
+    .orbit-ring{ width:58px; height:58px; }
+    .window-content{ padding:24px; }
+    .window-text{ font-size:14px; }
+    .ar-btn{ width:82%; padding:16px; font-size:14px; bottom:18px; }
+    .hand{ font-size:58px; }
+    .tutorial-text{ font-size:15px; width:80%; }
 }
-
-.logo-top-right img{
-height:46px;
-}
-
-.info-card{
-width:230px;
-padding:16px;
-}
-
-.text{
-font-size:12px;
-}
-
-.tag{
-font-size:10px;
-}
-
-.zoom-trigger{
-font-size:10px;
-padding:12px;
-}
-
-.dot{
-width:30px;
-height:30px;
-}
-
-.orbit-ring{
-width:58px;
-height:58px;
-}
-
-.window-content{
-padding:24px;
-}
-
-.window-text{
-font-size:14px;
-}
-
-.ar-btn{
-width:82%;
-padding:16px;
-font-size:14px;
-bottom:18px;
-}
-
-.hand{
-font-size:58px;
-}
-
-.tutorial-text{
-font-size:15px;
-width:80%;
-}
-
-}
-
 </style>
 </head>
 
 <body onclick="closeAllDots(event)">
 
 <div class="bg-overlay"></div>
-
 <div class="floating-light one"></div>
 <div class="floating-light two"></div>
 
 <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
-<img src="logo-PPKS.png">
+    <img src="logo-PPKS.png">
 </a>
 
-<div id="product-header">
-KECAMBAH SAWIT PPKS
-</div>
+<div id="product-header">KECAMBAH SAWIT PPKS</div>
 
 <div id="left-zone" class="nav-zone" onclick="changeProduct(-1)"></div>
 <div id="right-zone" class="nav-zone" onclick="changeProduct(1)"></div>
 
-<div id="tutorial">
-
-<div class="hand">👆</div>
-
-<div class="tutorial-text">
-CLICK HOTSPOT FOR INFORMATION<br>
-DRAG MODEL FOR 360° VIEW<br>
-TAP LEFT OR RIGHT SIDE TO SWITCH PRODUCT
-</div>
-
+<div id="tutorial" onclick="hideTutorial()">
+    <div class="hand">👆</div>
+    <div class="tutorial-text">
+        CLICK HOTSPOT FOR INFORMATION<br>
+        DRAG MODEL FOR 360° VIEW<br>
+        TAP LEFT OR RIGHT SIDE TO SWITCH PRODUCT
+    </div>
 </div>
 
 <div id="window-overlay" onclick="closeWindow(event)">
-
-<div class="window-box" onclick="event.stopPropagation()">
-
-<button class="close-btn" onclick="closeWindow()">✕</button>
-
-<div class="window-content" id="window-body"></div>
-
+    <div class="window-box" onclick="event.stopPropagation()">
+        <button class="close-btn" onclick="closeWindow()">✕</button>
+        <div class="window-content" id="window-body"></div>
+    </div>
 </div>
 
-</div>
-
-<button class="ar-btn" onclick="activateCurrentAR()">
-OPEN AR CATALOG
-</button>
-
-<!-- ====================================================== -->
-<!-- KECAMBAH -->
-<!-- ====================================================== -->
+<button class="ar-btn" onclick="activateCurrentAR()">OPEN AR CATALOG</button>
 
 <div id="kecambah" class="product-container active">
-
-<model-viewer
-src="kecambah_sawit.glb"
-ar
-ar-modes="webxr scene-viewer quick-look"
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-min-camera-orbit="auto auto 40%"
-max-camera-orbit="auto auto 250%"
-shadow-intensity="2"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-1" data-position="-30 6 25" data-normal="0 0 1" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Genetic Excellence</span>
-<div class="text">Benih unggul hasil pemuliaan PPKS dengan potensi produktivitas tinggi.</div>
-<button class="zoom-trigger" onclick="openWindow('Genetic Excellence','Benih kecambah sawit PPKS memiliki kualitas genetik unggul dan daya adaptasi tinggi.')">VIEW FULL INFO</button>
+    <model-viewer src="kecambah sawit.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-k1" data-position="10 5 10" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Genetik Unggul</span>
+                <div class="text">Benih varietas DxP PPKS memiliki laju pertumbuhan optimal dan potensi produksi CPO maksimal.</div>
+                <button class="zoom-trigger" onclick="openWindow('Genetik Unggul','Kecambah unggul Pusat Penelitian Kelapa Sawit (PPKS) telah melalui tahap pemuliaan ketat, tahan terhadap cekaman lingkungan, dan menjanjikan persentase panen yang sangat menguntungkan pekebun.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-k2" data-position="-10 8 -10" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Sertifikasi Resmi</span>
+                <div class="text">Terjamin keasliannya, bersertifikat, dan lolos seleksi kualitas.</div>
+                <button class="zoom-trigger" onclick="openWindow('Sertifikasi Resmi','Jangan ambil risiko dengan kecambah palsu (ilegal). Kecambah PPKS bersertifikat terjamin murni genetiknya untuk masa depan kebun Anda.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-<div class="dot" slot="hotspot-2" data-position="35 4 -20" data-normal="0 0 1" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Adaptive Growth</span>
-<div class="text">Memiliki pertumbuhan stabil dengan sistem akar kuat.</div>
-<button class="zoom-trigger" onclick="openWindow('Adaptive Growth','Kecambah memiliki kemampuan adaptasi tinggi pada fase awal pertumbuhan.')">VIEW FULL INFO</button>
-</div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- BIBIT 3 BULAN -->
-<!-- ====================================================== -->
 
 <div id="bibit3" class="product-container">
-
-<model-viewer
-src="bibitsawit3bulan.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-pn-1" data-position="0 15 0" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Early Nursery</span>
-<div class="text">Tahap awal pembentukan akar dan daun.</div>
-<button class="zoom-trigger" onclick="openWindow('Early Nursery','Fase awal pembibitan membutuhkan kelembapan stabil.')">VIEW FULL INFO</button>
+    <model-viewer src="bibitsawit3bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-b3a" data-position="0 15 0" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Fase Pre-Nursery</span>
+                <div class="text">Usia 1-3 bulan, difokuskan pada pembentukan jaringan akar awal di bawah naungan.</div>
+                <button class="zoom-trigger" onclick="openWindow('Fase Pre-Nursery','Pada fase ini (Pre-Nursery), bibit sawit membutuhkan penyiraman teratur dan naungan untuk menghindari paparan panas ekstrem sambil merangsang perakaran di baby bag.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-b3b" data-position="5 10 5" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Daun Lanset</span>
+                <div class="text">Morfologi daun masih berbentuk memanjang secara utuh.</div>
+                <button class="zoom-trigger" onclick="openWindow('Daun Lanset','Karakter fisik bibit usia 3 bulan ditandai dengan helaian daun utuh (lanset). Pemupukan daun sangat disarankan pada periode emas pertumbuhan ini.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- BIBIT 4-8 BULAN -->
-<!-- ====================================================== -->
 
 <div id="bibit8" class="product-container">
-
-<model-viewer
-src="bibitsawit4-8bulan.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-mn-1" data-position="0 30 0" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Main Nursery</span>
-<div class="text">Pertumbuhan vegetatif aktif dengan struktur daun kompleks.</div>
-<button class="zoom-trigger" onclick="openWindow('Main Nursery','Tahap percepatan pertumbuhan vegetatif.')">VIEW FULL INFO</button>
+    <model-viewer src="bibitsawit4-8bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-b8a" data-position="0 30 0" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Main Nursery</span>
+                <div class="text">Transisi ke polybag besar tanpa naungan (open field).</div>
+                <button class="zoom-trigger" onclick="openWindow('Main Nursery','Bibit yang memasuki usia 4-8 bulan ditempatkan di Main Nursery dengan asupan cahaya matahari penuh untuk mempercepat pertumbuhan batang dan tunas baru.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-b8b" data-position="-10 15 10" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Morfologi Pinnate</span>
+                <div class="text">Daun mulai terbelah / menyirip (pinnate).</div>
+                <button class="zoom-trigger" onclick="openWindow('Morfologi Pinnate','Ciri khas bibit unggul di usia ini adalah daun lanset yang berubah menjadi pinnate (menyirip). Bonggol bawah pun mulai menunjukkan tanda pelebaran.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- BIBIT 9-12 BULAN -->
-<!-- ====================================================== -->
 
 <div id="bibit12" class="product-container">
-
-<model-viewer
-src="bibitsawit9-12bulan.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-b12-1" data-position="0 35 0" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Field Ready</span>
-<div class="text">Bibit siap ditanam pada lahan utama.</div>
-<button class="zoom-trigger" onclick="openWindow('Field Ready','Bibit memiliki kesiapan tinggi untuk penanaman.')">VIEW FULL INFO</button>
+    <model-viewer src="bibitsawit9-12bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-b12a" data-position="0 35 0" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Field Ready</span>
+                <div class="text">Bibit memiliki kesiapan prima untuk proses transplanting lapangan.</div>
+                <button class="zoom-trigger" onclick="openWindow('Field Ready','Kondisi perakaran kokoh dan pangkal batang membesar. Tingkat ketahanan bibit di usia 9-12 bulan sangat baik terhadap risiko perpindahan ke lahan sawit utama.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-b12b" data-position="15 20 -5" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Seleksi Akhir</span>
+                <div class="text">Telah bebas dari kelainan genetik melalui culling (seleksi) PPKS.</div>
+                <button class="zoom-trigger" onclick="openWindow('Seleksi Akhir','Hanya bibit sehat dan normal yang akan direkomendasikan. Bibit runut, kerdil, atau berpenyakit telah dipilah secara profesional oleh tim PPKS.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- BIONEENSIS -->
-<!-- ====================================================== -->
 
 <div id="bioneensis" class="product-container">
-
-<model-viewer
-src="bioneensis.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-bio-1" data-position="0 10 15" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Bio Fertilizer</span>
-<div class="text">Pupuk hayati ramah lingkungan.</div>
-<button class="zoom-trigger" onclick="openWindow('Bio Fertilizer','Meningkatkan kualitas tanah dan nutrisi tanaman.')">VIEW FULL INFO</button>
+    <model-viewer src="bioneensis.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-bioa" data-position="0 10 15" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Pupuk Hayati PGPR</span>
+                <div class="text">Mengandung bakteri penambat Nitrogen dan pelarut Fosfat alami.</div>
+                <button class="zoom-trigger" onclick="openWindow('Pupuk Hayati PGPR','Bioneensis berfungsi memacu tumbuh kembang tanaman berkat kandungan bakteri Plant Growth Promoting Rhizobacteria (PGPR) yang memperkaya nutrisi tanah secara organik.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-biob" data-position="-5 25 5" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Lestari & Organik</span>
+                <div class="text">Berbahan dasar limbah organik (sawit/tebu) yang aman bagi lingkungan.</div>
+                <button class="zoom-trigger" onclick="openWindow('Lestari & Organik','Sangat mendukung konsep perkebunan berkelanjutan. Menjaga struktur biologi tanah jangka panjang tanpa meninggalkan residu kimia berbahaya.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- FEROMONAS -->
-<!-- ====================================================== -->
 
 <div id="feromonas" class="product-container">
-
-<model-viewer
-src="Feromonas.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-fer-1" data-position="0 10 10" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Pest Monitoring</span>
-<div class="text">Monitoring dan pengendalian hama modern.</div>
-<button class="zoom-trigger" onclick="openWindow('Pest Monitoring','Membantu mendeteksi keberadaan hama lebih awal.')">VIEW FULL INFO</button>
+    <model-viewer src="Feromonas.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-fera" data-position="0 5 10" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Atraktan Hama</span>
+                <div class="text">Feromon sintetis andalan mengendalikan kumbang tanduk (Oryctes rhinoceros).</div>
+                <button class="zoom-trigger" onclick="openWindow('Atraktan Hama','Kumbang tanduk adalah hama perusak pucuk sawit. Feromonas dirancang khusus untuk memikat populasi kumbang dewasa ke dalam perangkap yang disediakan.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-ferb" data-position="10 10 0" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Early Warning</span>
+                <div class="text">Mendeteksi dini potensi lonjakan hama di area replanting.</div>
+                <button class="zoom-trigger" onclick="openWindow('Early Warning','Selain mengurangi hama, alat ini juga berfungsi sebagai sistem peringatan awal (monitoring) tingkat populasi hama sebelum terlambat merusak seluruh kebun.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- FERTOMAX -->
-<!-- ====================================================== -->
 
 <div id="fertomax" class="product-container">
-
-<model-viewer
-src="FertoMax.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-fm-1" data-position="0 8 12" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Nutrient Booster</span>
-<div class="text">Formula nutrisi untuk meningkatkan pertumbuhan.</div>
-<button class="zoom-trigger" onclick="openWindow('Nutrient Booster','Membantu efisiensi penyerapan unsur hara.')">VIEW FULL INFO</button>
+    <model-viewer src="FertoMax.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-fma" data-position="0 8 12" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Pupuk Hayati Cair</span>
+                <div class="text">Formula nutrisi inovatif PPKS yang mengefisienkan serapan NPK.</div>
+                <button class="zoom-trigger" onclick="openWindow('Pupuk Hayati Cair','FertoMAX hadir dalam wujud pupuk hayati cair yang praktis. Mampu mengurangi dependensi penggunaan pupuk anorganik sehingga lebih efisien di sisi biaya dan hasil.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-fmb" data-position="-8 15 0" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Kesehatan Tanah</span>
+                <div class="text">Bekerja dari akarnya untuk memulihkan kesuburan mikroba lahan sawit.</div>
+                <button class="zoom-trigger" onclick="openWindow('Kesehatan Tanah','Penggunaan jangka panjang FertoMAX merevitalisasi sifat fisik dan biologi tanah yang tadinya rusak akibat paparan pupuk kimia secara beruntun.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
-</div>
-
-</model-viewer>
-
-</div>
-
-<!-- ====================================================== -->
-<!-- GREEMI G -->
-<!-- ====================================================== -->
 
 <div id="greemig" class="product-container">
-
-<model-viewer
-src="Greemi G.glb"
-ar
-camera-controls
-auto-rotate
-rotation-per-second="10deg"
-interaction-prompt="none"
-field-of-view="28deg"
-camera-orbit="0deg 75deg auto"
-environment-image="neutral"
-onclick="hideTutorial()">
-
-<div class="dot" slot="hotspot-gg-1" data-position="0 10 15" onclick="toggleDot(this,event)">
-<div class="orbit-ring"></div>
-<div class="dot-center"></div>
-<div class="info-card">
-<div class="card-glow"></div>
-<span class="tag">Premium Fertilizer</span>
-<div class="text">Pupuk inovatif dengan formula modern.</div>
-<button class="zoom-trigger" onclick="openWindow('Premium Fertilizer','Dirancang untuk mendukung pertumbuhan maksimal.')">VIEW FULL INFO</button>
-</div>
-</div>
-
-</model-viewer>
-
+    <model-viewer src="Greemi G.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="10deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
+        <div class="dot" slot="hotspot-gga" data-position="0 10 15" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Biofungisida Canggih</span>
+                <div class="text">Pertahanan terbaik PPKS berbasis Trichoderma untuk melawan Ganoderma.</div>
+                <button class="zoom-trigger" onclick="openWindow('Biofungisida Canggih','Greemi-G diciptakan khusus untuk meredam jamur mematikan Ganoderma boninense (busuk pangkal batang). Sangat krusial terutama saat siklus replanting kelapa sawit.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+        <div class="dot" slot="hotspot-ggb" data-position="8 20 5" onclick="toggleDot(this,event)">
+            <div class="orbit-ring"></div>
+            <div class="dot-center"></div>
+            <div class="info-card">
+                <div class="card-glow"></div>
+                <span class="tag">Enzim Kitinase</span>
+                <div class="text">Mendegradasi patogen jamur berbahaya di dalam tanah.</div>
+                <button class="zoom-trigger" onclick="openWindow('Enzim Kitinase','Bekerja sebagai agen hayati (antagonis), di mana Greemi-G mengeluarkan enzim yang menghancurkan struktur dinding sel patogen, tanpa bikin lahan kebal zat kimia.')">VIEW FULL INFO</button>
+            </div>
+        </div>
+    </model-viewer>
 </div>
 
 <script>
-
 let tutorialShown=true;
 
 setTimeout(()=>{
-if(tutorialShown){
-hideTutorial();
-}
+    if(tutorialShown) hideTutorial();
 },4500);
 
 function hideTutorial(){
-
-const tutorial=document.getElementById('tutorial');
-
-tutorial.style.opacity='0';
-
-setTimeout(()=>{
-tutorial.style.display='none';
-},500);
-
-tutorialShown=false;
-
+    const tutorial=document.getElementById('tutorial');
+    tutorial.style.opacity='0';
+    setTimeout(()=>{
+        tutorial.style.display='none';
+    },500);
+    tutorialShown=false;
 }
 
 const productIds=[
-'kecambah',
-'bibit3',
-'bibit8',
-'bibit12',
-'bioneensis',
-'feromonas',
-'fertomax',
-'greemig'
+    'kecambah',
+    'bibit3',
+    'bibit8',
+    'bibit12',
+    'bioneensis',
+    'feromonas',
+    'fertomax',
+    'greemig'
 ];
 
 const productTitles=[
-'KECAMBAH SAWIT PPKS',
-'BIBIT SAWIT 3 BULAN (PN)',
-'BIBIT SAWIT 4-8 BULAN (MN)',
-'BIBIT SAWIT 9-12 BULAN',
-'BIONEENSIS',
-'FEROMONAS',
-'FERTOMAX',
-'GREEMI G'
+    'KECAMBAH SAWIT PPKS',
+    'BIBIT SAWIT 3 BULAN (PN)',
+    'BIBIT SAWIT 4-8 BULAN (MN)',
+    'BIBIT SAWIT 9-12 BULAN',
+    'BIONEENSIS',
+    'FEROMONAS',
+    'FERTOMAX',
+    'GREEMI G'
 ];
 
 let currentProdIndex=0;
 
 function changeProduct(direction){
-
-currentProdIndex=
-(currentProdIndex+direction+productIds.length)
-%productIds.length;
-
-switchProduct(
-productIds[currentProdIndex],
-productTitles[currentProdIndex]
-);
-
+    currentProdIndex = (currentProdIndex + direction + productIds.length) % productIds.length;
+    switchProduct(productIds[currentProdIndex], productTitles[currentProdIndex]);
 }
 
 function switchProduct(id,title){
+    document.getElementById('product-header').innerText=title;
+    currentProdIndex=productIds.indexOf(id);
 
-document.getElementById('product-header').innerText=title;
-
-currentProdIndex=productIds.indexOf(id);
-
-document.querySelectorAll('.product-container')
-.forEach(container=>{
-container.classList.remove('active');
-});
-
-document.getElementById(id)
-.classList.add('active');
-
-closeAllDots();
-closeWindow();
-hideTutorial();
-
+    document.querySelectorAll('.product-container').forEach(container=>{
+        container.classList.remove('active');
+    });
+    
+    document.getElementById(id).classList.add('active');
+    
+    closeAllDots();
+    closeWindow();
+    hideTutorial();
 }
 
 function toggleDot(el,e){
-
-e.stopPropagation();
-
-hideTutorial();
-
-const active=el.classList.contains('active');
-
-closeAllDots();
-
-if(!active){
-el.classList.add('active');
-}
-
+    e.stopPropagation();
+    hideTutorial();
+    const active=el.classList.contains('active');
+    closeAllDots();
+    if(!active) el.classList.add('active');
 }
 
 function closeAllDots(){
-
-document.querySelectorAll('.dot')
-.forEach(dot=>{
-dot.classList.remove('active');
-});
-
+    document.querySelectorAll('.dot').forEach(dot=>{
+        dot.classList.remove('active');
+    });
 }
 
 function openWindow(title,content){
-
-const body=document.getElementById('window-body');
-
-body.innerHTML=`
-
-<div class="window-title">
-${title}
-</div>
-
-<div class="window-text">
-${content}
-</div>
-
-`;
-
-document.getElementById('window-overlay')
-.style.display='flex';
-
-document.querySelector('.product-container.active model-viewer')
-.classList.add('blurred');
-
+    const body=document.getElementById('window-body');
+    body.innerHTML=`
+        <div class="window-title">${title}</div>
+        <div class="window-text">${content}</div>
+    `;
+    document.getElementById('window-overlay').style.display='flex';
+    document.querySelector('.product-container.active model-viewer').classList.add('blurred');
 }
 
 function closeWindow(e){
-
-if(
-e &&
-e.target!==document.getElementById('window-overlay') &&
-e.target!==document.querySelector('.close-btn')
-)return;
-
-document.getElementById('window-overlay')
-.style.display='none';
-
-document.querySelectorAll('model-viewer')
-.forEach(model=>{
-model.classList.remove('blurred');
-});
-
+    if(e && e.target!==document.getElementById('window-overlay') && e.target!==document.querySelector('.close-btn')) return;
+    document.getElementById('window-overlay').style.display='none';
+    document.querySelectorAll('model-viewer').forEach(model=>{
+        model.classList.remove('blurred');
+    });
 }
 
 function activateCurrentAR(){
-
-const currentViewer=
-document.querySelector('.product-container.active model-viewer');
-
-currentViewer.activateAR();
-
+    const currentViewer=document.querySelector('.product-container.active model-viewer');
+    currentViewer.activateAR();
 }
 
 window.addEventListener('keydown',(e)=>{
-
-if(e.key==='ArrowRight'){
-changeProduct(1);
-}
-
-if(e.key==='ArrowLeft'){
-changeProduct(-1);
-}
-
+    if(e.key==='ArrowRight') changeProduct(1);
+    if(e.key==='ArrowLeft') changeProduct(-1);
 });
 
 let touchStartX=0;
-
 window.addEventListener('touchstart',e=>{
-touchStartX=e.changedTouches[0].screenX;
+    touchStartX=e.changedTouches[0].screenX;
 });
-
 window.addEventListener('touchend',e=>{
-
-const touchEndX=e.changedTouches[0].screenX;
-
-const diff=touchStartX-touchEndX;
-
-if(Math.abs(diff)>80){
-
-if(diff>0){
-changeProduct(1);
-}else{
-changeProduct(-1);
-}
-
-}
-
+    const touchEndX=e.changedTouches[0].screenX;
+    const diff=touchStartX-touchEndX;
+    if(Math.abs(diff)>80){
+        if(diff>0) changeProduct(1);
+        else changeProduct(-1);
+    }
 });
-
 </script>
 
 </body>
