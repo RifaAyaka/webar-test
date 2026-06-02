@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 
-<!-- Model-Viewer Resmi Google -->
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -467,9 +466,6 @@ model-viewer{
 
 <button class="ar-btn" onclick="activateCurrentAR()">OPEN AR CATALOG</button>
 
-<!-- ====================================================== -->
-<!-- 1. KECAMBAH SAWIT -->
-<!-- ====================================================== -->
 <div id="kecambah" class="product-container active">
     <model-viewer data-src="kecambah_sawit.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -478,8 +474,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <!-- Satellite 1: Orbit Kiri Depan -->
-        <div class="dot" slot="hotspot-k1" data-position="-0.25 0.15 0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-k1" data-position="-1.0 0.1 0.3" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Potensi Hasil TBS</div>
@@ -491,8 +486,7 @@ model-viewer{
             </div>
         </div>
 
-        <!-- Satellite 2: Orbit Kanan Depan -->
-        <div class="dot" slot="hotspot-k2" data-position="0.25 0.22 0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-k2" data-position="1.0 0.1 0.3" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Rendemen CPO</div>
@@ -504,8 +498,7 @@ model-viewer{
             </div>
         </div>
 
-        <!-- Satellite 3: Orbit Atas Belakang -->
-        <div class="dot" slot="hotspot-k3" data-position="0.0 0.35 -0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-k3" data-position="0.0 0.1 -1.0" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Sertifikasi Benih</div>
@@ -519,9 +512,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 2. BIBIT 3 BULAN -->
-<!-- ====================================================== -->
 <div id="bibit3" class="product-container">
     <model-viewer data-src="bibitsawit3bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -530,7 +520,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b3-1" data-position="-0.28 0.25 0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b3-1" data-position="-1.5 0.15 0.6" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Fase Pembibitan</div>
@@ -542,7 +532,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b3-2" data-position="0.28 0.35 0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b3-2" data-position="1.5 0.15 0.6" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Wadah Kantong</div>
@@ -554,7 +544,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b3-3" data-position="0.0 0.5 -0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b3-3" data-position="0.0 0.15 -1.5" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Ukuran Fisik</div>
@@ -568,9 +558,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 3. BIBIT 4-8 BULAN -->
-<!-- ====================================================== -->
 <div id="bibit8" class="product-container">
     <model-viewer data-src="bibitsawit4-8bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -579,7 +566,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b8-1" data-position="-0.35 0.4 0.3" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b8-1" data-position="-2.2 0.3 0.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Fase Pembibitan</div>
@@ -591,7 +578,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b8-2" data-position="0.35 0.5 0.3" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b8-2" data-position="2.2 0.3 0.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Tata Ruang Lahan</div>
@@ -603,7 +590,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b8-3" data-position="0.0 0.7 -0.25" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b8-3" data-position="0.0 0.3 -2.2" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Sistem Penampung</div>
@@ -617,9 +604,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 4. BIBIT 9-12 BULAN -->
-<!-- ====================================================== -->
 <div id="bibit12" class="product-container">
     <model-viewer data-src="bibitsawit9-12bulan.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -628,7 +612,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-b12-1" data-position="-0.4 0.5 0.35" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b12-1" data-position="-2.8 0.45 1.0" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Kesiapan Tanam</div>
@@ -640,7 +624,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b12-2" data-position="0.4 0.7 0.35" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b12-2" data-position="2.8 0.45 1.0" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Dimensi Batang</div>
@@ -652,7 +636,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-b12-3" data-position="0.0 1.0 -0.3" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-b12-3" data-position="0.0 0.45 -2.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Arsitektur Pelepah</div>
@@ -666,9 +650,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 5. BIONEENSIS -->
-<!-- ====================================================== -->
 <div id="bioneensis" class="product-container">
     <model-viewer data-src="bioneensis.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -677,7 +658,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-bio1" data-position="-0.32 0.3 0.25" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-bio1" data-position="-1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Formulasi Form</div>
@@ -689,7 +670,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-bio2" data-position="0.32 0.45 0.25" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-bio2" data-position="1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Konsorsium Mikroba</div>
@@ -701,7 +682,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-bio3" data-position="0.0 0.65 -0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-bio3" data-position="0.0 0.15 -1.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Fungsi Utama</div>
@@ -715,9 +696,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 6. FEROMONAS -->
-<!-- ====================================================== -->
 <div id="feromonas" class="product-container">
     <model-viewer data-src="Feromonas.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -726,7 +704,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-fer1" data-position="-0.26 0.22 0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fer1" data-position="-1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Target Hama</div>
@@ -738,7 +716,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-fer2" data-position="0.26 0.35 0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fer2" data-position="1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Bahan Aktif</div>
@@ -750,7 +728,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-fer3" data-position="0.0 0.5 -0.15" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fer3" data-position="0.0 0.15 -1.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Daya Jangkau</div>
@@ -764,9 +742,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 7. FERTOMAX -->
-<!-- ====================================================== -->
 <div id="fertomax" class="product-container">
     <model-viewer data-src="FertoMax.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -775,7 +750,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-fm1" data-position="-0.25 0.25 0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fm1" data-position="-1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Bentuk Formulasi</div>
@@ -787,7 +762,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-fm2" data-position="0.25 0.4 0.2" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fm2" data-position="1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Bio-Stimulan</div>
@@ -799,7 +774,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-fm3" data-position="0.0 0.55 -0.18" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-fm3" data-position="0.0 0.15 -1.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Efisiensi Makro</div>
@@ -813,9 +788,6 @@ model-viewer{
     </model-viewer>
 </div>
 
-<!-- ====================================================== -->
-<!-- 8. GREEMI G -->
-<!-- ====================================================== -->
 <div id="greemig" class="product-container">
     <model-viewer data-src="Greemi G.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate rotation-per-second="8deg" interaction-prompt="none" field-of-view="28deg" camera-orbit="0deg 75deg auto" environment-image="neutral" onclick="hideTutorial()">
         
@@ -824,7 +796,7 @@ model-viewer{
             <div class="loading-text">Memuat Ragam 3D...</div>
         </div>
 
-        <div class="dot" slot="hotspot-gg1" data-position="-0.32 0.3 0.25" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-gg1" data-position="-1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Jenis Agens</div>
@@ -836,7 +808,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-gg2" data-position="0.32 0.45 0.25" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-gg2" data-position="1.8 0.15 0.75" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Bahan Aktif Resmi</div>
@@ -848,7 +820,7 @@ model-viewer{
             </div>
         </div>
 
-        <div class="dot" slot="hotspot-gg3" data-position="0.0 0.65 -0.22" onclick="toggleDot(this,event)">
+        <div class="dot" slot="hotspot-gg3" data-position="0.0 0.15 -1.8" onclick="toggleDot(this,event)">
             <div class="dot-center"></div>
             <div class="info-card" onclick="event.stopPropagation()">
                 <div class="mini-spec-title">Sasaran Proteksi</div>
