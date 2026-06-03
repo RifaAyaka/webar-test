@@ -521,7 +521,7 @@ model-viewer{
 
 <script>
 // ===================================================
-// DATA PRODUK (KECAMBAH MENGGUNAKAN UNDERSCORE '_')
+// DATA PRODUK 
 // ===================================================
 const productsData = [
     {
@@ -568,10 +568,11 @@ const productsData = [
         id: 'bioneensis',
         name: 'BIONEENSIS (PUPUK HAYATI)',
         src: 'bioneensis.glb',
+        // DIPERLEBAR DAN DINAIKKAN AGAR MELAYANG LUAS DI ATAS BOTOL/KARUNG
         hotspots: [
-            { pos: '-0.9 0.7 0.37', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
-            { pos: '0.9 0.7 0.37', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
-            { pos: '0.0 0.7 -0.9', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
+            { pos: '-1.5 1.3 0.5', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
+            { pos: '1.5 1.3 0.5', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
+            { pos: '0.0 1.3 -1.5', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
         ]
     },
     {
@@ -598,10 +599,11 @@ const productsData = [
         id: 'greemig',
         name: 'GREEMI-G (TRICHODERMA)',
         src: 'Greemi G.glb',
+        // DIPERLEBAR DAN DINAIKKAN AGAR MELAYANG LUAS DI ATAS KARUNG
         hotspots: [
-            { pos: '-0.9 0.7 0.37', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
-            { pos: '0.9 0.7 0.37', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
-            { pos: '0.0 0.7 -0.9', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
+            { pos: '-1.5 1.3 0.5', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
+            { pos: '1.5 1.3 0.5', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
+            { pos: '0.0 1.3 -1.5', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
         ]
     }
 ];
@@ -677,7 +679,7 @@ const specDatabase = {
             { k: "Target Hama", v: "Oryctes rhinoceros (Kumbang Tanduk)" },
             { k: "Sistem Kerja", v: "Attractant penciuman jarak jauh (Mass Trapping)" },
             { k: "Bentuk Kemasan", v: "Sachet membran pelepasan lambat (Slow release)" },
-            { k: "Daya Tahan Pikat", v: "2 hingga 3 month terpasang di lapangan" },
+            { k: "Daya Tahan Pikat", v: "2 hingga 3 bulan terpasang di lapangan" },
             { k: "Rasio Pasang (Kerapatan)", v: "1 perangkap (trap) untuk luas 2 Hektar" },
             { k: "Dampak Lingkungan", v: "Sangat ramah lingkungan (Non-toksik kimiawi)" }
         ]
@@ -702,7 +704,7 @@ const specDatabase = {
             { k: "Target Patogen", v: "Ganoderma boninense (Busuk Pangkal Batang)" },
             { k: "Media Pembawa (Carrier)", v: "Kompos serbuk organik kualitas tinggi" },
             { k: "Aplikasi Bibitan", v: "Campurkan ke lubang tanam atau media polybag" },
-            { k: "Aplikasi Lahan", v: "Tabur di piringan/lubang tanam (Pre-emptive)" },
+            { k: "Aplikasi Lapangan", v: "Tabur di piringan/lubang tanam (Pre-emptive)" },
             { k: "Efek Tambahan", v: "Memperbaiki struktur biologi tanah jangka panjang" }
         ]
     }
@@ -715,12 +717,10 @@ const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
-// AMANKAN MONITOR LOADING (Wajib Mulai Dari 0%)
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
     let percent = Math.round(progress * 100);
     
-    // Proteksi ekstra agar nilai di bawah 0 atau tidak valid tidak merusak UI
     if (isNaN(percent) || percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     
@@ -736,11 +736,9 @@ mainViewer.addEventListener('progress', (event) => {
     }
 });
 
-// ANTISIPASI GAGAL LOAD AGAR TIDAK FREEZE LAYAR
 mainViewer.addEventListener('error', (err) => {
     console.error("Gagal memuat 3D Model:", err);
     progressPct.innerText = "Gagal memuat aset!";
-    // Tutup loader perlahan agar user tetap bisa navigasi ganti produk lain
     setTimeout(() => {
         customLoader.style.opacity = '0';
         setTimeout(() => customLoader.style.display = 'none', 400);
@@ -751,23 +749,19 @@ function loadProduct(index) {
     const data = productsData[index];
     document.getElementById('product-header').innerText = data.name;
     
-    // Lewati render JS dinamis pada ketukan pertama karena Kecambah sudah terpasang di HTML
     if (!isFirstLoad) {
-        // RESET LOADING KE 0% INSTAN TANPA ANIMASI MUNDUR
         progressFill.style.transition = 'none';
         progressFill.style.width = '0%';
         progressPct.innerText = '0%';
         customLoader.style.display = 'flex';
         customLoader.style.opacity = '1';
         
-        // Jeda mikro agar browser merender kondisi 0% terlebih dahulu
         setTimeout(() => {
-            progressFill.style.transition = 'width 0.2s linear'; // Aktifkan kembali animasi maju
+            progressFill.style.transition = 'width 0.2s linear'; 
             
             mainViewer.src = data.src;
             mainViewer.cameraOrbit = "0deg 75deg auto"; 
             
-            // Render Hotspots Satelit Baru
             mainViewer.innerHTML = '';
             data.hotspots.forEach((hs, i) => {
                 const dot = document.createElement('div');
@@ -868,7 +862,6 @@ window.addEventListener('DOMContentLoaded', () => {
     isFirstLoad = false;
 });
 
-// Kontrol Keyboard & Navigasi Gesture Swiping
 window.addEventListener('keydown',(e)=>{
     if(e.key==='ArrowRight') changeProduct(1);
     if(e.key==='ArrowLeft') changeProduct(-1);
