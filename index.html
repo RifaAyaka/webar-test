@@ -23,43 +23,14 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:'Montserrat',sans-serif;
-    background:#eef3ed;
+    /* UBAH KE PUTIH POLOS */
+    background: #ffffff; 
 }
 
-body{
-    background:url('background.png') no-repeat center center fixed;
-    background-size:cover;
-}
+/* bg-overlay dihapus atau diset agar tidak menimpa warna putih */
+.bg-overlay{ display: none; }
 
-.bg-overlay{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
-    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 30%);
-    pointer-events:none;
-    z-index:0;
-}
-
-.floating-light{
-    position:fixed;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    filter:blur(80px);
-    background:rgba(76,175,80,.09);
-    z-index:0;
-    animation:floatLight 10s ease-in-out infinite;
-}
-
-.floating-light.one{ top:-180px; left:-120px; }
-.floating-light.two{ bottom:-220px; right:-120px; animation-delay:3s; }
-
-@keyframes floatLight{
-    0%{ transform:translate(0,0); }
-    50%{ transform:translate(40px,30px); }
-    100%{ transform:translate(0,0); }
-}
+.floating-light{ display: none; }
 
 .logo-top-right{
     position:fixed;
@@ -111,13 +82,14 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
+    /* MENGATUR BACKGROUND MODEL VIEWER JADI PUTIH */
+    background-color: #ffffff;
 }
 
 #custom-loader {
     position: fixed;
     inset: 0;
-    background: rgba(238, 243, 237, 0.95);
-    backdrop-filter: blur(10px);
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -126,31 +98,9 @@ model-viewer{
     transition: opacity 0.4s ease;
 }
 
-.loading-text {
-    font-size: 14px;
-    font-weight: 900;
-    color: #2e7d32;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-}
-
-.progress-container {
-    width: 70%;
-    max-width: 350px;
-    height: 10px;
-    background: rgba(46, 125, 50, 0.15);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #fbc02d, #2e7d32);
-    border-radius: 20px;
-    transition: width 0.2s linear;
-}
+.loading-text { font-size: 14px; font-weight: 900; color: #2e7d32; letter-spacing: 2px; margin-bottom: 15px; }
+.progress-container { width: 70%; max-width: 350px; height: 10px; background: rgba(46, 125, 50, 0.15); border-radius: 20px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #fbc02d, #2e7d32); border-radius: 20px; transition: width 0.2s linear; }
 
 #window-overlay {
     position: fixed;
@@ -160,8 +110,8 @@ model-viewer{
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(10px);
 }
 
 .window-box {
@@ -171,113 +121,14 @@ model-viewer{
     max-height: 80vh;
     overflow: hidden;
     border-radius: 24px;
-    background: rgba(255,255,255,0.98);
-    border: 1px solid rgba(255,255,255,0.6);
-    box-shadow: 0 35px 80px rgba(0,0,0,0.3);
-    animation: popup 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-@keyframes popup {
-    from { transform: scale(0.92); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.window-content {
-    padding: 28px;
-    overflow-y: auto;
-    max-height: 80vh;
-}
-
-.close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #ef5350, #d32f2f);
-    font-size: 14px;
-    font-weight: 900;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(211,47,47,0.25);
-    z-index: 10;
-}
-
-.window-title {
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #2e7d32;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #fbc02d;
-}
-
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 5px;
-    border-radius: 10px;
-}
-
-.official-spec-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.official-spec-table th, .official-spec-table td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #eef3ed;
-}
-
-.official-spec-table th {
-    background-color: #2e7d32;
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    text-align: left;
-}
-
-.official-spec-table tr:nth-child(even) { background-color: #f9fbf9; }
-.official-spec-table td.param-name { font-weight: 700; color: #2e7d32; width: 38%; }
-.official-spec-table td.param-value { color: #333; font-weight: 500; }
-
-#tutorial {
-    position: fixed;
-    inset: 0;
-    z-index: 999999;
-    background: rgba(0,0,0,0.65);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: white;
-    transition: 0.4s;
-}
-
-.hand { font-size: 55px; animation: swipe 2s infinite ease-in-out; }
-@keyframes swipe {
-    0%, 100% { transform: translateX(-35px); }
-    50% { transform: translateX(35px); }
-}
-
-.tutorial-text {
-    margin-top: 18px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 800;
-    line-height: 1.6;
-    letter-spacing: 0.5px;
-}
+.window-content { padding: 28px; overflow-y: auto; max-height: 80vh; }
+.close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border: none; border-radius: 50%; background: #ef5350; color: white; cursor: pointer; }
+.window-title { font-size: 16px; font-weight: 900; text-transform: uppercase; color: #2e7d32; border-bottom: 2px solid #fbc02d; padding-bottom: 12px; margin-bottom: 16px; }
 
 .ar-btn {
     position: fixed;
@@ -288,35 +139,22 @@ model-viewer{
     padding: 15px 55px;
     border: none;
     border-radius: 16px;
-    background: linear-gradient(145deg, #2e7d32, #43a047);
+    background: #2e7d32;
     font-size: 13px;
     font-weight: 900;
     color: white;
     cursor: pointer;
-    box-shadow: 0 12px 25px rgba(46,125,50,0.25);
-    transition: 0.3s;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
-
-.ar-btn:hover { transform: translateX(-50%) translateY(-2px); }
-.blurred { filter: blur(5px) brightness(0.7); }
 
 @media(max-width:768px){
     #product-header { width: 82%; font-size: 13px; padding: 11px 14px; }
-    .logo-top-right img { height: 44px; }
     .ar-btn { width: 80%; padding: 13px; bottom: 16px; }
 }
 </style>
 </head>
 
 <body>
-
-<div class="bg-overlay"></div>
-<div class="floating-light one"></div>
-<div class="floating-light two"></div>
-
-<a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
-    <img src="logo-PPKS.png" alt="Logo PPKS">
-</a>
 
 <div id="product-header">KECAMBAH SAWIT PPKS</div>
 
@@ -327,14 +165,6 @@ model-viewer{
     <div class="loading-text">MEMUAT 3D... <span id="load-pct">0%</span></div>
     <div class="progress-container">
         <div class="progress-fill" id="progress-fill"></div>
-    </div>
-</div>
-
-<div id="tutorial" onclick="hideTutorial()">
-    <div class="hand">👆</div>
-    <div class="tutorial-text">
-        GESER PRODUK UNTUK MELIHAT ROTASI 360°<br>
-        TEKAN KIRI / KANAN LAYAR UNTUK GANTI BARANG
     </div>
 </div>
 
@@ -357,10 +187,8 @@ model-viewer{
     interaction-prompt="none" 
     field-of-view="28deg" 
     camera-orbit="0deg 75deg auto" 
-    environment-image="neutral" 
-    onclick="hideTutorial()">
-
-    </model-viewer>
+    environment-image="neutral">
+</model-viewer>
 
 <script>
 const productsData = [
@@ -383,8 +211,6 @@ const progressPct = document.getElementById('load-pct');
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
     let percent = Math.round(progress * 100);
-    if (isNaN(percent) || percent < 0) percent = 0;
-    if (percent > 100) percent = 100;
     progressFill.style.width = `${percent}%`;
     progressPct.innerText = `${percent}%`;
     if (progress === 1) {
@@ -396,15 +222,9 @@ mainViewer.addEventListener('progress', (event) => {
 function loadProduct(index) {
     const data = productsData[index];
     document.getElementById('product-header').innerText = data.name;
-    progressFill.style.transition = 'none';
-    progressFill.style.width = '0%';
-    progressPct.innerText = '0%';
     customLoader.style.display = 'flex';
     customLoader.style.opacity = '1';
-    setTimeout(() => {
-        progressFill.style.transition = 'width 0.2s linear';
-        mainViewer.src = data.src;
-    }, 50);
+    mainViewer.src = data.src;
 }
 
 function changeProduct(direction) {
@@ -412,15 +232,6 @@ function changeProduct(direction) {
     if (currentIndex < 0) currentIndex = productsData.length - 1;
     if (currentIndex >= productsData.length) currentIndex = 0;
     loadProduct(currentIndex);
-}
-
-function hideTutorial() {
-    const tut = document.getElementById('tutorial');
-    if (tut) {
-        tut.style.opacity = '0';
-        setTimeout(() => tut.style.display = 'none', 400);
-        mainViewer.classList.remove('blurred');
-    }
 }
 
 function activateCurrentAR() {
@@ -431,20 +242,11 @@ function activateCurrentAR() {
     }
 }
 
-window.addEventListener('keydown',(e)=>{
-    if(e.key==='ArrowRight') changeProduct(1);
-    if(e.key==='ArrowLeft') changeProduct(-1);
-});
-
-let touchStartX=0;
-window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
-window.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].screenX;
-    if(Math.abs(diff) > 80) {
-        if(diff > 0) changeProduct(1);
-        else changeProduct(-1);
+function closeWindow(e) {
+    if(!e || e.target.id === 'window-overlay' || e.target.closest('.close-btn')) {
+        document.getElementById('window-overlay').style.display = 'none';
     }
-});
+}
 </script>
 </body>
 </html>
