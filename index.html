@@ -150,7 +150,7 @@ model-viewer{
     width: 0%;
     background: linear-gradient(90deg, #fbc02d, #2e7d32);
     border-radius: 20px;
-    transition: width 0.15s linear;
+    transition: width 0.2s linear; /* Animasi dibuat linear agar mulus */
 }
 
 /* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
@@ -470,6 +470,7 @@ model-viewer{
 <button class="ar-btn" onclick="activateCurrentAR()">BUKA KATALOG AR</button>
 
 <model-viewer id="main-viewer"
+    src="kecambah sawit.glb"
     ar 
     ar-modes="webxr scene-viewer quick-look" 
     camera-controls 
@@ -480,6 +481,42 @@ model-viewer{
     camera-orbit="0deg 75deg auto" 
     environment-image="neutral" 
     onclick="hideTutorial()">
+
+    <div class="dot" slot="hotspot-k1" data-position="-0.5 0.1 0.15" onclick="toggleDot(this,event)">
+        <div class="dot-center"></div>
+        <div class="info-card" onclick="event.stopPropagation()">
+            <div class="mini-spec-title">Potensi Hasil TBS</div>
+            <table class="mini-table">
+                <tr><td class="lbl">Rataan:</td><td>28 - 34 Ton/Ha/Thn</td></tr>
+                <tr><td class="lbl">Siklus:</td><td>Sangat Tinggi</td></tr>
+            </table>
+            <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">LIHAT SELENGKAPNYA</button>
+        </div>
+    </div>
+
+    <div class="dot" slot="hotspot-k2" data-position="0.5 0.1 0.15" onclick="toggleDot(this,event)">
+        <div class="dot-center"></div>
+        <div class="info-card" onclick="event.stopPropagation()">
+            <div class="mini-spec-title">Rendemen CPO</div>
+            <table class="mini-table">
+                <tr><td class="lbl">Nilai OER:</td><td>26.0% - 28.5%</td></tr>
+                <tr><td class="lbl">Kualitas:</td><td>Premium Ekstra</td></tr>
+            </table>
+            <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">LIHAT SELENGKAPNYA</button>
+        </div>
+    </div>
+
+    <div class="dot" slot="hotspot-k3" data-position="0.0 0.1 -0.5" onclick="toggleDot(this,event)">
+        <div class="dot-center"></div>
+        <div class="info-card" onclick="event.stopPropagation()">
+            <div class="mini-spec-title">Sertifikasi Benih</div>
+            <table class="mini-table">
+                <tr><td class="lbl">Autentik:</td><td>Segel Hologram</td></tr>
+                <tr><td class="lbl">Sertifikat:</td><td>Lembaga PPKS Resmi</td></tr>
+            </table>
+            <button class="zoom-trigger" onclick="openOfficialWindow('kecambah')">LIHAT SELENGKAPNYA</button>
+        </div>
+    </div>
 </model-viewer>
 
 <script>
@@ -531,10 +568,11 @@ const productsData = [
         id: 'bioneensis',
         name: 'BIONEENSIS (PUPUK HAYATI)',
         src: 'bioneensis.glb',
+        // KORDINAT Y DINAIKKAN KE 0.7 AGAR BERADA DI TENGAH BOTOL
         hotspots: [
-            { pos: '-0.9 0.3 0.37', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
-            { pos: '0.9 0.3 0.37', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
-            { pos: '0.0 0.3 -0.9', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
+            { pos: '-0.9 0.7 0.37', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
+            { pos: '0.9 0.7 0.37', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
+            { pos: '0.0 0.7 -0.9', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
         ]
     },
     {
@@ -561,10 +599,11 @@ const productsData = [
         id: 'greemig',
         name: 'GREEMI-G (TRICHODERMA)',
         src: 'Greemi G.glb',
+        // KORDINAT Y DINAIKKAN KE 0.7 AGAR BERADA DI TENGAH BOTOL/KARUNG
         hotspots: [
-            { pos: '-0.9 0.3 0.37', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
-            { pos: '0.9 0.3 0.37', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
-            { pos: '0.0 0.3 -0.9', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
+            { pos: '-0.9 0.7 0.37', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
+            { pos: '0.9 0.7 0.37', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
+            { pos: '0.0 0.7 -0.9', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
         ]
     }
 ];
@@ -628,6 +667,7 @@ const specDatabase = {
             { k: "Komposisi Mikroba", v: "Azospirillum, Bacillus, Pseudomonas spp." },
             { k: "Fungsi Primer", v: "Menambat Nitrogen udara & Melarutkan Fosfat" },
             { k: "Fungsi Sekunder", v: "Menghasilkan Fitohormon penggalak akar" },
+            { k: "Dosis Pemakaian", v: "50-100 ml dilarutkan per pokok tanaman" },
             { k: "Penghematan Kimia", v: "Mampu mensubstitusi 25% pupuk anorganik" },
             { k: "Aplikasi Terintegrasi", v: "Bisa dicampur bahan organik (tank mix ttt)" }
         ]
@@ -640,19 +680,20 @@ const specDatabase = {
             { k: "Sistem Kerja", v: "Attractant penciuman jarak jauh (Mass Trapping)" },
             { k: "Bentuk Kemasan", v: "Sachet membran pelepasan lambat (Slow release)" },
             { k: "Daya Tahan Pikat", v: "2 hingga 3 bulan terpasang di lapangan" },
-            { k: "Rasio Pasang", v: "1 perangkap (trap) untuk luas 2 Hektar" },
+            { k: "Rasio Pasang (Kerapatan)", v: "1 perangkap (trap) untuk luas 2 Hektar" },
             { k: "Dampak Lingkungan", v: "Sangat ramah lingkungan (Non-toksik kimiawi)" }
         ]
     },
     fertomax: {
         title: "SPESIFIKASI PUPUK FERTOMAX",
         specs: [
-            { k: "Kategori", v: "Pupuk Booster Nutrisi Cair" },
+            { k: "Kategori", v: "Pupuk Majemuk NPK Padat" },
             { k: "Kandungan Makro", v: "Nitrogen (N), Fosfat (P), Kalium (K), Magnesium" },
-            { k: "Kandungan Tambahan", v: "Asam Amino dan ZPT organik" },
-            { k: "Spesialisasi Fase", v: "Pembibitan dan Tanaman Menghasilkan (TM)" },
+            { k: "Kandungan Mikro", v: "Boron (B), Zinc (Zn), Cu, Fe" },
+            { k: "Spesialisasi Fase", v: "Tanaman Menghasilkan (TM) pemicu berat jenjang" },
             { k: "Kelarutan Air", v: "Optimal, mudah diserap bulu akar sawit" },
-            { k: "Sifat Pemakaian", v: "Meningkatkan efisiensi serapan pupuk tabur" }
+            { k: "Sifat Rilis", v: "Terkendali (Controlled Release) cegah leaching" },
+            { k: "Bentuk Fisik", v: "Briket / Granul padat tahan kelembaban tinggi" }
         ]
     },
     greemig: {
@@ -661,7 +702,7 @@ const specDatabase = {
             { k: "Bahan Aktif Hayati", v: "Spora Trichoderma harzianum galur khusus" },
             { k: "Kepadatan Spora", v: "Sangat tinggi (>10^7 CFU / gram)" },
             { k: "Target Patogen", v: "Ganoderma boninense (Busuk Pangkal Batang)" },
-            { k: "Media Pembawa", v: "Kompos serbuk organik kualitas tinggi" },
+            { k: "Media Pembawa (Carrier)", v: "Kompos serbuk organik kualitas tinggi" },
             { k: "Aplikasi Bibitan", v: "Campurkan ke lubang tanam atau media polybag" },
             { k: "Aplikasi Lapangan", v: "Tabur di piringan/lubang tanam (Pre-emptive)" },
             { k: "Efek Tambahan", v: "Memperbaiki struktur biologi tanah jangka panjang" }
@@ -674,11 +715,14 @@ const mainViewer = document.getElementById('main-viewer');
 const customLoader = document.getElementById('custom-loader');
 const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
+let isFirstLoad = true;
 
 // EVENT LISTENER LOADING BAR KUSTOM
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
-    const percent = Math.round(progress * 100);
+    let percent = Math.round(progress * 100);
+    if (percent < 0) percent = 0;
+    
     progressFill.style.width = `${percent}%`;
     progressPct.innerText = `${percent}%`;
 
@@ -695,33 +739,46 @@ function loadProduct(index) {
     const data = productsData[index];
     document.getElementById('product-header').innerText = data.name;
     
-    // Set 3D Source
-    mainViewer.src = data.src;
-    mainViewer.cameraOrbit = "0deg 75deg auto"; // Reset rotasi kamera
+    // SKIP JS RENDER DI AWAL UNTUK MENCEGAH FREEZE PADA KECAMBAH
+    if (!isFirstLoad) {
+        // Matikan transisi sebentar agar loading reset ke 0% instan tanpa animasi mundur
+        progressFill.style.transition = 'none';
+        progressFill.style.width = '0%';
+        progressPct.innerText = '0%';
+        customLoader.style.display = 'flex';
+        customLoader.style.opacity = '1';
+        
+        // Timeout kecil agar UI sempat membaca CSS width 0% sebelum load data baru
+        setTimeout(() => {
+            progressFill.style.transition = 'width 0.2s linear'; // Nyalakan animasi maju
+            
+            mainViewer.src = data.src;
+            mainViewer.cameraOrbit = "0deg 75deg auto"; 
+            
+            mainViewer.innerHTML = '';
+            data.hotspots.forEach((hs, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.slot = `hotspot-${i}`;
+                dot.dataset.position = hs.pos;
+                dot.innerHTML = `
+                    <div class="dot-center"></div>
+                    <div class="info-card" onclick="event.stopPropagation()">
+                        <div class="mini-spec-title">${hs.title}</div>
+                        <table class="mini-table">
+                            <tr><td class="lbl">${hs.rows[0][0]}</td><td>${hs.rows[0][1]}</td></tr>
+                            <tr><td class="lbl">${hs.rows[1][0]}</td><td>${hs.rows[1][1]}</td></tr>
+                        </table>
+                        <button class="zoom-trigger" onclick="openOfficialWindow('${data.id}')">LIHAT SELENGKAPNYA</button>
+                    </div>
+                `;
+                dot.onclick = (e) => toggleDot(dot, e);
+                mainViewer.appendChild(dot);
+            });
+        }, 50);
+    }
     
-    // Clear old hotspots
-    mainViewer.innerHTML = '';
-    
-    // Generate new hotspots
-    data.hotspots.forEach((hs, i) => {
-        const dot = document.createElement('div');
-        dot.className = 'dot';
-        dot.slot = `hotspot-${i}`;
-        dot.dataset.position = hs.pos;
-        dot.innerHTML = `
-            <div class="dot-center"></div>
-            <div class="info-card" onclick="event.stopPropagation()">
-                <div class="mini-spec-title">${hs.title}</div>
-                <table class="mini-table">
-                    <tr><td class="lbl">${hs.rows[0][0]}</td><td>${hs.rows[0][1]}</td></tr>
-                    <tr><td class="lbl">${hs.rows[1][0]}</td><td>${hs.rows[1][1]}</td></tr>
-                </table>
-                <button class="zoom-trigger" onclick="openOfficialWindow('${data.id}')">LIHAT SELENGKAPNYA</button>
-            </div>
-        `;
-        dot.onclick = (e) => toggleDot(dot, e);
-        mainViewer.appendChild(dot);
-    });
+    isFirstLoad = false;
 }
 
 function changeProduct(direction) {
@@ -793,9 +850,10 @@ function activateCurrentAR() {
     }
 }
 
-// Inisialisasi awal (Load produk pertama)
+// Hanya untuk set state awal, DOM sudah otomatis diisi elemen native HTML untuk kecambah
 window.addEventListener('DOMContentLoaded', () => {
-    loadProduct(0);
+    currentIndex = 0;
+    isFirstLoad = false;
 });
 
 // Gesture & Keyboard Support
