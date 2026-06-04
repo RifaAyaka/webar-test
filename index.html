@@ -113,7 +113,6 @@ model-viewer{
     position: relative;
 }
 
-/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
@@ -153,7 +152,6 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
-/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -197,7 +195,6 @@ model-viewer{
     background: #fbc02d;
 }
 
-/* POPUP MINI BOX CARD */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -269,7 +266,6 @@ model-viewer{
     background: linear-gradient(145deg, #1b5e20, #2e7d32);
 }
 
-/* WINDOW MODAL DETIL UTAMA DI TENGAH LAYAR */
 #window-overlay {
     position: fixed;
     inset: 0;
@@ -482,7 +478,7 @@ model-viewer{
     environment-image="neutral" 
     onclick="hideTutorial()">
 
-    <div class="dot" slot="hotspot-k1" data-position="-1.6 0.1 0.6" onclick="toggleDot(this,event)">
+    <div class="dot" slot="hotspot-k1" data-position="-0.8 0.1 0.4" onclick="toggleDot(this,event)">
         <div class="dot-center"></div>
         <div class="info-card" onclick="event.stopPropagation()">
             <div class="mini-spec-title">Potensi Hasil TBS</div>
@@ -494,7 +490,7 @@ model-viewer{
         </div>
     </div>
 
-    <div class="dot" slot="hotspot-k2" data-position="1.6 0.1 0.6" onclick="toggleDot(this,event)">
+    <div class="dot" slot="hotspot-k2" data-position="0.8 0.1 0.4" onclick="toggleDot(this,event)">
         <div class="dot-center"></div>
         <div class="info-card" onclick="event.stopPropagation()">
             <div class="mini-spec-title">Rendemen CPO</div>
@@ -506,7 +502,7 @@ model-viewer{
         </div>
     </div>
 
-    <div class="dot" slot="hotspot-k3" data-position="0.0 0.1 -1.6" onclick="toggleDot(this,event)">
+    <div class="dot" slot="hotspot-k3" data-position="0.0 0.1 -0.8" onclick="toggleDot(this,event)">
         <div class="dot-center"></div>
         <div class="info-card" onclick="event.stopPropagation()">
             <div class="mini-spec-title">Sertifikasi Benih</div>
@@ -529,9 +525,9 @@ const productsData = [
         name: 'KECAMBAH SAWIT PPKS',
         src: 'kecambah_sawit.glb',
         hotspots: [
-            { pos: '-1.6 0.1 0.6', title: 'Potensi Hasil TBS', rows: [['Rataan:', '28 - 34 Ton/Ha/Thn'], ['Siklus:', 'Sangat Tinggi']] },
-            { pos: '1.6 0.1 0.6', title: 'Rendemen CPO', rows: [['Nilai OER:', '26.0% - 28.5%'], ['Kualitas:', 'Premium Ekstra']] },
-            { pos: '0.0 0.1 -1.6', title: 'Sertifikasi Benih', rows: [['Autentik:', 'Segel Hologram'], ['Sertifikat:', 'Lembaga PPKS Resmi']] }
+            { pos: '-0.8 0.1 0.4', title: 'Potensi Hasil TBS', rows: [['Rataan:', '28 - 34 Ton/Ha/Thn'], ['Siklus:', 'Sangat Tinggi']] },
+            { pos: '0.8 0.1 0.4', title: 'Rendemen CPO', rows: [['Nilai OER:', '26.0% - 28.5%'], ['Kualitas:', 'Premium Ekstra']] },
+            { pos: '0.0 0.1 -0.8', title: 'Sertifikasi Benih', rows: [['Autentik:', 'Segel Hologram'], ['Sertifikat:', 'Lembaga PPKS Resmi']] }
         ]
     },
     {
@@ -539,9 +535,9 @@ const productsData = [
         name: 'BIBIT SAWIT 3 BULAN (PN)',
         src: 'bibitsawit3bulan.glb',
         hotspots: [
-            { pos: '-1.6 0.15 0.6', title: 'Fase Pembibitan', rows: [['Kategori:', 'Pre-Nursery (PN)'], ['Rentang:', '1 - 3 Bulan']] },
-            { pos: '1.6 0.15 0.6', title: 'Wadah Kantong', rows: [['Polybag:', '15 cm x 23 cm'], ['Warna:', 'Hitam Organik']] },
-            { pos: '0.0 0.15 -1.6', title: 'Ukuran Fisik', rows: [['Tinggi:', '15 - 25 cm'], ['Daun:', '3 - 4 Helai Lancip']] }
+            { pos: '-0.8 0.15 0.4', title: 'Fase Pembibitan', rows: [['Kategori:', 'Pre-Nursery (PN)'], ['Rentang:', '1 - 3 Bulan']] },
+            { pos: '0.8 0.15 0.4', title: 'Wadah Kantong', rows: [['Polybag:', '15 cm x 23 cm'], ['Warna:', 'Hitam Organik']] },
+            { pos: '0.0 0.15 -0.8', title: 'Ukuran Fisik', rows: [['Tinggi:', '15 - 25 cm'], ['Daun:', '3 - 4 Helai Lancip']] }
         ]
     },
     {
@@ -549,9 +545,9 @@ const productsData = [
         name: 'BIBIT SAWIT 4-8 BULAN (MN)',
         src: 'bibitsawit4-8bulan.glb',
         hotspots: [
-            { pos: '-1.6 0.3 0.6', title: 'Fase Pembibitan', rows: [['Kategori:', 'Main Nursery (MN)'], ['Usia Lapang:', '4 - 8 Bulan']] },
-            { pos: '1.6 0.3 0.6', title: 'Tata Ruang Lahan', rows: [['Sistem:', 'Segitiga Sama Sisi'], ['Jarak Tanam:', '90 x 90 x 90 cm']] },
-            { pos: '0.0 0.3 -1.6', title: 'Bentuk Polybag', rows: [['Dimensi:', '40 cm x 40 cm'], ['Kapasitas:', 'Sangat Optimal']] }
+            { pos: '-0.8 0.3 0.4', title: 'Fase Pembibitan', rows: [['Kategori:', 'Main Nursery (MN)'], ['Usia Lapang:', '4 - 8 Bulan']] },
+            { pos: '0.8 0.3 0.4', title: 'Tata Ruang Lahan', rows: [['Sistem:', 'Segitiga Sama Sisi'], ['Jarak Tanam:', '90 x 90 x 90 cm']] },
+            { pos: '0.0 0.3 -0.8', title: 'Bentuk Polybag', rows: [['Dimensi:', '40 cm x 40 cm'], ['Kapasitas:', 'Sangat Optimal']] }
         ]
     },
     {
@@ -559,9 +555,9 @@ const productsData = [
         name: 'BIBIT SAWIT 9-12 BULAN',
         src: 'bibitsawit9-12bulan.glb',
         hotspots: [
-            { pos: '-1.6 0.4 0.6', title: 'Kesiapan Tanam', rows: [['Status:', 'Field Ready (Siap)'], ['Saran Usia:', '9 - 12 Bulan']] },
-            { pos: '1.6 0.4 0.6', title: 'Dimensi Batang', rows: [['Tinggi:', '70 - 110 cm'], ['Bonggol:', '> 10 cm Kokoh']] },
-            { pos: '0.0 0.4 -1.6', title: 'Standar Seleksi', rows: [['Afkir:', 'Buang Bibit Kerdil'], ['Kondisi:', 'Bebas Hama/Penyakit']] }
+            { pos: '-0.8 0.4 0.4', title: 'Kesiapan Tanam', rows: [['Status:', 'Field Ready (Siap)'], ['Saran Usia:', '9 - 12 Bulan']] },
+            { pos: '0.8 0.4 0.4', title: 'Dimensi Batang', rows: [['Tinggi:', '70 - 110 cm'], ['Bonggol:', '> 10 cm Kokoh']] },
+            { pos: '0.0 0.4 -0.8', title: 'Standar Seleksi', rows: [['Afkir:', 'Buang Bibit Kerdil'], ['Kondisi:', 'Bebas Hama/Penyakit']] }
         ]
     },
     {
@@ -569,9 +565,9 @@ const productsData = [
         name: 'BIONEENSIS (PUPUK HAYATI)',
         src: 'bioneensis.glb',
         hotspots: [
-            { pos: '-1.6 1.3 0.6', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
-            { pos: '1.6 1.3 0.6', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
-            { pos: '0.0 1.3 -1.6', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
+            { pos: '-1.6 1.8 0.6', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
+            { pos: '1.6 1.8 0.6', title: 'Konsorsium Mikroba', rows: [['Kandungan:', 'Bacillus sp.'], ['Fiksasi N:', 'Sangat Efektif']] },
+            { pos: '0.0 1.8 -1.6', title: 'Manfaat Utama', rows: [['Akar:', 'Pacu Tumbuh Serabut'], ['Efisiensi:', 'Hemat Pupuk Kimia']] }
         ]
     },
     {
@@ -579,9 +575,9 @@ const productsData = [
         name: 'FEROMONAS (TRAP ORYCTES)',
         src: 'Feromonas.glb',
         hotspots: [
-            { pos: '-1.6 0.3 0.6', title: 'Fungsi Utama', rows: [['Metode:', 'Mass Trapping Hama'], ['Target:', 'Oryctes rhinoceros']] },
-            { pos: '1.6 0.3 0.6', title: 'Zat Aktif', rows: [['Senyawa:', 'Etil 4-metil oktanoat'], ['Kemurnian:', 'Sangat Tinggi']] },
-            { pos: '0.0 0.3 -1.6', title: 'Daya Tahan', rows: [['Efektivitas:', '2-3 Bulan per Sachet'], ['Sebaran:', '1 Trap / 2 Hektar']] }
+            { pos: '-1.6 1.0 0.6', title: 'Fungsi Utama', rows: [['Metode:', 'Mass Trapping Hama'], ['Target:', 'Oryctes rhinoceros']] },
+            { pos: '1.6 1.0 0.6', title: 'Zat Aktif', rows: [['Senyawa:', 'Etil 4-metil oktanoat'], ['Kemurnian:', 'Sangat Tinggi']] },
+            { pos: '0.0 1.0 -1.6', title: 'Daya Tahan', rows: [['Efektivitas:', '2-3 Bulan per Sachet'], ['Sebaran:', '1 Trap / 2 Hektar']] }
         ]
     },
     {
@@ -589,9 +585,9 @@ const productsData = [
         name: 'FERTOMAX (BOOSTER NPK)',
         src: 'FertoMax.glb',
         hotspots: [
-            { pos: '-1.6 0.4 0.6', title: 'Kategori Pupuk', rows: [['Format:', 'Cairan Konsentrat'], ['Aplikasi:', 'Semprot / Cor']] },
-            { pos: '1.6 0.4 0.6', title: 'Bio-Stimulan', rows: [['Nutrisi:', 'Asam Amino Kompleks'], ['Hormon:', 'ZPT Alami Sawit']] },
-            { pos: '0.0 0.4 -1.6', title: 'Efisiensi Makro', rows: [['Booster NPK:', 'Naik 25% - 30%'], ['Fungsi:', 'Optimalisasi Hara']] }
+            { pos: '-0.8 0.4 0.4', title: 'Kategori Pupuk', rows: [['Format:', 'Cairan Konsentrat'], ['Aplikasi:', 'Semprot / Cor']] },
+            { pos: '0.8 0.4 0.4', title: 'Bio-Stimulan', rows: [['Nutrisi:', 'Asam Amino Kompleks'], ['Hormon:', 'ZPT Alami Sawit']] },
+            { pos: '0.0 0.4 -0.8', title: 'Efisiensi Makro', rows: [['Booster NPK:', 'Naik 25% - 30%'], ['Fungsi:', 'Optimalisasi Hara']] }
         ]
     },
     {
@@ -599,9 +595,9 @@ const productsData = [
         name: 'GREEMI-G (TRICHODERMA)',
         src: 'Greemi G.glb',
         hotspots: [
-            { pos: '-1.6 1.3 0.6', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
-            { pos: '1.6 1.3 0.6', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
-            { pos: '0.0 1.3 -1.6', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
+            { pos: '-1.6 1.8 0.6', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
+            { pos: '1.6 1.8 0.6', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
+            { pos: '0.0 1.8 -1.6', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
         ]
     }
 ];
@@ -715,12 +711,10 @@ const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
-// AMANKAN MONITOR LOADING (Wajib Mulai Dari 0%)
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
     let percent = Math.round(progress * 100);
     
-    // Proteksi ekstra agar nilai di bawah 0 atau tidak valid tidak merusak UI
     if (isNaN(percent) || percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     
@@ -736,11 +730,9 @@ mainViewer.addEventListener('progress', (event) => {
     }
 });
 
-// ANTISIPASI GAGAL LOAD AGAR TIDAK FREEZE LAYAR
 mainViewer.addEventListener('error', (err) => {
     console.error("Gagal memuat 3D Model:", err);
     progressPct.innerText = "Gagal memuat aset!";
-    // Tutup loader perlahan agar user tetap bisa navigasi ganti produk lain
     setTimeout(() => {
         customLoader.style.opacity = '0';
         setTimeout(() => customLoader.style.display = 'none', 400);
@@ -751,23 +743,19 @@ function loadProduct(index) {
     const data = productsData[index];
     document.getElementById('product-header').innerText = data.name;
     
-    // Lewati render JS dinamis pada ketukan pertama karena Kecambah sudah terpasang di HTML
     if (!isFirstLoad) {
-        // RESET LOADING KE 0% INSTAN TANPA ANIMASI MUNDUR
         progressFill.style.transition = 'none';
         progressFill.style.width = '0%';
         progressPct.innerText = '0%';
         customLoader.style.display = 'flex';
         customLoader.style.opacity = '1';
         
-        // Jeda mikro agar browser merender kondisi 0% terlebih dahulu
         setTimeout(() => {
-            progressFill.style.transition = 'width 0.2s linear'; // Aktifkan kembali animasi maju
+            progressFill.style.transition = 'width 0.2s linear';
             
             mainViewer.src = data.src;
             mainViewer.cameraOrbit = "0deg 75deg auto"; 
             
-            // Render Hotspots Satelit Baru
             mainViewer.innerHTML = '';
             data.hotspots.forEach((hs, i) => {
                 const dot = document.createElement('div');
@@ -863,13 +851,11 @@ function activateCurrentAR() {
     }
 }
 
-// Hanya untuk set state awal, DOM sudah otomatis diisi elemen native HTML untuk kecambah
 window.addEventListener('DOMContentLoaded', () => {
     currentIndex = 0;
     isFirstLoad = false;
 });
 
-// Kontrol Keyboard & Navigasi Gesture Swiping
 window.addEventListener('keydown',(e)=>{
     if(e.key==='ArrowRight') changeProduct(1);
     if(e.key==='ArrowLeft') changeProduct(-1);
