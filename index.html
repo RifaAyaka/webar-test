@@ -577,8 +577,8 @@ const productsData = [
     {
         id: 'tbs',
         name: 'TANDAN BUAH SEGAR (TBS)',
-        src: 'TBS.glb',
-        hotspots: [] // Dikosongkan agar tidak ada dot info pada produk TBS
+        src: 'TBS.glb', // PASTIKAN NAMA FILE DI FOLDER PERSIS HURUF BESAR "TBS.glb"
+        hotspots: []
     }
 ];
 
@@ -691,6 +691,7 @@ const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
+// EVENT LISTENER PERTAMA: Cuma buat ngurusin bar animasinya berjalan 1-99%
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
     let percent = Math.round(progress * 100);
@@ -700,14 +701,14 @@ mainViewer.addEventListener('progress', (event) => {
     
     progressFill.style.width = `${percent}%`;
     progressPct.innerText = `${percent}%`;
+});
 
-    if (progress === 1) {
-        customLoader.style.opacity = '0';
-        setTimeout(() => customLoader.style.display = 'none', 400);
-    } else {
-        customLoader.style.display = 'flex';
-        customLoader.style.opacity = '1';
-    }
+// EVENT LISTENER KEDUA: Ini kunci pastinya loader putih menghilang kalau model udah siap dirender!
+mainViewer.addEventListener('load', () => {
+    progressFill.style.width = '100%';
+    progressPct.innerText = '100%';
+    customLoader.style.opacity = '0';
+    setTimeout(() => customLoader.style.display = 'none', 400);
 });
 
 mainViewer.addEventListener('error', (err) => {
