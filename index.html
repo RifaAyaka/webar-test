@@ -23,42 +23,15 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:'Montserrat',sans-serif;
-    background:#eef3ed;
-}
-
-body{
-    background:url('background.png') no-repeat center center fixed;
-    background-size:cover;
+    background:#ffffff;
 }
 
 .bg-overlay{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
-    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 30%);
-    pointer-events:none;
-    z-index:0;
+    display:none;
 }
 
 .floating-light{
-    position:fixed;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    filter:blur(80px);
-    background:rgba(76,175,80,.09);
-    z-index:0;
-    animation:floatLight 10s ease-in-out infinite;
-}
-
-.floating-light.one{ top:-180px; left:-120px; }
-.floating-light.two{ bottom:-220px; right:-120px; animation-delay:3s; }
-
-@keyframes floatLight{
-    0%{ transform:translate(0,0); }
-    50%{ transform:translate(40px,30px); }
-    100%{ transform:translate(0,0); }
+    display:none;
 }
 
 .logo-top-right{
@@ -111,12 +84,14 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
+    background-color:#ffffff;
 }
 
+/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
-    background: rgba(238, 243, 237, 0.95);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
@@ -152,6 +127,7 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
+/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -195,6 +171,7 @@ model-viewer{
     background: #fbc02d;
 }
 
+/* POPUP MINI BOX CARD */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -266,6 +243,7 @@ model-viewer{
     background: linear-gradient(145deg, #1b5e20, #2e7d32);
 }
 
+/* WINDOW MODAL DETIL UTAMA DI TENGAH LAYAR */
 #window-overlay {
     position: fixed;
     inset: 0;
@@ -426,10 +404,6 @@ model-viewer{
 </head>
 
 <body onclick="closeAllDots(event)">
-
-<div class="bg-overlay"></div>
-<div class="floating-light one"></div>
-<div class="floating-light two"></div>
 
 <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
     <img src="logo-PPKS.png" alt="Logo PPKS">
@@ -599,6 +573,12 @@ const productsData = [
             { pos: '1.6 1.8 0.6', title: 'Bahan Aktif Resmi', rows: [['Spora Fungus:', 'Trichoderma harzianum'], ['Strain:', 'Indigenos PPKS']] },
             { pos: '0.0 1.8 -1.6', title: 'Sasaran Proteksi', rows: [['Penyakit Utama:', 'Busuk Pangkal Batang'], ['Patogen:', 'Ganoderma boninense']] }
         ]
+    },
+    {
+        id: 'tbs',
+        name: 'TANDAN BUAH SEGAR (TBS)',
+        src: 'TBS.glb',
+        hotspots: [] // Dikosongkan agar tidak ada dot info pada produk TBS
     }
 ];
 
