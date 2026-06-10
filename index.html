@@ -98,7 +98,7 @@ body{
     position:fixed;
     top:0;
     bottom:0;
-    width:15%;
+    width:10%; /* SUDAH DIKECILKAN JADI 10% KAYA IG STORY */
     z-index:999;
     cursor:pointer;
 }
@@ -523,6 +523,7 @@ model-viewer{
 // ==========================================
 // DATA UTAMA PRODUK & HOTSPOT SATELIT ORBIT
 // ==========================================
+// SEMUA TANDA KURUNG DI NAMA PRODUK SUDAH DIHAPUS
 const productsData = [
     {
         id: 'kecambah',
@@ -536,7 +537,7 @@ const productsData = [
     },
     {
         id: 'bibit3',
-        name: 'BIBIT SAWIT 3 BULAN (PN)',
+        name: 'BIBIT SAWIT 3 BULAN',
         src: 'bibitsawit3bulan.glb',
         hotspots: [
             { pos: '-0.8 0.15 0.4', title: 'Fase Pembibitan', rows: [['Kategori:', 'Pre-Nursery (PN)'], ['Rentang:', '1 - 3 Bulan']] },
@@ -546,7 +547,7 @@ const productsData = [
     },
     {
         id: 'bibit8',
-        name: 'BIBIT SAWIT 4-8 BULAN (MN)',
+        name: 'BIBIT SAWIT 4-8 BULAN',
         src: 'bibitsawit4-8bulan.glb',
         hotspots: [
             { pos: '-0.8 0.3 0.4', title: 'Fase Pembibitan', rows: [['Kategori:', 'Main Nursery (MN)'], ['Usia Lapang:', '4 - 8 Bulan']] },
@@ -566,13 +567,13 @@ const productsData = [
     },
     {
         id: 'tbs',
-        name: 'TANDAN BUAH SEGAR (TBS)',
+        name: 'TANDAN BUAH SEGAR',
         src: 'TBS.glb',
         hotspots: []
     },
     {
         id: 'bioneensis',
-        name: 'BIONEENSIS (PUPUK HAYATI)',
+        name: 'BIONEENSIS',
         src: 'bioneensis.glb',
         hotspots: [
             { pos: '-1.6 1.8 0.6', title: 'Jenis Pupuk', rows: [['Kategori:', 'Hayati Organik'], ['Kapasitas:', 'Sesuai Kemasan']] },
@@ -582,7 +583,7 @@ const productsData = [
     },
     {
         id: 'feromonas',
-        name: 'FEROMONAS (TRAP ORYCTES)',
+        name: 'FEROMONAS',
         src: 'Feromonas.glb',
         hotspots: [
             { pos: '-1.6 1.0 0.6', title: 'Fungsi Utama', rows: [['Metode:', 'Mass Trapping Hama'], ['Target:', 'Oryctes rhinoceros']] },
@@ -592,7 +593,7 @@ const productsData = [
     },
     {
         id: 'fertomax',
-        name: 'FERTOMAX (BOOSTER NPK)',
+        name: 'FERTOMAX',
         src: 'FertoMax.glb',
         hotspots: [
             { pos: '-0.8 0.4 0.4', title: 'Kategori Pupuk', rows: [['Format:', 'Cairan Konsentrat'], ['Aplikasi:', 'Semprot / Cor']] },
@@ -602,7 +603,7 @@ const productsData = [
     },
     {
         id: 'greemig',
-        name: 'GREEMI-G (TRICHODERMA)',
+        name: 'GREEMI-G',
         src: 'Greemi G.glb',
         hotspots: [
             { pos: '-1.6 1.8 0.6', title: 'Jenis Agens', rows: [['Kategori:', 'Biofungisida Granul'], ['Sifat:', 'Protektif Sistemik']] },
