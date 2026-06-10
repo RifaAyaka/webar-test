@@ -23,43 +23,11 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:'Montserrat',sans-serif;
-    background:#eef3ed;
+    background:#ffffff;
 }
 
-body{
-    background:url('background.png') no-repeat center center fixed;
-    background-size:cover;
-}
-
-.bg-overlay{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
-    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 30%);
-    pointer-events:none;
-    z-index:0;
-}
-
-.floating-light{
-    position:fixed;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    filter:blur(80px);
-    background:rgba(76,175,80,.09);
-    z-index:0;
-    animation:floatLight 10s ease-in-out infinite;
-}
-
-.floating-light.one{ top:-180px; left:-120px; }
-.floating-light.two{ bottom:-220px; right:-120px; animation-delay:3s; }
-
-@keyframes floatLight{
-    0%{ transform:translate(0,0); }
-    50%{ transform:translate(40px,30px); }
-    100%{ transform:translate(0,0); }
-}
+.bg-overlay{ display:none; }
+.floating-light{ display:none; }
 
 .logo-top-right{
     position:fixed;
@@ -92,6 +60,7 @@ body{
     box-shadow: 0 15px 35px rgba(46,125,50,.35), inset 0 1px 2px rgba(255,255,255,.2);
     backdrop-filter:blur(18px);
     white-space:nowrap;
+    text-align: center;
 }
 
 .nav-zone{
@@ -111,13 +80,14 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
+    background-color:#ffffff;
 }
 
 /* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
-    background: rgba(238, 243, 237, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
@@ -169,35 +139,11 @@ model-viewer{
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.dot:hover {
-    transform: scale(1.2) rotate(8deg);
-    z-index: 5000;
-}
+.dot:hover { transform: scale(1.2) rotate(8deg); z-index: 5000; }
+.dot::before { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; background: rgba(76,175,80,0.35); animation: pulse 2.5s infinite; z-index: -1; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
+.dot-center { width: 8px; height: 8px; border-radius: 50%; background: #fbc02d; }
 
-.dot::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: rgba(76,175,80,0.35);
-    animation: pulse 2.5s infinite;
-    z-index: -1;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(2.4); opacity: 0; }
-}
-
-.dot-center {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #fbc02d;
-}
-
-/* POPUP MINI BOX CARD */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -216,40 +162,11 @@ model-viewer{
     z-index: 1000;
 }
 
-.dot:hover .info-card, .dot.active .info-card {
-    transform: translateX(-50%) scale(1);
-    pointer-events: auto;
-    opacity: 1;
-}
-
-.mini-spec-title {
-    font-size: 11px;
-    font-weight: 900;
-    color: #2e7d32;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 8px;
-    border-bottom: 1px dashed #cedfce;
-    padding-bottom: 5px;
-}
-
-.mini-table {
-    width: 100%;
-    font-size: 12px;
-    margin-bottom: 10px;
-    color: #333;
-    border-collapse: collapse;
-}
-
-.mini-table td {
-    padding: 4px 0;
-}
-
-.mini-table td.lbl {
-    font-weight: 700;
-    color: #666;
-    width: 40%;
-}
+.dot:hover .info-card, .dot.active .info-card { transform: translateX(-50%) scale(1); pointer-events: auto; opacity: 1; }
+.mini-spec-title { font-size: 11px; font-weight: 900; color: #2e7d32; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; border-bottom: 1px dashed #cedfce; padding-bottom: 5px; }
+.mini-table { width: 100%; font-size: 12px; margin-bottom: 10px; color: #333; border-collapse: collapse; }
+.mini-table td { padding: 4px 0; }
+.mini-table td.lbl { font-weight: 700; color: #666; width: 40%; }
 
 .zoom-trigger {
     width: 100%;
@@ -264,12 +181,8 @@ model-viewer{
     box-shadow: 0 4px 10px rgba(46,125,50,0.15);
     transition: 0.2s;
 }
+.zoom-trigger:hover { background: linear-gradient(145deg, #1b5e20, #2e7d32); }
 
-.zoom-trigger:hover {
-    background: linear-gradient(145deg, #1b5e20, #2e7d32);
-}
-
-/* WINDOW MODAL DETIL UTAMA DI TENGAH LAYAR */
 #window-overlay {
     position: fixed;
     inset: 0;
@@ -295,76 +208,15 @@ model-viewer{
     animation: popup 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-@keyframes popup {
-    from { transform: scale(0.92); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
+@keyframes popup { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.window-content {
-    padding: 28px;
-    overflow-y: auto;
-    max-height: 80vh;
-}
-
-.close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #ef5350, #d32f2f);
-    font-size: 14px;
-    font-weight: 900;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(211,47,47,0.25);
-    z-index: 10;
-}
-
-.window-title {
-    font-size: 16px;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: #2e7d32;
-    padding-bottom: 12px;
-    margin-bottom: 16px;
-    border-bottom: 2px solid #fbc02d;
-}
-
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 5px;
-    border-radius: 10px;
-}
-
-.official-spec-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.official-spec-table th, .official-spec-table td {
-    padding: 12px 14px;
-    border-bottom: 1px solid #eef3ed;
-}
-
-.official-spec-table th {
-    background-color: #2e7d32;
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 11px;
-    letter-spacing: 0.5px;
-    text-align: left;
-}
-
+.window-content { padding: 28px; overflow-y: auto; max-height: 80vh; }
+.close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border: none; border-radius: 50%; background: linear-gradient(145deg, #ef5350, #d32f2f); font-size: 14px; font-weight: 900; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(211,47,47,0.25); z-index: 10; }
+.window-title { font-size: 16px; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase; color: #2e7d32; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 2px solid #fbc02d; }
+.table-responsive { width: 100%; overflow-x: auto; margin-top: 5px; border-radius: 10px; }
+.official-spec-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.official-spec-table th, .official-spec-table td { padding: 12px 14px; border-bottom: 1px solid #eef3ed; }
+.official-spec-table th { background-color: #2e7d32; color: white; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; text-align: left; }
 .official-spec-table tr:nth-child(even) { background-color: #f9fbf9; }
 .official-spec-table td.param-name { font-weight: 700; color: #2e7d32; width: 38%; }
 .official-spec-table td.param-value { color: #333; font-weight: 500; }
@@ -383,19 +235,8 @@ model-viewer{
 }
 
 .hand { font-size: 55px; animation: swipe 2s infinite ease-in-out; }
-@keyframes swipe {
-    0%, 100% { transform: translateX(-35px); }
-    50% { transform: translateX(35px); }
-}
-
-.tutorial-text {
-    margin-top: 18px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 800;
-    line-height: 1.6;
-    letter-spacing: 0.5px;
-}
+@keyframes swipe { 0%, 100% { transform: translateX(-35px); } 50% { transform: translateX(35px); } }
+.tutorial-text { margin-top: 18px; text-align: center; font-size: 14px; font-weight: 800; line-height: 1.6; letter-spacing: 0.5px; }
 
 .ar-btn {
     position: fixed;
@@ -414,12 +255,18 @@ model-viewer{
     box-shadow: 0 12px 25px rgba(46,125,50,0.25);
     transition: 0.3s;
 }
-
 .ar-btn:hover { transform: translateX(-50%) translateY(-2px); }
 .blurred { filter: blur(5px) brightness(0.7); }
 
 @media(max-width:768px){
-    #product-header { width: 82%; font-size: 13px; padding: 11px 14px; }
+    /* Perbaikan teks rata tengah dan mencegah layar minus/luber di HP */
+    #product-header { 
+        width: 85%; 
+        font-size: 13px; 
+        padding: 11px 14px; 
+        white-space: normal;
+        line-height: 1.3;
+    }
     .logo-top-right img { height: 44px; }
     .info-card { width: 230px; }
     .window-content { padding: 18px; }
@@ -430,10 +277,6 @@ model-viewer{
 </head>
 
 <body onclick="closeAllDots(event)">
-
-<div class="bg-overlay"></div>
-<div class="floating-light one"></div>
-<div class="floating-light two"></div>
 
 <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
     <img src="logo-PPKS.png" alt="Logo PPKS">
@@ -523,7 +366,6 @@ model-viewer{
 // ==========================================
 // DATA UTAMA PRODUK & HOTSPOT SATELIT ORBIT
 // ==========================================
-// SEMUA TANDA KURUNG DI NAMA PRODUK SUDAH DIHAPUS
 const productsData = [
     {
         id: 'kecambah',
@@ -723,80 +565,110 @@ const specDatabase = {
 };
 
 let currentIndex = 0;
+let isARMode = false; // Deteksi apakah sedang dalam mode AR
 const mainViewer = document.getElementById('main-viewer');
 const customLoader = document.getElementById('custom-loader');
 const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
+// MENDETEKSI SAAT AR DIBUKA ATAU DITUTUP
+mainViewer.addEventListener('ar-status', (event) => {
+    if (event.detail.status === 'session-started') {
+        isARMode = true; // Kunci fungsi geser layar saat AR aktif
+    } else if (event.detail.status === 'not-presenting') {
+        isARMode = false; // Buka kunci saat kembali ke preview 3D normal
+    }
+});
+
 mainViewer.addEventListener('progress', (event) => {
     const progress = event.detail.totalProgress;
     let percent = Math.round(progress * 100);
+
     if (isNaN(percent) || percent < 0) percent = 0;
     if (percent > 100) percent = 100;
+
     progressFill.style.width = `${percent}%`;
     progressPct.innerText = `${percent}%`;
+
     if (progress === 1) {
-        customLoader.style.opacity = '0';
-        setTimeout(() => customLoader.style.display = 'none', 400);
-    } else {
-        customLoader.style.display = 'flex';
-        customLoader.style.opacity = '1';
+        setTimeout(() => {
+            customLoader.style.opacity = '0';
+            setTimeout(() => customLoader.style.display = 'none', 400);
+        }, 300);
     }
+});
+
+mainViewer.addEventListener('load', () => {
+    progressFill.style.width = '100%';
+    progressPct.innerText = '100%';
+    customLoader.style.opacity = '0';
+    setTimeout(() => customLoader.style.display = 'none', 400);
 });
 
 mainViewer.addEventListener('error', (err) => {
     console.error("Gagal memuat 3D Model:", err);
     progressPct.innerText = "Gagal memuat aset!";
+    alert("Maaf, file 3D " + mainViewer.src + " tidak ditemukan. Pastikan huruf besar/kecil di nama file sudah sesuai.");
     setTimeout(() => {
         customLoader.style.opacity = '0';
         setTimeout(() => customLoader.style.display = 'none', 400);
-    }, 1500);
+    }, 1000);
 });
 
 function loadProduct(index) {
     const data = productsData[index];
     document.getElementById('product-header').innerText = data.name;
+    
     if (!isFirstLoad) {
         progressFill.style.transition = 'none';
         progressFill.style.width = '0%';
         progressPct.innerText = '0%';
         customLoader.style.display = 'flex';
         customLoader.style.opacity = '1';
+        
         setTimeout(() => {
             progressFill.style.transition = 'width 0.2s linear';
+            
             mainViewer.src = data.src;
             mainViewer.cameraOrbit = "0deg 75deg auto"; 
+            
             mainViewer.innerHTML = '';
-            data.hotspots.forEach((hs, i) => {
-                const dot = document.createElement('div');
-                dot.className = 'dot';
-                dot.slot = `hotspot-${i}`;
-                dot.dataset.position = hs.pos;
-                dot.innerHTML = `
-                    <div class="dot-center"></div>
-                    <div class="info-card" onclick="event.stopPropagation()">
-                        <div class="mini-spec-title">${hs.title}</div>
-                        <table class="mini-table">
-                            <tr><td class="lbl">${hs.rows[0][0]}</td><td>${hs.rows[0][1]}</td></tr>
-                            <tr><td class="lbl">${hs.rows[1][0]}</td><td>${hs.rows[1][1]}</td></tr>
-                        </table>
-                        <button class="zoom-trigger" onclick="openOfficialWindow('${data.id}')">LIHAT SELENGKAPNYA</button>
-                    </div>
-                `;
-                dot.onclick = (e) => toggleDot(dot, e);
-                mainViewer.appendChild(dot);
-            });
+            
+            if(data.hotspots && data.hotspots.length > 0) {
+                data.hotspots.forEach((hs, i) => {
+                    const dot = document.createElement('div');
+                    dot.className = 'dot';
+                    dot.slot = `hotspot-${i}`;
+                    dot.dataset.position = hs.pos;
+                    dot.innerHTML = `
+                        <div class="dot-center"></div>
+                        <div class="info-card" onclick="event.stopPropagation()">
+                            <div class="mini-spec-title">${hs.title}</div>
+                            <table class="mini-table">
+                                <tr><td class="lbl">${hs.rows[0][0]}</td><td>${hs.rows[0][1]}</td></tr>
+                                <tr><td class="lbl">${hs.rows[1][0]}</td><td>${hs.rows[1][1]}</td></tr>
+                            </table>
+                            <button class="zoom-trigger" onclick="openOfficialWindow('${data.id}')">LIHAT SELENGKAPNYA</button>
+                        </div>
+                    `;
+                    dot.onclick = (e) => toggleDot(dot, e);
+                    mainViewer.appendChild(dot);
+                });
+            }
         }, 50);
     }
+    
     isFirstLoad = false;
 }
 
 function changeProduct(direction) {
+    if (isARMode) return; // BLOKIR FUNGSI GESER KETIKA AR SEDANG NYALA
     closeAllDots();
     currentIndex += direction;
     if (currentIndex < 0) currentIndex = productsData.length - 1;
     if (currentIndex >= productsData.length) currentIndex = 0;
+    
     loadProduct(currentIndex);
 }
 
@@ -825,10 +697,12 @@ function hideTutorial() {
 function openOfficialWindow(productId) {
     const data = specDatabase[productId];
     if(!data) return;
+
     let trs = '';
     data.specs.forEach(s => {
         trs += `<tr><td class="param-name">${s.k}</td><td class="param-value">${s.v}</td></tr>`;
     });
+
     const html = `
         <div class="window-title">${data.title}</div>
         <div class="table-responsive">
@@ -837,6 +711,7 @@ function openOfficialWindow(productId) {
             </table>
         </div>
     `;
+
     document.getElementById('window-body').innerHTML = html;
     document.getElementById('window-overlay').style.display = 'flex';
     mainViewer.classList.add('blurred');
@@ -863,6 +738,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('keydown',(e)=>{
+    if (isARMode) return; // BLOKIR PENCETAN KEYBOARD SAAT AR
     if(e.key==='ArrowRight') changeProduct(1);
     if(e.key==='ArrowLeft') changeProduct(-1);
 });
@@ -870,6 +746,7 @@ window.addEventListener('keydown',(e)=>{
 let touchStartX=0;
 window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
 window.addEventListener('touchend', e => {
+    if (isARMode) return; // BLOKIR SWIPE LAYAR HP SAAT AR
     const diff = touchStartX - e.changedTouches[0].screenX;
     if(Math.abs(diff) > 80) {
         if(diff > 0) changeProduct(1);
