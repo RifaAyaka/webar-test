@@ -26,7 +26,6 @@ html, body {
 }
 
 body {
-    /* PENGATURAN BACKGROUND DIPAKSA MUNCUL (!important) */
     background-color: #eef3ed !important;
     background-image: url('./background.png') !important;
     background-position: center center !important;
@@ -89,11 +88,9 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
-    /* WAJIB TRANSPARAN AGAR BACKGROUND.PNG TEMBUS */
     background: transparent !important;
 }
 
-/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
@@ -133,7 +130,6 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
-/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -154,7 +150,6 @@ model-viewer{
 @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
 .dot-center { width: 8px; height: 8px; border-radius: 50%; background: #fbc02d; }
 
-/* POPUP MINI BOX CARD */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -194,7 +189,6 @@ model-viewer{
 }
 .zoom-trigger:hover { background: linear-gradient(145deg, #1b5e20, #2e7d32); }
 
-/* WINDOW MODAL DETIL UTAMA DI TENGAH LAYAR */
 #window-overlay {
     position: fixed;
     inset: 0;
@@ -376,9 +370,7 @@ model-viewer{
 </model-viewer>
 
 <script>
-// ==========================================
-// DATA UTAMA PRODUK & HOTSPOT SATELIT ORBIT
-// ==========================================
+
 const productsData = [
     {
         id: 'kecambah',
