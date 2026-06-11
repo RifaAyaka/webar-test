@@ -23,10 +23,25 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:'Montserrat',sans-serif;
-    background:#ffffff;
+    background:#eef3ed;
 }
 
-.bg-overlay{ display:none; }
+body{
+    /* BG KAMU UDAH DIBALIKIN KESINI YA BANg */
+    background:url('background.png') no-repeat center center fixed;
+    background-size:cover;
+}
+
+.bg-overlay{
+    position:fixed;
+    inset:0;
+    background:
+    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 35%);
+    pointer-events:none;
+    z-index: 1;
+}
+
 .floating-light{ display:none; }
 
 .logo-top-right{
@@ -67,7 +82,7 @@ html,body{
     position:fixed;
     top:0;
     bottom:0;
-    width:10%; /* SUDAH DIKECILKAN JADI 10% KAYA IG STORY */
+    width:10%;
     z-index:999;
     cursor:pointer;
 }
@@ -80,10 +95,9 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
-    background-color:#ffffff;
+    background-color: transparent; /* UBAH JADI TRANSPARAN BIAR BG MUNCUL */
 }
 
-/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
@@ -123,7 +137,6 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
-/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -259,7 +272,6 @@ model-viewer{
 .blurred { filter: blur(5px) brightness(0.7); }
 
 @media(max-width:768px){
-    /* Perbaikan teks rata tengah dan mencegah layar minus/luber di HP */
     #product-header { 
         width: 85%; 
         font-size: 13px; 
@@ -277,6 +289,8 @@ model-viewer{
 </head>
 
 <body onclick="closeAllDots(event)">
+
+<div class="bg-overlay"></div>
 
 <a href="https://iopri.co.id/" target="_blank" class="logo-top-right">
     <img src="logo-PPKS.png" alt="Logo PPKS">
@@ -455,9 +469,6 @@ const productsData = [
     }
 ];
 
-// ==========================================
-// DATABASE SPESIFIKASI LENGKAP (MODAL BOX)
-// ==========================================
 const specDatabase = {
     kecambah: {
         title: "SPESIFIKASI LENGKAP KECAMBAH",
@@ -565,19 +576,18 @@ const specDatabase = {
 };
 
 let currentIndex = 0;
-let isARMode = false; // Deteksi apakah sedang dalam mode AR
+let isARMode = false;
 const mainViewer = document.getElementById('main-viewer');
 const customLoader = document.getElementById('custom-loader');
 const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
-// MENDETEKSI SAAT AR DIBUKA ATAU DITUTUP
 mainViewer.addEventListener('ar-status', (event) => {
     if (event.detail.status === 'session-started') {
-        isARMode = true; // Kunci fungsi geser layar saat AR aktif
+        isARMode = true; 
     } else if (event.detail.status === 'not-presenting') {
-        isARMode = false; // Buka kunci saat kembali ke preview 3D normal
+        isARMode = false; 
     }
 });
 
@@ -663,7 +673,7 @@ function loadProduct(index) {
 }
 
 function changeProduct(direction) {
-    if (isARMode) return; // BLOKIR FUNGSI GESER KETIKA AR SEDANG NYALA
+    if (isARMode) return; 
     closeAllDots();
     currentIndex += direction;
     if (currentIndex < 0) currentIndex = productsData.length - 1;
@@ -738,7 +748,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('keydown',(e)=>{
-    if (isARMode) return; // BLOKIR PENCETAN KEYBOARD SAAT AR
+    if (isARMode) return; 
     if(e.key==='ArrowRight') changeProduct(1);
     if(e.key==='ArrowLeft') changeProduct(-1);
 });
@@ -746,7 +756,7 @@ window.addEventListener('keydown',(e)=>{
 let touchStartX=0;
 window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
 window.addEventListener('touchend', e => {
-    if (isARMode) return; // BLOKIR SWIPE LAYAR HP SAAT AR
+    if (isARMode) return; 
     const diff = touchStartX - e.changedTouches[0].screenX;
     if(Math.abs(diff) > 80) {
         if(diff > 0) changeProduct(1);
