@@ -67,7 +67,7 @@ html,body{
     position:fixed;
     top:0;
     bottom:0;
-    width:10%;
+    width:10%; /* SUDAH DIKECILKAN JADI 10% KAYA IG STORY */
     z-index:999;
     cursor:pointer;
 }
@@ -83,6 +83,7 @@ model-viewer{
     background-color:#ffffff;
 }
 
+/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
@@ -122,6 +123,7 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
+/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -257,6 +259,7 @@ model-viewer{
 .blurred { filter: blur(5px) brightness(0.7); }
 
 @media(max-width:768px){
+    /* Perbaikan teks rata tengah dan mencegah layar minus/luber di HP */
     #product-header { 
         width: 85%; 
         font-size: 13px; 
@@ -360,7 +363,9 @@ model-viewer{
 </model-viewer>
 
 <script>
-
+// ==========================================
+// DATA UTAMA PRODUK & HOTSPOT SATELIT ORBIT
+// ==========================================
 const productsData = [
     {
         id: 'kecambah',
@@ -450,7 +455,9 @@ const productsData = [
     }
 ];
 
-
+// ==========================================
+// DATABASE SPESIFIKASI LENGKAP (MODAL BOX)
+// ==========================================
 const specDatabase = {
     kecambah: {
         title: "SPESIFIKASI LENGKAP KECAMBAH",
@@ -558,19 +565,19 @@ const specDatabase = {
 };
 
 let currentIndex = 0;
-let isARMode = false;
+let isARMode = false; // Deteksi apakah sedang dalam mode AR
 const mainViewer = document.getElementById('main-viewer');
 const customLoader = document.getElementById('custom-loader');
 const progressFill = document.getElementById('progress-fill');
 const progressPct = document.getElementById('load-pct');
 let isFirstLoad = true;
 
-
+// MENDETEKSI SAAT AR DIBUKA ATAU DITUTUP
 mainViewer.addEventListener('ar-status', (event) => {
     if (event.detail.status === 'session-started') {
-        isARMode = true;
+        isARMode = true; // Kunci fungsi geser layar saat AR aktif
     } else if (event.detail.status === 'not-presenting') {
-        isARMode = false;
+        isARMode = false; // Buka kunci saat kembali ke preview 3D normal
     }
 });
 
@@ -656,7 +663,7 @@ function loadProduct(index) {
 }
 
 function changeProduct(direction) {
-    if (isARMode) return;
+    if (isARMode) return; // BLOKIR FUNGSI GESER KETIKA AR SEDANG NYALA
     closeAllDots();
     currentIndex += direction;
     if (currentIndex < 0) currentIndex = productsData.length - 1;
@@ -731,7 +738,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('keydown',(e)=>{
-    if (isARMode) return;
+    if (isARMode) return; // BLOKIR PENCETAN KEYBOARD SAAT AR
     if(e.key==='ArrowRight') changeProduct(1);
     if(e.key==='ArrowLeft') changeProduct(-1);
 });
@@ -739,7 +746,7 @@ window.addEventListener('keydown',(e)=>{
 let touchStartX=0;
 window.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
 window.addEventListener('touchend', e => {
-    if (isARMode) return;
+    if (isARMode) return; // BLOKIR SWIPE LAYAR HP SAAT AR
     const diff = touchStartX - e.changedTouches[0].screenX;
     if(Math.abs(diff) > 80) {
         if(diff > 0) changeProduct(1);
