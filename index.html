@@ -18,30 +18,24 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    font-family:'Montserrat',sans-serif;
-    background:#eef3ed;
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
 }
 
-body{
-    /* BG KAMU UDAH DIBALIKIN KESINI YA BANg */
-    background:url('background.png') no-repeat center center fixed;
-    background-size:cover;
+body {
+    /* PENGATURAN BACKGROUND DIPAKSA MUNCUL (!important) */
+    background-color: #eef3ed !important;
+    background-image: url('./background.png') !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+    background-size: cover !important;
 }
 
-.bg-overlay{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at top left,rgba(255,255,255,.7),transparent 35%),
-    radial-gradient(circle at bottom right,rgba(76,175,80,.08),transparent 35%);
-    pointer-events:none;
-    z-index: 1;
-}
-
+.bg-overlay{ display:none; }
 .floating-light{ display:none; }
 
 .logo-top-right{
@@ -95,9 +89,11 @@ model-viewer{
     --progress-bar-color:transparent;
     z-index: 10;
     position: relative;
-    background-color: transparent; /* UBAH JADI TRANSPARAN BIAR BG MUNCUL */
+    /* WAJIB TRANSPARAN AGAR BACKGROUND.PNG TEMBUS */
+    background: transparent !important;
 }
 
+/* DESAIN LOADING BAR KUSTOM TENGAH LAYAR */
 #custom-loader {
     position: fixed;
     inset: 0;
@@ -137,6 +133,7 @@ model-viewer{
     transition: width 0.2s linear;
 }
 
+/* DESAIN SATELLITE HOTSPOT YANG MELAYANG */
 .dot {
     width: 28px;
     height: 28px;
@@ -157,6 +154,7 @@ model-viewer{
 @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.4); opacity: 0; } }
 .dot-center { width: 8px; height: 8px; border-radius: 50%; background: #fbc02d; }
 
+/* POPUP MINI BOX CARD */
 .info-card {
     position: absolute;
     bottom: 40px;
@@ -196,6 +194,7 @@ model-viewer{
 }
 .zoom-trigger:hover { background: linear-gradient(145deg, #1b5e20, #2e7d32); }
 
+/* WINDOW MODAL DETIL UTAMA DI TENGAH LAYAR */
 #window-overlay {
     position: fixed;
     inset: 0;
@@ -469,6 +468,9 @@ const productsData = [
     }
 ];
 
+// ==========================================
+// DATABASE SPESIFIKASI LENGKAP (MODAL BOX)
+// ==========================================
 const specDatabase = {
     kecambah: {
         title: "SPESIFIKASI LENGKAP KECAMBAH",
